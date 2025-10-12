@@ -1,0 +1,37 @@
+
+:root{ --teal:#14B8A6; --sky:#0284C7; --ink:#0F172A; }
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:#fff;color:var(--ink)}
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+.header{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e7eb;z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+.nav a{margin-left:14px;text-decoration:none;color:var(--ink)}
+.nav a[aria-current="page"]{font-weight:600}
+.brand-link{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand .brand-mark img,.brand .brand-mark{height:44px;border-radius:8px}
+.brand-text{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;line-height:1.1}
+.brand-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;font-size:18px;color:var(--ink);margin:0}
+.brand-sub{font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#64748b;letter-spacing:.06em;margin:2px 0 0 0}
+.hero{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;padding:28px 0}
+.section{border-top:1px solid #e5e7eb;padding-top:20px;margin-top:20px}
+.grid{display:grid;gap:16px}
+.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fff}
+.note{color:#64748b;font-size:14px}
+.btn{display:inline-block;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;color:var(--ink);text-decoration:none;font-weight:500}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.secondary{background:transparent}
+.footer{border-top:1px solid #e5e7eb;color:#64748b;padding:24px 0;margin-top:30px;background:#fff}
+@media (max-width:900px){ .grid.cols-3{grid-template-columns:1fr} .brand .brand-mark{height:36px} .brand-name{font-size:16px} }
+@media (prefers-color-scheme: dark){
+  body{background:#0F172A;color:#E5E7EB}
+  .header,.footer{background:#0F172A}
+  .brand-name{color:#F8FAFC}
+  .brand-sub,.note,.footer{color:#cbd5e1}
+  .card{background:#111827;border-color:#1f2937}
+  .section{border-top-color:#1f2937}
+  .nav a{color:#E5E7EB}
+  .btn{background:#0b1220;color:#E5E7EB;border-color:#334155}
+  .btn.primary{background:var(--teal);border-color:var(--teal);color:#00110f}
+}
+.brand-downloads a{font-size:13px}
