@@ -14,22 +14,39 @@
 
 <!-- Page-scoped layout + responsive tweaks -->
 <style>
-  /* Main hero spacing remains simple; the side-by-side is handled in .intro-pair */
-  .hero { margin-top: 20px; }
-
-  /* Paragraph + Video pair: side-by-side and bottoms aligned */
-  .intro-pair {
+  /* Build a 2-col hero grid; first row elements (h1, subheading) span full width */
+  .hero-grid {
     display: grid;
-    grid-template-columns: 1fr 480px;
+    grid-template-columns: 1fr 480px; /* text | video */
     gap: 28px;
-    align-items: end; /* <-- aligns video bottom to the last line of the paragraph */
-    margin-top: 12px;
+    align-items: start;
+    margin-top: 20px;
   }
-  @media (max-width: 900px) {
-    .intro-pair { grid-template-columns: 1fr; }
+  /* Make H1 and subheading stretch across both columns */
+  .hero-grid > h1,
+  .hero-grid > .subhead {
+    grid-column: 1 / -1;
   }
 
-  /* Video frame with soft teal accent */
+  /* Paragraph + Video row: align bottoms */
+  .intro-pair {
+    display: contents; /* lets children sit directly in the hero grid row */
+  }
+  .intro-text {
+    align-self: end;     /* bottom-align paragraph */
+  }
+  .intro-text p:last-child { margin-bottom: 0; }
+  .intro-vid {
+    align-self: end;     /* bottom-align video */
+  }
+
+  /* Responsive stacking on small screens */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .intro-vid { order: 2; }
+  }
+
+  /* Video frame with subtle teal glow (uses your --teal) */
   .video-embed {
     position: relative;
     padding-bottom: 56.25%;
@@ -38,7 +55,6 @@
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     background: #000;
-    /* subtle teal glow using your brand var --teal */
     box-shadow: 0 4px 16px rgba(20, 184, 166, 0.15);
   }
   .video-embed iframe {
@@ -84,40 +100,38 @@
 <main class="container">
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero hero-grid">
 
-  <!-- Headline + subheading -->
-  <div class="hero-text">
-    <h1>Knowledge and perspectives, shaped by numbers. 📊</h1>
-    <p class="note">Online articles, tools, and analysis across business, finance, and global trends.</p>
-  </div>
+  <!-- Full-width headline -->
+  <h1>Knowledge and perspectives, shaped by numbers. 📊</h1>
 
-  <!-- Paragraph and Video: side-by-side (bottom-aligned) -->
+  <!-- Full-width subheading -->
+  <p class="note subhead">Online articles, tools, and analysis across business, finance, and global trends.</p>
+
+  <!-- Side-by-side: paragraph (left) and video (right), bottoms aligned -->
   <div class="intro-pair">
-    <!-- Left: brief about Quantificate -->
-    <div class="hero-text">
+    <div class="hero-text intro-text">
       <p>
         <strong>Quantificate</strong> is a space where knowledge, perspectives, and experience come to life through numbers and stories ✨📈.
         Expect analysis that challenges assumptions, tools you can reuse, and practical frameworks drawn from over a decade
         across finance, strategy, and tech. Everything here is free to learn from, remix, and build upon.
       </p>
+      <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a class="btn primary" href="/articles/index.html">Read Articles</a>
+        <a class="btn secondary" href="/tools/index.html">Explore Tools</a>
+      </div>
     </div>
 
-    <!-- Right: responsive YouTube embed -->
-    <div class="video-embed">
-      <iframe
-        src="https://www.youtube.com/embed/VIDEO_ID"
-        title="Welcome to Quantificate"
-        loading="lazy"
-        allowfullscreen
-      ></iframe>
+    <div class="intro-vid">
+      <div class="video-embed">
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID"
+          title="Welcome to Quantificate"
+          loading="lazy"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
-  </div>
-
-  <!-- CTAs -->
-  <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
-    <a class="btn primary" href="/articles/index.html">Read Articles</a>
-    <a class="btn secondary" href="/tools/index.html">Explore Tools</a>
   </div>
 
 </section>
