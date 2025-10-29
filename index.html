@@ -5,12 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Home — Quantificate</title>
 <meta name="color-scheme" content="light dark">
-<link rel="icon" type="image/png" href="/assets/img/favicon_light.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/x-icon" href="/assets/img/favicon_light.ico" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/styles.css">
+
+<!-- Page-scoped tweaks: mobile stacking + dark-mode border for video -->
+<style>
+  @media (max-width: 900px) {
+    .intro-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .video-embed { border-color: #1f2937 !important; }
+  }
+</style>
+
 <script defer src="/assets/js/app.js"></script>
 </head>
 <body>
@@ -39,25 +50,56 @@
     </nav>
   </div>
 </header>
+
 <main class="container">
 
+<!-- HERO -->
 <section class="hero">
   <div>
-    <h1>Clarity through numbers</h1>
+    <h1>A space to share knowledge and perspectives, shaped by numbers.</h1>
     <p class="note">Online articles, tools, and analysis across business, finance, and global trends.</p>
+
+    <!-- Intro paragraph + Welcome video (side-by-side) -->
+    <div class="grid intro-grid" style="grid-template-columns: 1fr 420px; gap: 20px; align-items: start; margin-top: 12px;">
+      <!-- Left: brief about Quantificate -->
+      <div>
+        <p style="font-size:16px; line-height:1.65; margin:0; text-align:justify;">
+          <strong>Quantificate</strong> is my corner of the internet — a space where I share my own perspectives,
+          knowledge, and experience through numbers and stories. Expect analysis that challenges assumptions, tools you
+          can reuse, and practical frameworks drawn from over a decade across finance, strategy, and tech. Everything
+          here is free to learn from, remix, and build upon.
+        </p>
+      </div>
+
+      <!-- Right: responsive YouTube embed -->
+      <div class="video-embed" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid #e5e7eb; background:#000;">
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID"
+          title="Welcome to Quantificate"
+          loading="lazy"
+          allowfullscreen
+          style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+        ></iframe>
+      </div>
+    </div>
+
     <div style="margin-top:14px; display:flex; gap:12px">
       <a class="btn primary" href="/articles/index.html">Read Articles</a>
       <a class="btn secondary" href="/tools/index.html">Explore Tools</a>
     </div>
   </div>
+
+  <!-- Right visual in hero (kept as-is) -->
   <div style="justify-self:end">
     <img src="/assets/img/logo_dark_1024.png" style="height:140px;border-radius:12px" alt="Quantificate visual">
   </div>
 </section>
 
 </main>
+
 <footer class="footer">
   <div class="container">© 2025 Quantificate · <a href="/brand/brand.html">Brand</a> · <a href="/brand_assets/structured_v4.zip">Download kit</a></div>
 </footer>
+
 </body>
 </html>
