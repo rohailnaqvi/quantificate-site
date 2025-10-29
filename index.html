@@ -14,16 +14,22 @@
 
 <!-- Page-scoped layout + responsive tweaks -->
 <style>
-  .hero-grid {
+  /* Main hero spacing remains simple; the side-by-side is handled in .intro-pair */
+  .hero { margin-top: 20px; }
+
+  /* Paragraph + Video pair: side-by-side and bottoms aligned */
+  .intro-pair {
     display: grid;
     grid-template-columns: 1fr 480px;
-    align-items: start;
     gap: 28px;
-    margin-top: 20px;
+    align-items: end; /* <-- aligns video bottom to the last line of the paragraph */
+    margin-top: 12px;
   }
   @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr; }
+    .intro-pair { grid-template-columns: 1fr; }
   }
+
+  /* Video frame with soft teal accent */
   .video-embed {
     position: relative;
     padding-bottom: 56.25%;
@@ -32,18 +38,17 @@
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     background: #000;
+    /* subtle teal glow using your brand var --teal */
+    box-shadow: 0 4px 16px rgba(20, 184, 166, 0.15);
   }
   .video-embed iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
   }
   @media (prefers-color-scheme: dark) {
-    .video-embed { border-color: #1f2937; }
+    .video-embed { border-color: #1f2937; box-shadow: 0 6px 18px rgba(20, 184, 166, 0.22); }
   }
+
+  /* Readability */
   .hero-text p { text-align: justify; line-height: 1.65; font-size: 16px; }
 </style>
 
@@ -79,31 +84,40 @@
 <main class="container">
 
 <!-- HERO -->
-<section class="hero hero-grid">
+<section class="hero">
 
-  <!-- Left: Tagline + subheading + paragraph + buttons -->
+  <!-- Headline + subheading -->
   <div class="hero-text">
-    <h1>Knowledge and perspectives, shaped by numbers.</h1>
+    <h1>Knowledge and perspectives, shaped by numbers. 📊</h1>
     <p class="note">Online articles, tools, and analysis across business, finance, and global trends.</p>
+  </div>
 
-    <p><strong>Quantificate</strong> is a space where knowledge, perspectives, and experience come to life through numbers and stories. Expect analysis that challenges assumptions, tools you
-      can reuse, and practical frameworks drawn from over a decade across finance, strategy, and tech. Everything
-      here is free to learn from, remix, and build upon.</p>
+  <!-- Paragraph and Video: side-by-side (bottom-aligned) -->
+  <div class="intro-pair">
+    <!-- Left: brief about Quantificate -->
+    <div class="hero-text">
+      <p>
+        <strong>Quantificate</strong> is a space where knowledge, perspectives, and experience come to life through numbers and stories ✨📈.
+        Expect analysis that challenges assumptions, tools you can reuse, and practical frameworks drawn from over a decade
+        across finance, strategy, and tech. Everything here is free to learn from, remix, and build upon.
+      </p>
+    </div>
 
-    <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
-      <a class="btn primary" href="/articles/index.html">Read Articles</a>
-      <a class="btn secondary" href="/tools/index.html">Explore Tools</a>
+    <!-- Right: responsive YouTube embed -->
+    <div class="video-embed">
+      <iframe
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Welcome to Quantificate"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
     </div>
   </div>
 
-  <!-- Right: YouTube Video -->
-  <div class="video-embed">
-    <iframe
-      src="https://www.youtube.com/embed/VIDEO_ID"
-      title="Welcome to Quantificate"
-      loading="lazy"
-      allowfullscreen
-    ></iframe>
+  <!-- CTAs -->
+  <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+    <a class="btn primary" href="/articles/index.html">Read Articles</a>
+    <a class="btn secondary" href="/tools/index.html">Explore Tools</a>
   </div>
 
 </section>
