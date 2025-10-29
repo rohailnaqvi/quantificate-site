@@ -14,7 +14,7 @@
 
 <!-- Page-scoped layout + responsive tweaks -->
 <style>
-  /* Build a 2-col hero grid; first row elements (h1, subheading) span full width */
+  /* Hero layout */
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr 480px; /* text | video */
@@ -22,31 +22,38 @@
     align-items: start;
     margin-top: 20px;
   }
-  /* Make H1 and subheading stretch across both columns */
   .hero-grid > h1,
   .hero-grid > .subhead {
     grid-column: 1 / -1;
   }
 
-  /* Paragraph + Video row: align bottoms */
+  /* Tighten heading/subheading spacing */
+  .hero-grid h1 {
+    margin-bottom: 6px;
+  }
+  .hero-grid .subhead {
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+
+  /* Paragraph + Video: align tops */
   .intro-pair {
-    display: contents; /* lets children sit directly in the hero grid row */
+    display: contents;
   }
   .intro-text {
-    align-self: end;     /* bottom-align paragraph */
+    align-self: start;
   }
-  .intro-text p:last-child { margin-bottom: 0; }
   .intro-vid {
-    align-self: end;     /* bottom-align video */
+    align-self: start;
   }
 
-  /* Responsive stacking on small screens */
+  /* Responsive stacking */
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; }
-    .intro-vid { order: 2; }
+    .intro-vid { order: 2; margin-top: 16px; }
   }
 
-  /* Video frame with subtle teal glow (uses your --teal) */
+  /* Video styling with teal accent */
   .video-embed {
     position: relative;
     padding-bottom: 56.25%;
@@ -64,7 +71,7 @@
     .video-embed { border-color: #1f2937; box-shadow: 0 6px 18px rgba(20, 184, 166, 0.22); }
   }
 
-  /* Readability */
+  /* Text styling */
   .hero-text p { text-align: justify; line-height: 1.65; font-size: 16px; }
 </style>
 
@@ -102,13 +109,11 @@
 <!-- HERO -->
 <section class="hero hero-grid">
 
-  <!-- Full-width headline -->
+  <!-- Full-width heading and subheading -->
   <h1>Knowledge and perspectives, shaped by numbers. 📊</h1>
-
-  <!-- Full-width subheading -->
   <p class="note subhead">Online articles, tools, and analysis across business, finance, and global trends.</p>
 
-  <!-- Side-by-side: paragraph (left) and video (right), bottoms aligned -->
+  <!-- Paragraph and video, aligned top -->
   <div class="intro-pair">
     <div class="hero-text intro-text">
       <p>
@@ -116,6 +121,7 @@
         Expect analysis that challenges assumptions, tools you can reuse, and practical frameworks drawn from over a decade
         across finance, strategy, and tech. Everything here is free to learn from, remix, and build upon.
       </p>
+
       <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
         <a class="btn primary" href="/articles/index.html">Read Articles</a>
         <a class="btn secondary" href="/tools/index.html">Explore Tools</a>
