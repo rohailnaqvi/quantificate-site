@@ -11,6 +11,33 @@
 <link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/styles.css">
+
+<style>
+  /* Enhanced card button layout */
+  .card-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .card-buttons .btn {
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+  
+  /* Ensure card content takes up space, buttons at bottom */
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card .note {
+    flex-grow: 1;
+  }
+</style>
+
 <script defer src="/assets/js/app.js"></script>
 </head>
 <body>
@@ -35,6 +62,7 @@
       <a href="/tools/index.html">Tools</a>
       <a href="/about/index.html">About</a>
       <a href="/contact/index.html">Contact</a>
+      <a href="/disclaimer/index.html">Disclaimer</a>
       <a href="/brand/brand.html">Brand</a>
     </nav>
   </div>
@@ -43,12 +71,35 @@
 
 <section class="section">
   <h1>Articles</h1>
-  <p class="note">Deep dives and explainers.</p>
+  <div class="grid cols-3" style="margin-top:12px">
+    
+    <!-- Investment Basics Article -->
+    <div class="card">
+      <h3>Starting Your Investment Journey</h3>
+      <p class="note">Why simple beats complex — the power of compounding, index investing, and time-tested principles.</p>
+      <div class="card-buttons">
+        <a class="btn primary" href="/articles/investment-basics.html">Read Article</a>
+        <a class="btn secondary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Try Personal Investment Planner</a>
+      </div>
+    </div>
+    
+    <!-- Placeholder Cards -->
+    <div class="card">
+      <h3>More articles</h3>
+      <p class="note">Coming soon: more deep dives on finance, data, and strategy.</p>
+    </div>
+    
+    <div class="card">
+      <h3>Case studies</h3>
+      <p class="note">Real-world analysis and breakdowns (roadmap).</p>
+    </div>
+    
+  </div>
 </section>
 
 </main>
 <footer class="footer">
-  <div class="container">© 2025 Quantificate · <a href="/brand/brand.html">Brand</a> · <a href="/brand_assets/structured_v4.zip">Download kit</a></div>
+  <div class="container">© 2025 Quantificate · <a href="/brand/brand.html">Brand</a> · <a href="/disclaimer.html">Disclaimer</a> · <a href="/brand_assets/structured_v4.zip">Download kit</a></div>
 </footer>
 </body>
 </html>

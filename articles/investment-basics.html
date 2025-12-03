@@ -1,0 +1,1229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starting Your Investment Journey: Why Simple Beats Complex — Quantificate</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+<!-- Article-specific styles -->
+<style>
+  article {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  article h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  
+  article h2 {
+    font-size: 1.75rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+  
+  article h3 {
+    font-size: 1.35rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+  
+  article p {
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    text-align: justify;
+  }
+  
+  article ul, article ol {
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+  
+  article li {
+    margin-bottom: 0.5rem;
+  }
+  
+  article strong {
+    font-weight: 600;
+  }
+  
+  article em {
+    font-style: italic;
+  }
+  
+  .article-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .disclaimer-box {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid #F59E0B;
+    border-left: 4px solid #F59E0B;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .disclaimer-box p {
+    margin-bottom: 0.75rem;
+  }
+  
+  .disclaimer-box p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .chart-container {
+    position: relative;
+    height: 320px;
+    margin: 2rem 0;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .chart-caption {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 12px;
+    font-style: italic;
+  }
+  
+  .stat-box {
+    background: rgba(20, 184, 166, 0.05);
+    border-left: 4px solid #14B8A6;
+    padding: 16px;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+  }
+  
+  .stat-box p {
+    margin: 0;
+    font-weight: 600;
+    color: #0F172A;
+  }
+  
+  .study-link {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: inline-block;
+    margin: 0 4px 8px 0;
+    text-decoration: none;
+    color: #14B8A6;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+  
+  .study-link:hover {
+    border-color: #14B8A6;
+    background: rgba(20, 184, 166, 0.05);
+  }
+  
+  .morningstar-image {
+    width: 100%;
+    max-width: 700px;
+    margin: 2rem auto;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .image-caption {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 12px;
+    font-style: italic;
+  }
+  
+  /* SPIVA Widget Styles */
+  .spiva-widget {
+    background: var(--card-bg);
+    border: 2px solid #14B8A6;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 2rem 0;
+  }
+  
+  .widget-controls {
+    margin-bottom: 24px;
+  }
+  
+  .control-group {
+    margin-bottom: 16px;
+  }
+  
+  .control-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .btn-widget {
+    padding: 6px 12px;
+    border: 1.5px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-widget:hover {
+    border-color: #14B8A6;
+    background: rgba(20, 184, 166, 0.05);
+  }
+  
+  .btn-widget.active {
+    background: #14B8A6;
+    color: white;
+    border-color: #14B8A6;
+  }
+  
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .stat-item {
+    background: var(--card-bg);
+    border-left: 4px solid #14B8A6;
+    padding: 12px;
+    border-radius: 6px;
+  }
+  
+  .stat-item.negative {
+    background: rgba(239, 68, 68, 0.05);
+    border-left-color: #ef4444;
+  }
+  
+  .stat-item.positive {
+    background: rgba(16, 185, 129, 0.05);
+    border-left-color: #10b981;
+  }
+  
+  .stat-item .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  
+  .stat-item .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  
+  .chart-note {
+    background: rgba(109, 40, 217, 0.05);
+    border: 1px solid #6D28D9;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  
+  .chart-note p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .chart-source {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  
+  .chart-source a {
+    color: #14B8A6;
+  }
+  
+  .data-note {
+    background: rgba(245, 158, 11, 0.05);
+    border-left: 4px solid #F59E0B;
+    padding: 12px 16px;
+    margin-top: 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  /* Video & CTA Styles */
+  .video-placeholder {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2px dashed var(--border-color);
+    background: #f3f4f6;
+    margin: 2rem 0;
+  }
+  
+  .video-placeholder-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .video-placeholder-content p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+  }
+  
+  .article-cta {
+    background: rgba(20, 184, 166, 0.05);
+    border: 1px solid #14B8A6;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2.5rem 0;
+    text-align: center;
+  }
+  
+  .article-cta h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #0F172A;
+  }
+  
+  .article-cta p {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #14B8A6;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  .btn:hover {
+    background: #0d9488;
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  
+  .btn.secondary {
+    background: #6D28D9;
+  }
+  
+  .btn.secondary:hover {
+    background: #5b21b6;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2.5rem 0;
+  }
+  
+  .references {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+  }
+  
+  .references h3 {
+    margin-top: 0;
+  }
+  
+  .emoji {
+    font-size: 1.2em;
+    margin: 0 4px;
+  }
+  
+  @media (max-width: 768px) {
+    article h1 {
+      font-size: 2rem;
+    }
+    article h2 {
+      font-size: 1.5rem;
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+    .chart-container {
+      height: 280px;
+    }
+    .cta-buttons {
+      flex-direction: column;
+    }
+  }
+
+  .returns-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+  }
+  
+  .returns-table th {
+    background: #14B8A6;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .returns-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+  }
+  
+  .returns-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .returns-table tr:hover {
+    background: rgba(20, 184, 166, 0.05);
+  }
+  
+  .returns-table .index-name {
+    font-weight: 600;
+    color: #0F172A;
+  }
+  
+  .returns-table .return-value {
+    font-weight: 700;
+    color: #10b981;
+  }
+  
+  .example-box {
+    background: rgba(109, 40, 217, 0.05);
+    border: 1px solid #6D28D9;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 2rem 0;
+  }
+  
+  .example-box h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #6D28D9;
+    font-size: 1.1rem;
+  }
+  
+  .example-box p {
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  
+  .example-box p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .example-result {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+    border: 1px solid #6D28D9;
+  }
+  
+  .example-result strong {
+    color: #6D28D9;
+    font-size: 1.05rem;
+  }
+  
+  .example-result p {
+    margin-bottom: 8px;
+    text-align: left;
+  }
+  
+  .example-result p:last-child {
+    margin-bottom: 0;
+  }
+  
+  article h4 {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+</style>
+
+<script defer src="/assets/js/app.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="container nav">
+    <div class="brand">
+      <a class="brand-link" href="/">
+        <picture class="brand-mark">
+          <source srcset="/assets/img/avatar_dark_256.png" media="(prefers-color-scheme: dark)">
+          <source srcset="/assets/img/avatar_light_256.png" media="(prefers-color-scheme: light)">
+          <img src="/assets/img/avatar_light_256.png" alt="Quantificate mark">
+        </picture>
+        <div class="brand-text">
+          <div class="brand-name">Quantificate</div>
+          <div class="brand-sub">analysis • tools • insight</div>
+        </div>
+      </a>
+    </div>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/articles/index.html" aria-current="page">Articles</a>
+      <a href="/tools/index.html">Tools</a>
+      <a href="/about/index.html">About</a>
+      <a href="/contact/index.html">Contact</a>
+      <a href="/disclaimer/index.html">Disclaimer</a>
+      <a href="/brand/brand.html">Brand</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+    <h1>Starting Your Investment Journey: Why Simple Beats Complex <span class="emoji">📊</span></h1>
+    
+    <div class="article-meta">
+      <strong>Published:</strong> November 17, 2025 | <strong>Read time:</strong> 15 minutes
+    </div>
+
+    <!-- Disclaimer Box -->
+    <div class="disclaimer-box">
+      <p><strong><em>Disclaimer:</em></strong></p>
+      <p><em>This article is for educational purposes only and does not constitute financial advice. Always do your own research and consider consulting with a qualified financial advisor before making investment decisions.</em></p>
+      <p><em>Please also review the <a href="/disclaimer/index.html" style="color: #F59E0B; font-weight: 600;">General Disclaimer</a> covering all content in and/or directed from Quantificate.ca.</em></p>
+    </div>
+
+    <p>Let's talk about investing, the cornerstone of every conversation concerning wealth (especially at family dinner tables), and one that (if you're like me) has caused anxiety for many a late teen and early twenty years. The anxiety in question hasn't been around getting started with investing, rather, where to start (and how not to crash and burn with your first investment). After all, money, savings, financial independence and safety net are important considerations which, I believe should be on everyone's radar, and treated with great care. That said, I have realized that starting out in investing doesn't have to be an uphill battle. In fact, it can be as simple as investing in the market. The following perspective might give you some direction.</p>
+
+    <h2>Investing Doesn't Have to Be Daunting <span class="emoji">😊</span></h2>
+    
+    <p>If you've ever felt overwhelmed by the prospect of investing, you're not alone. The financial world can seem intimidating—filled with jargon, endless stock tickers, and talking heads debating which companies will soar or crash. Many aspiring investors convince themselves they need to become market experts before taking their first step. But here's the truth: whereas a dedicated education in investing does help, people have successfully grown wealth without the need of an MBA, a Bloomberg terminal, or treating investments as a full time job.</p>
+    
+    <p>Starting your investment journey is simpler than you think. The path to financial security doesn't require you to pick the next Amazon or predict market crashes. In fact, as we'll explore, the data overwhelmingly shows that keeping it simple often yields better results than trying to outsmart the market.</p>
+
+    <h2>The Magic of Compounding: Your Most Powerful Ally <span class="emoji">✨</span></h2>
+    
+    <p>Before we dive into what to invest in, let's talk about <em>why</em> investing matters so much—and the answer lies in one of the most powerful forces in finance: compound growth.</p>
+    
+    <p>Compound interest has been called "the eighth wonder of the world," and for good reason. Unlike simple interest, where you earn returns only on your initial investment, compounding means you earn returns on your returns. Your money doesn't just grow—it accelerates over time.</p>
+    
+    <p>Here's how it works: imagine you invest $10,000 at a 6% annual return. In the first year, you earn $600, bringing your total to $10,600. But in year two, you earn 6% on the full $10,600, not just your original investment. That's $636. Year three? You earn on $11,236. This snowball effect becomes increasingly powerful over time.</p>
+
+    <h3>The Power of Time: Emily vs John</h3>
+    
+    <p>Consider two scenarios:</p>
+    <ul>
+      <li><strong>Emily</strong> starts investing $200 per month at age 25 ($2,400/yr), earning an average 7% annual return. By 65 (40 years on), she has approximately <strong>$500,000</strong>.</li>
+      <li><strong>John</strong> waits until 35 to start but invests the same $200 monthly with the same return. By 65 (30 years on), he has only around <strong>$250,000</strong>—half of Emily's total, despite the same monthly contribution.</li>
+    </ul>
+    
+    <div class="chart-container">
+      <canvas id="compoundingChart"></canvas>
+    </div>
+    <div class="chart-caption">Emily ($200/month from age 25) vs John ($200/month from age 35) — both earning 7% annual returns</div>
+    
+    <div class="stat-box">
+      <p>🎯 <strong>The ten-year head start makes a $250,000 difference.</strong> That's the power of time and compounding working in your favor.</p>
+    </div>
+    
+    <p>The lesson? Start early, stay consistent, and let time do the heavy lifting. Even if you don't start early, modest contributions—$100, $200, or $500 per month—can grow into substantial wealth when compounding works its magic over decades.</p>
+    <h2>You Don't Need to Pick Stocks to Win <span class="emoji">🎯</span></h2>
+    
+    <p>Now here's where many beginning investors get stuck. They believe investing success requires identifying the next Tesla, avoiding the next Enron, and constantly monitoring their portfolios. The reality? Not only is this needlessly complicating things when getting starting, but attempting it often produces <em>worse</em> results than a simple, straightforward approach.</p>
+
+    <h3>The Market Delivers Strong Returns on Its Own <span class="emoji">📈</span></h3>
+    
+    <p>Before diving into why professional stock pickers struggle, let's first establish an important baseline: <strong>simply investing in the market has historically generated substantial wealth</strong>. You don't need to beat the market to build financial security—you just need to match it.</p>
+    
+    <p>Major U.S. market indices have delivered impressive returns over time. Here are the historical Compound Annual Growth Rates (CAGR) for key indices:</p>
+    
+    <table class="returns-table">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>10-Year CAGR</th>
+          <th>20-Year CAGR</th>
+          <th>30-Year CAGR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="index-name">S&P 500</td>
+          <td class="return-value">13.0%</td>
+          <td class="return-value">10.0%</td>
+          <td class="return-value">10.7%</td>
+        </tr>
+        <tr>
+          <td class="index-name">Dow Jones Industrial Average</td>
+          <td class="return-value">11.2%</td>
+          <td class="return-value">8.8%</td>
+          <td class="return-value">9.8%</td>
+        </tr>
+        <tr>
+          <td class="index-name">Nasdaq Composite</td>
+          <td class="return-value">17.0%</td>
+          <td class="return-value">11.9%</td>
+          <td class="return-value">13.4%</td>
+        </tr>
+        <tr>
+          <td class="index-name">Russell 2000 (Small Cap)</td>
+          <td class="return-value">10.1%</td>
+          <td class="return-value">9.1%</td>
+          <td class="return-value">9.5%</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="chart-caption">Historical returns through December 2024. Source: S&P Dow Jones Indices, Nasdaq, FTSE Russell</div>
+    
+    <div class="stat-box">
+      <p>💡 <strong>Key Insight:</strong> The S&P 500 has averaged approximately 10% annual returns over the past century. This means your money roughly doubles every 7 years through simple market participation.</p>
+    </div>
+    
+    <h4>Real-World Example: The Power of Simply Holding the Market</h4>
+    
+    <div class="example-box">
+      <h4>📊 10-Year Investment in the S&P 500</h4>
+      <p>Let's say you invested <strong>$10,000</strong> in an S&P 500 index fund in <strong>January 2015</strong> and simply held it until <strong>December 2024</strong>.</p>
+      
+      <div class="example-result">
+        <p><strong>Initial Investment:</strong> $10,000</p>
+        <p><strong>Value After 10 Years:</strong> $34,456</p>
+        <p><strong>Total Gain:</strong> $24,456 (244.6% return)</p>
+        <p><strong>CAGR:</strong> 13.0% annually</p>
+      </div>
+      
+      <p style="margin-top: 16px;">This means you <strong>more than tripled your money</strong> without picking a single stock, timing the market, or paying a fund manager. You simply bought the market and held on.</p>
+    </div>
+    
+    <!-- Growth Visualization Chart -->
+    <div class="chart-container">
+      <canvas id="growthChart"></canvas>
+    </div>
+    <div class="chart-caption">$10,000 invested in S&P 500 in January 2015 → $34,456 by December 2024</div>
+    
+    <div class="stat-box">
+      <p>🎯 <strong>The Bottom Line:</strong> Even during a period that included a global pandemic, trade wars, and significant market volatility, a simple buy-and-hold strategy in the S&P 500 delivered exceptional returns. No stock-picking expertise required.</p>
+    </div>
+    
+    <p>This historical performance demonstrates a crucial point: the market itself generates wealth over time. The real question isn't whether you need to beat the market—it's whether active fund managers can justify their fees by actually beating these readily available index returns. Spoiler alert: as we'll see, most cannot.</p>
+
+    <h3>The Evidence Is Clear <span class="emoji">📈</span></h3>
+    
+    <p>Multiple comprehensive studies have examined whether professional fund managers—people who spend their entire careers analyzing companies and markets—can consistently beat simple market indexes. The results are striking:</p>
+    
+    <p>According to the <a href="https://www.spglobal.com/spdji/en/research-insights/spiva/" target="_blank" class="study-link">S&P Indices Versus Active (SPIVA) reports</a>, which track thousands of actively managed funds against their benchmarks:</p>
+    
+    <ul>
+      <li><strong>Over 5 years</strong>:
+        <ul>
+          <li>Approximately 94% of actively managed funds failed to outperform the S&P Global Benchmarks</li>
+          <li>In the US alone, 87% of actively managed funds underperformed the S&P 500 over the 5 year period</li>
+        </ul>
+      </li>
+    </ul>
+    
+    <p>More results can be found as follows, however the overarching conclusion is that more often than not, majority of actively managed funds fail to sustain a performance better than index benchmarks over the longer term.</p>
+    
+    <!-- Interactive SPIVA Chart Widget (Full 18 regions version) -->
+    <div class="spiva-widget">
+      <div class="widget-controls">
+        <!-- Region Selector -->
+        <div class="control-group">
+          <label class="control-label">Select Region:</label>
+          <div class="button-group" id="regionButtons">
+            <button class="btn-widget" data-region="global">Global</button>
+            <button class="btn-widget active" data-region="us">U.S.</button>
+            <button class="btn-widget" data-region="canada">Canada</button>
+            <button class="btn-widget" data-region="mexico">Mexico</button>
+            <button class="btn-widget" data-region="brazil">Brazil</button>
+            <button class="btn-widget" data-region="chile">Chile</button>
+            <button class="btn-widget" data-region="europe">Europe</button>
+            <button class="btn-widget" data-region="mena">MENA</button>
+            <button class="btn-widget" data-region="safrica">S. Africa</button>
+            <button class="btn-widget" data-region="india">India</button>
+            <button class="btn-widget" data-region="china">China</button>
+            <button class="btn-widget" data-region="japan">Japan</button>
+            <button class="btn-widget" data-region="skorea">S. Korea</button>
+            <button class="btn-widget" data-region="taiwan">Taiwan</button>
+            <button class="btn-widget" data-region="thailand">Thailand</button>
+            <button class="btn-widget" data-region="malaysia">Malaysia</button>
+            <button class="btn-widget" data-region="australia">Australia</button>
+            <button class="btn-widget" data-region="nz">New Zealand</button>
+          </div>
+        </div>
+        
+        <!-- Time Period Selector -->
+        <div class="control-group">
+          <label class="control-label">Select Time Period:</label>
+          <div class="button-group" id="periodButtons">
+            <button class="btn-widget active" data-period="1">1 Year</button>
+            <button class="btn-widget" data-period="3">3 Years</button>
+            <button class="btn-widget" data-period="5">5 Years</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Chart -->
+      <div class="chart-container">
+        <canvas id="spivaChart"></canvas>
+      </div>
+      
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-item negative">
+          <div class="stat-label">Underperformed</div>
+          <div class="stat-value" id="underperformStat">73%</div>
+        </div>
+        <div class="stat-item positive">
+          <div class="stat-label">Outperformed</div>
+          <div class="stat-value" id="outperformStat">27%</div>
+        </div>
+      </div>
+      
+      <div class="chart-note">
+        <p id="chartInsight">💡 In the U.S., only 27% of actively managed funds outperformed the S&P 500 over 1 year.</p>
+      </div>
+      
+      <div class="data-note">
+        📅 <strong>Data as of June 30, 2025</strong> | Source: S&P Dow Jones Indices LLC, Morningstar, Fundata, CRSP
+      </div>
+      
+      <div class="chart-source">
+        <strong>Full Report:</strong> <a href="https://www.spglobal.com/spdji/en/documents/spiva/spiva-infographic.pdf" target="_blank" rel="noopener">SPIVA Around the World Infographic (PDF)</a> | 
+        <a href="https://www.spglobal.com/spdji/en/research-insights/spiva/" target="_blank" rel="noopener">SPIVA Scorecards</a>
+      </div>
+    </div>
+
+    <div class="stat-box">
+      <p>💡 <strong>Think about that.</strong> These are highly compensated professionals with teams of analysts, sophisticated tools, and decades of experience. Yet fewer than 1 in 10 can beat a simple index fund over the long term.</p>
+    </div>
+    <h3>Why Stock Picking Is Best Left To The Experts <span class="emoji">🎲</span></h3>
+    
+    <p>The above observation is neither new nor limited to the S&P. In fact, research by Morningstar (below) demonstrates the success rate of actively managed funds beating their respective benchmarks over time.</p>
+    
+    <img src="https://morningstar-morningstar-prod.web.arc-cdn.net/resizer/NBNXn1cRtbGeNbS7jlCbuXOwVow=/1200x0/filters:no_upscale():quality(80)/cloudfront-us-east-1.images.arcpublishing.com/morningstar/6U7MHC3JWZGK5ONIBWA3AV7WKQ.png" alt="Morningstar Active Fund Success Rate Chart" class="morningstar-image">
+    <div class="image-caption">Source: <a href="https://www.morningstar.com/funds/passive-funds-beat-active-amid-this-years-market-volatility" target="_blank">Morningstar</a> - Success rate of actively managed funds vs. benchmarks over time. Data as of June 30 2025</div>
+    
+    <p>What this chart demonstrates is the percentage of actively managed funds beating their benchmarks across categories. Whereas across almost all categories, percetage of overperforming funds may be respectable, the number drops as time progresses (in some cases to single digits). The data corroborates conventional wisdom about the difficulty there is for fund managers to consistently outperform the market, and the difficulty for investors to successfully choose the right managers.</p>
+    
+    <p>Professor <a href="https://business.marquette.edu/faculty-and-research/faculty-directory/hendrik-bessembinder/" target="_blank" class="study-link">Hendrik Bessembinder</a> examined all publicly traded stocks from 1926 to 2019 and <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3537838" target="_blank" class="study-link">found</a> something remarkable: The top <a href="https://www.morganstanley.com/im/publication/insights/articles/article_birthdeathandwealthcreation.pdf" target="_blank" class="study-link">2% of companies generated 90% of all gains</a>.</p>
+    
+    <p>What does this mean? It means that picking individual stocks is extraordinarily difficult because:</p>
+    
+    <ol>
+      <li>Most individual stocks underperform the overall market</li>
+      <li>A tiny handful of mega-winners drive the market's returns</li>
+      <li>Identifying those winners in advance is nearly impossible</li>
+    </ol>
+    
+    <p>Even if you're lucky enough to pick a winner, you also need to hold it through years of volatility—resisting the urge to sell during inevitable downturns.</p>
+
+    <div class="stat-box">
+      <p>💡 <strong>The Takeaway:</strong> Even the experts struggle to consistently beat the market. As time progresses, the percentage of funds that outperform their benchmarks shrinks dramatically—in many cases to single digits. If the professionals can't reliably do it with all their resources, individual investors face even steeper odds trying to pick winning stocks themselves.</p>
+    </div>
+
+    <h3>The Hidden Costs <span class="emoji">💸</span></h3>
+    
+    <p>Beyond the difficulty of selection, active stock picking comes with hidden costs:</p>
+    
+    <ul>
+      <li><strong>Fees</strong>: Actively managed funds typically charge 0.5-1.5% annually, compared to 0.03-0.20% for index funds</li>
+      <li><strong>Time</strong>: Researching companies, monitoring positions, and managing trades requires significant ongoing effort</li>
+      <li><strong>Taxes</strong>: Frequent trading generates capital gains taxes that erode returns</li>
+      <li><strong>Stress</strong>: Watching daily price movements and second-guessing decisions takes an emotional toll</li>
+    </ul>
+    
+    <p><strong>Fee Impact Reality:</strong> Over 30 years, a $100,000 investment at 7% annual returns:</p>
+    <ul>
+      <li>With 0.05% fee (index fund): <strong>$739,000</strong></li>
+      <li>With 1.00% fee (active fund): <strong>$574,000</strong></li>
+      <li><strong>Difference: $165,000</strong> lost to higher fees</li>
+    </ul>
+    
+    <div class="stat-box">
+      <p>⚠️ That $165,000 difference is money that could have been compounding for you instead of flowing to fund managers.</p>
+    </div>
+
+    <h2>Understanding Risk, Return, and Why Markets Work <span class="emoji">⚖️</span></h2>
+    
+    <p>To appreciate why broad market investing works, we need to understand two fundamental concepts: risk and return.</p>
+
+    <h3>The Risk-Return Trade-Off <span class="emoji">📉</span></h3>
+    
+    <p>In investing, risk and return are inseparable companions. Generally speaking:</p>
+    
+    <ul>
+      <li><strong>Higher potential returns come with higher risk</strong> (greater chance of losses)</li>
+      <li><strong>Lower risk investments offer lower expected returns</strong> (but more stability)</li>
+    </ul>
+    
+    <p>This isn't a flaw in the system—it's how markets work. Investors demand higher returns to compensate them for taking on more uncertainty. Stocks are riskier than bonds, which is why stocks have historically delivered higher long-term returns.</p>
+
+    <h3>How Diversification Reduces Risk <span class="emoji">🛡️</span></h3>
+    
+    <p>Here's the beautiful part: while you can't eliminate risk entirely, you can manage it intelligently through diversification—spreading your investments across many different assets.</p>
+    
+    <p>When you invest in a broad market index like the S&P 500, you're instantly diversified across:</p>
+    
+    <ul>
+      <li>500 different companies</li>
+      <li>All major economic sectors (technology, healthcare, finance, energy, etc.)</li>
+      <li>Various company sizes and business models</li>
+      <li>Different growth stages and market positions</li>
+    </ul>
+    
+    <p>This diversification means that:</p>
+    
+    <ul>
+      <li>If one company fails, it barely affects your overall portfolio</li>
+      <li>When some sectors struggle, others may thrive</li>
+      <li>You capture the overall growth of the economy without betting on specific winners</li>
+    </ul>
+    
+    <p>Compare this to owning just 5-10 individual stocks, where a single company's bankruptcy could wipe out 10-20% of your portfolio. Or to keeping all your money in cash, where inflation steadily erodes your purchasing power.</p>
+
+    <h3>Market Returns: Not Luck, But Productivity <span class="emoji">💼</span></h3>
+    
+    <p>When you invest in broad market indexes, you're not gambling—you're participating in economic growth. You're betting that:</p>
+    
+    <ul>
+      <li>Companies will continue innovating and serving customers</li>
+      <li>The economy will grow over time (as it historically has)</li>
+      <li>Human ingenuity and productivity will create value</li>
+    </ul>
+    
+    <p>Over the past century, the U.S. stock market has returned approximately 10% annually on average. This isn't because of luck or speculation—it's because businesses generate profits, which flow to shareholders through stock price appreciation and dividends.</p>
+
+    <h2>How to Invest in the Market: Index Funds and ETFs <span class="emoji">🎯</span></h2>
+    
+    <p>So if individual stock picking doesn't work and you should invest in the broad market instead, how do you actually do that? The answer: index funds and exchange-traded funds (ETFs).</p>
+
+    <h3>What Are Index Funds and ETFs? <span class="emoji">📚</span></h3>
+    
+    <p><strong>Index funds</strong> are mutual funds designed to track a specific market index, like the S&P 500, Nasdaq 100, or total stock market indexes. When you buy shares in an index fund, you're automatically buying a small piece of every company in that index.</p>
+    
+    <p><strong>ETFs (Exchange-Traded Funds)</strong> work similarly but trade on stock exchanges like individual stocks. You can buy and sell them throughout the trading day, whereas mutual funds are priced once daily.</p>
+    
+    <p>Both offer:</p>
+    
+    <ul>
+      <li><strong>Instant diversification</strong> across hundreds or thousands of companies</li>
+      <li><strong>Low costs</strong> (often 0.03-0.20% annually compared to 0.5-1.5% for active funds)</li>
+      <li><strong>Simplicity</strong> (one purchase gives you exposure to the entire market)</li>
+      <li><strong>Transparency</strong> (you know exactly what you own)</li>
+      <li><strong>Tax efficiency</strong> (especially ETFs)</li>
+    </ul>
+
+    <h3>Popular Index Options <span class="emoji">🌍</span></h3>
+    
+    <p>For beginners, several index funds provide excellent broad market exposure:</p>
+    
+    <ul>
+      <li><strong>S&P 500 Index Funds</strong> (like VOO, SPY, IVV): Track the 500 largest U.S. companies</li>
+      <li><strong>Total Stock Market Funds</strong> (like VTI, ITOT): Cover essentially every publicly traded U.S. company</li>
+      <li><strong>International Index Funds</strong> (like VXUS, IXUS): Provide exposure to companies outside the U.S.</li>
+      <li><strong>Total World Funds</strong> (like VT): Include both U.S. and international stocks in one fund</li>
+    </ul>
+    
+    <p>Many investors build portfolios using just 2-3 of these funds, gaining global diversification with minimal complexity.</p>
+    <h2>Investing Wisdom: Building Lasting Wealth <span class="emoji">💪</span></h2>
+    
+    <p>Understanding what to invest in is only half the battle. How you invest matters just as much. Here are foundational principles that separate successful long-term investors from those who struggle:</p>
+
+    <h3>1. Invest for the Medium to Long Term <span class="emoji">⏳</span></h3>
+    
+    <p>The stock market goes up and down daily, monthly, and yearly. But over longer periods, it has consistently trended upward. Since 1926, the S&P 500 has never had a negative 20-year return period, despite multiple crashes, recessions, and crises along the way.</p>
+    
+    <p>Set your investing horizon at least 5-10 years, ideally longer. This gives you time to ride out market volatility, benefit from compounding, avoid panic-selling during downturns, and participate in economic growth.</p>
+
+    <h3>2. Only Invest Money You Can Lock Away <span class="emoji">🔒</span></h3>
+    
+    <p>Never invest money you'll need in the next 3-5 years, and especially not your emergency fund. A good rule: maintain 3-6 months of expenses as an emergency slush fund, then invest money beyond that for your long-term goals.</p>
+
+    <h3>3. Invest Consistently, Regardless of Market Conditions <span class="emoji">📅</span></h3>
+    
+    <p>One of the best strategies is dollar-cost averaging: investing a fixed amount regularly (monthly, bi-weekly, etc.) regardless of whether markets are up or down. This approach removes emotion from the equation, buys more shares when prices are low, and averages out your purchase price over time.</p>
+
+    <h3>4. Ignore Short-Term Noise <span class="emoji">🔇</span></h3>
+    
+    <p>Market pundits constantly predict doom or boom. News headlines scream about daily movements. Your portfolio balance will fluctuate. Learn to ignore it all. The market has survived world wars, pandemics, financial crises, political turmoil, and every other catastrophe imaginable—and continued growing.</p>
+
+    <h3>5. Reinvest Dividends and Returns <span class="emoji">🔄</span></h3>
+    
+    <p>Many index funds and ETFs pay dividends from the underlying companies. Always reinvest these automatically rather than taking them as cash. This ensures your dividends start generating their own returns, supercharging the compounding effect.</p>
+
+    <h3>6. Keep Fees Low and Simple <span class="emoji">💰</span></h3>
+    
+    <p>Complexity is the enemy of good returns. The simplest portfolios often perform best because they minimize costs and remove opportunities for costly mistakes.</p>
+
+    <h3>7. Stay the Course During Downturns <span class="emoji">💯</span></h3>
+    
+    <p>This is perhaps the hardest but most important rule. When markets crash (and they will), your instinct will scream at you to sell and "preserve what's left." Resist this urge. Market downturns are temporary. Recovery is inevitable. Investors who sold during the 2008 financial crisis, the 2020 COVID crash, or any other downturn and stayed out of the market missed the subsequent recoveries.</p>
+
+    <h2>The Path Forward: Simple, Proven, Powerful <span class="emoji">🚀</span></h2>
+    
+    <p>Investing for your future doesn't require sophistication. It requires:</p>
+    
+    <ul>
+      <li>Understanding that compounding is your most powerful tool</li>
+      <li>Recognizing that simple market investing beats stock picking</li>
+      <li>Grasping the relationship between risk and return</li>
+      <li>Using low-cost index funds or ETFs</li>
+      <li>Following time-tested principles of long-term investing</li>
+    </ul>
+    
+    <p>The most profound insight from decades of financial research is this: <strong>the best investment strategy is often the simplest one.</strong> By investing in broad market indexes, keeping costs low, and staying invested for the long term, you give yourself the best chance of achieving your financial goals.</p>
+    
+    <p>The app at Quantificate embodies this philosophy. It doesn't promise to pick winning stocks or time the market. Instead, it shows you the power of simple, consistent, long-term investing in proven assets like stock market indexes. Play with different scenarios, adjust your contributions and time horizons, and see how the numbers compound over time.</p>
+    
+    <p>Remember: every day you wait is a day of potential compounding you've lost forever. The best time to start investing was yesterday. The second-best time is today. <span class="emoji">✨</span></p>
+    <!-- CTA Section with Video Placeholder and Button -->
+    <div class="article-cta">
+      <h3>Ready to see your investment potential? <span class="emoji">📊</span></h3>
+      
+      <!-- YouTube Video Placeholder -->
+      <div class="video-placeholder">
+        <div class="video-placeholder-content">
+          <p style="font-size: 3rem; margin-bottom: 12px;">📹</p>
+          <p><strong>Video Walkthrough Coming Soon</strong></p>
+          <p>Watch how to use the Personal Investment Planner</p>
+          <p style="margin-top: 12px; font-size: 0.85rem; color: #9ca3af;">🎬 YouTube Tutorial | Step-by-step guide</p>
+        </div>
+      </div>
+      
+      <p>Use our interactive tool to model different investment scenarios based on historical market performance.</p>
+      
+      <a href="https://quantificate-planner.streamlit.app" class="btn" target="_blank" rel="noopener">Try Personal Investment Planner</a>
+    </div>
+    
+    <hr>
+
+    <!-- References Section -->
+    <div class="references">
+      <h3>References & Studies</h3>
+      <ul>
+        <li><a href="https://www.spglobal.com/spdji/en/research-insights/spiva/" target="_blank" rel="noopener">S&P Indices Versus Active (SPIVA) Reports</a> - Performance tracking of active managers vs benchmarks</li>
+        <li><a href="https://business.marquette.edu/faculty-and-research/faculty-directory/hendrik-bessembinder/" target="_blank" rel="noopener">Hendrik Bessembinder Research</a> - Stock wealth creation analysis (1926-2019)</li>
+        <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3537838" target="_blank" rel="noopener">Bessembinder Paper (SSRN)</a> - Do Stocks Outperform Treasury Bills?</li>
+        <li><a href="https://www.morganstanley.com/im/publication/insights/articles/article_birthdeathandwealthcreation.pdf" target="_blank" rel="noopener">Morgan Stanley Research</a> - Birth, Death and Wealth Creation</li>
+        <li><a href="https://www.morningstar.com" target="_blank" rel="noopener">Morningstar</a> - Active fund success rate analysis</li>
+      </ul>
+    </div>
+
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">© 2025 Quantificate · <a href="/brand/brand.html">Brand</a> · <a href="/disclaimer.html">Disclaimer</a> · <a href="/brand_assets/structured_v4.zip">Download kit</a></div>
+</footer>
+
+</body>
+</html>
+<script>
+  // Compounding Chart (Emily vs John)
+  const compoundingCtx = document.getElementById('compoundingChart').getContext('2d');
+  new Chart(compoundingCtx, {
+    type: 'line',
+    data: {
+      labels: Array.from({length: 41}, (_, i) => i + 25),
+      datasets: [
+        {
+          label: 'Emily (Start at 25)',
+          data: Array.from({length: 41}, (_, i) => {
+            const years = i;
+            return 200 * 12 * ((Math.pow(1.07, years) - 1) / 0.07);
+          }),
+          borderColor: '#14b8a6',
+          backgroundColor: 'rgba(20, 184, 166, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+        },
+        {
+          label: 'John (Start at 35)',
+          data: Array.from({length: 41}, (_, i) => {
+            const years = Math.max(0, i - 10);
+            return 200 * 12 * ((Math.pow(1.07, years) - 1) / 0.07);
+          }),
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return '$' + (value / 1000).toFixed(0) + 'k';
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // SPIVA Interactive Chart Data (All 18 regions)
+  const spivaData = {
+    global: { 1: [82, 18], 3: [90, 10], 5: [94, 6] },
+    us: { 1: [73, 27], 3: [65, 35], 5: [87, 13] },
+    canada: { 1: [95, 5], 3: [94, 6], 5: [85, 15] },
+    mexico: { 1: [50, 50], 3: [60, 40], 5: [69, 31] },
+    brazil: { 1: [27, 73], 3: [90, 10], 5: [78, 22] },
+    chile: { 1: [60, 40], 3: [36, 64], 5: [65, 35] },
+    europe: { 1: [72, 28], 3: [90, 10], 5: [92, 8] },
+    mena: { 1: [46, 54], 3: [36, 64], 5: [55, 45] },
+    safrica: { 1: [69, 31], 3: [84, 16], 5: [77, 23] },
+    india: { 1: [42, 58], 3: [67, 33], 5: [90, 10] },
+    china: { 1: [61, 39], 3: [70, 30], 5: [51, 49] },
+    japan: { 1: [30, 70], 3: [71, 29], 5: [79, 21] },
+    skorea: { 1: [24, 76], 3: [49, 51], 5: [43, 57] },
+    taiwan: { 1: [97, 3], 3: [74, 26], 5: [95, 5] },
+    thailand: { 1: [75, 25], 3: [71, 29], 5: [85, 15] },
+    malaysia: { 1: [56, 44], 3: [63, 37], 5: [40, 60] },
+    australia: { 1: [69, 31], 3: [75, 25], 5: [75, 25] },
+    nz: { 1: [40, 60], 3: [52, 48], 5: [41, 59] }
+  };
+  
+  const regionNames = {
+    global: 'Global', us: 'United States', canada: 'Canada', mexico: 'Mexico',
+    brazil: 'Brazil', chile: 'Chile', europe: 'Europe', mena: 'MENA',
+    safrica: 'South Africa', india: 'India', china: 'China', japan: 'Japan',
+    skorea: 'South Korea', taiwan: 'Taiwan', thailand: 'Thailand',
+    malaysia: 'Malaysia', australia: 'Australia', nz: 'New Zealand'
+  };
+  
+  const regionBenchmarks = {
+    global: 'S&P World', us: 'S&P 500', canada: 'S&P/TSX Composite',
+    mexico: 'S&P/BMV IRT', brazil: 'S&P Brazil LargeCap', chile: 'S&P Chile BMI',
+    europe: 'S&P Europe 350', mena: 'S&P Pan Arab Composite',
+    safrica: 'S&P South Africa 50', india: 'S&P India LargeMidCap',
+    china: 'S&P China A 300', japan: 'S&P/TOPIX 150', skorea: 'S&P Korea BMI',
+    taiwan: 'S&P Taiwan BMI', thailand: 'S&P Thailand BMI',
+    malaysia: 'S&P Malaysia BMI', australia: 'S&P/ASX 200', nz: 'S&P/NZX 50'
+  };
+  
+  let currentRegion = 'us';
+  let currentPeriod = '1';
+  let spivaChart;
+  
+  // Initialize SPIVA interactive chart
+  const spivaCtx = document.getElementById('spivaChart').getContext('2d');
+  spivaChart = new Chart(spivaCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Underperformed', 'Outperformed'],
+      datasets: [{
+        data: [73, 27],
+        backgroundColor: ['#ef4444', '#10b981'],
+        borderWidth: 0,
+        hoverOffset: 12
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 16,
+            font: { size: 13, weight: '600' },
+            color: '#0F172A'
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.label + ': ' + context.parsed + '%';
+            }
+          },
+          backgroundColor: '#0F172A',
+          padding: 12,
+          titleFont: { size: 14 },
+          bodyFont: { size: 13 }
+        }
+      }
+    }
+  });
+  
+  // Update chart function
+  function updateSPIVAChart() {
+    const data = spivaData[currentRegion][currentPeriod];
+    const regionName = regionNames[currentRegion];
+    const benchmark = regionBenchmarks[currentRegion];
+    
+    spivaChart.data.datasets[0].data = data;
+    spivaChart.update('active');
+    
+    document.getElementById('underperformStat').textContent = data[0] + '%';
+    document.getElementById('outperformStat').textContent = data[1] + '%';
+    
+    const periodText = currentPeriod === '1' ? '1 year' : currentPeriod + ' years';
+    let insightText = `💡 In ${regionName}, `;
+    
+    if (data[1] >= 50) {
+      insightText += `<strong>${data[1]}%</strong> of actively managed funds outperformed the ${benchmark} over ${periodText}. This is an unusual case where active managers collectively beat the index.`;
+    } else {
+      insightText += `only <strong>${data[1]}%</strong> of actively managed funds outperformed the ${benchmark} over ${periodText}.`;
+    }
+    
+    document.getElementById('chartInsight').innerHTML = insightText;
+  }
+  
+  // Region button handlers
+  document.getElementById('regionButtons').addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-widget')) {
+      document.querySelectorAll('#regionButtons .btn-widget').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      e.target.classList.add('active');
+      currentRegion = e.target.dataset.region;
+      updateSPIVAChart();
+    }
+  });
+  
+  // Period button handlers
+  document.getElementById('periodButtons').addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-widget')) {
+      document.querySelectorAll('#periodButtons .btn-widget').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      e.target.classList.add('active');
+      currentPeriod = e.target.dataset.period;
+      updateSPIVAChart();
+    }
+  });
+
+  // Growth Chart showing $10,000 invested in 2015
+  const growthCtx = document.getElementById('growthChart').getContext('2d');
+  
+  // Simulated S&P 500 growth data based on historical performance
+  const growthYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+  const growthValues = [10000, 10980, 13260, 12710, 16540, 19560, 28410, 23240, 29270, 34456];
+  
+  new Chart(growthCtx, {
+    type: 'line',
+    data: {
+      labels: growthYears,
+      datasets: [{
+        label: 'Portfolio Value',
+        data: growthValues,
+        borderColor: '#14b8a6',
+        backgroundColor: 'rgba(20, 184, 166, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: '#14b8a6'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return '$' + context.parsed.y.toLocaleString();
+            }
+          },
+          backgroundColor: '#0F172A',
+          padding: 12
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 8000,
+          ticks: {
+            callback: function(value) {
+              return '$' + (value / 1000).toFixed(0) + 'k';
+            }
+          },
+          grid: {
+            color: '#f3f4f6'
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+</script>
