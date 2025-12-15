@@ -11,6 +11,122 @@
 <link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/styles.css">
+
+<style>
+  /* Page-specific styles */
+  .contact-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .contact-intro {
+    text-align: justify;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  
+  .info-box {
+    background: rgba(20, 184, 166, 0.05);
+    border: 1px solid #14B8A6;
+    border-left: 4px solid #14B8A6;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 2rem 0;
+  }
+  
+  .info-box h2 {
+    margin-top: 0;
+    color: #14B8A6;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #14B8A6;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+  }
+  
+  .form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+  
+  .form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+  
+  .required {
+    color: #ef4444;
+  }
+  
+  .emoji {
+    font-size: 1.3em;
+    margin: 0 6px;
+  }
+  
+  .alternative-contact {
+    background: rgba(109, 40, 217, 0.05);
+    border: 1px solid #6D28D9;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 2.5rem 0;
+    text-align: center;
+  }
+  
+  .alternative-contact h3 {
+    margin-top: 0;
+    color: #6D28D9;
+    margin-bottom: 1rem;
+  }
+  
+  .alternative-contact p {
+    margin-bottom: 0;
+    text-align: center;
+  }
+  
+  .alternative-contact a {
+    color: #6D28D9;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .alternative-contact a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+
 <script defer src="/assets/js/app.js"></script>
 </head>
 <body>
@@ -39,16 +155,108 @@
     </nav>
   </div>
 </header>
+
 <main class="container">
+  <section class="section">
+    
+    <h1>Contact</h1>
+    <p class="note">Get in touch — I'd love to hear from you</p>
 
-<section class="section">
-  <h1>Contact</h1>
-  <p class="note">Email: hello@quantificate.ca</p>
-</section>
+    <div class="contact-content">
+      
+      <p class="contact-intro">
+        Have a question, feedback, or just want to connect? Whether you've spotted an error, have suggestions for future topics, or want to discuss something you've read — I'm always happy to hear from readers and fellow data enthusiasts. Fill out the form below and I'll get back to you as soon as possible.
+      </p>
 
+      <div class="info-box">
+        <h2><span class="emoji">📬</span> Send Me a Message</h2>
+        
+        <form 
+          name="contact" 
+          method="POST" 
+          data-netlify="true" 
+          data-netlify-honeypot="bot-field"
+          action="/contact/success.html"
+        >
+          <!-- Hidden field for Netlify -->
+          <input type="hidden" name="form-name" value="contact" />
+          
+          <!-- Honeypot field for spam protection -->
+          <p style="display:none;">
+            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+          </p>
+
+          <div class="form-group">
+            <label for="name">
+              Name <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required 
+              placeholder="Your full name"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="email">
+              Email <span class="required">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required 
+              placeholder="your.email@example.com"
+            >
+            <small>I'll respond to this address</small>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">
+              Subject <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="subject" 
+              name="subject" 
+              required 
+              placeholder="What's this about?"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="message">
+              Message <span class="required">*</span>
+            </label>
+            <textarea 
+              id="message" 
+              name="message" 
+              required 
+              placeholder="Your message here..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn primary" style="width: 100%;">
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <div class="alternative-contact">
+        <h3><span class="emoji">✉️</span> Prefer Email?</h3>
+        <p>Reach me directly at <a href="mailto:hello@quantificate.ca">hello@quantificate.ca</a></p>
+      </div>
+
+    </div>
+
+  </section>
 </main>
+
 <footer class="footer">
   <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
+
 </body>
 </html>
