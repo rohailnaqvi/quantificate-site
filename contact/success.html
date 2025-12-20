@@ -12,6 +12,27 @@
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/styles.css">
 
+<!-- Google Analytics 4 with Cookie Consent -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  
+  // Default: deny all tracking until user consents
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PC2NVFZ2J5"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'G-PC2NVFZ2J5');
+</script>
+
 <style>
   /* Page-specific styles */
   .success-content {
@@ -154,6 +175,69 @@
 <footer class="footer">
   <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
+
+<!-- Cookie Consent Banner -->
+<div id="cookieConsent">
+  <div class="cookie-container">
+    <div class="cookie-content">
+      <div class="cookie-text">
+        <h3>🍪 We Value Your Privacy</h3>
+        <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
+      </div>
+      <div class="cookie-buttons">
+        <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
+        <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
+        <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div id="cookieSettings">
+  <div class="settings-modal">
+    <div class="settings-header">
+      <h2>Cookie Preferences</h2>
+      <p>Manage your cookie preferences. You can enable or disable different types of cookies below.</p>
+    </div>
+    
+    <div class="settings-body">
+      <div class="cookie-category">
+        <div class="category-header">
+          <h3>Essential Cookies</h3>
+          <label class="toggle-switch">
+            <input type="checkbox" id="essentialCookies" checked disabled>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p class="category-description">
+          These cookies are necessary for the website to function and cannot be disabled. They are usually set in response to actions you take, such as setting privacy preferences.
+        </p>
+      </div>
+
+      <div class="cookie-category">
+        <div class="category-header">
+          <h3>Analytics Cookies</h3>
+          <label class="toggle-switch">
+            <input type="checkbox" id="analyticsCookies">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p class="category-description">
+          These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously using Google Analytics.
+        </p>
+      </div>
+    </div>
+
+    <div class="settings-footer">
+      <button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button>
+      <button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button>
+    </div>
+  </div>
+</div>
+
+<!-- Load Cookie Consent Script -->
+<script src="/assets/js/cookie-consent.js"></script>
 
 </body>
 </html>
