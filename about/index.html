@@ -34,9 +34,81 @@
 </script>
 
 <style>
+  /* ====================================
+     MOBILE HAMBURGER MENU STYLES
+     ==================================== */
+  
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px;
+    color: inherit;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    
+    .nav {
+      flex-wrap: wrap;
+    }
+    
+    nav {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    nav.active {
+      display: flex;
+    }
+    
+    nav a {
+      padding: 12px 0;
+      width: 100%;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    nav a:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @media (max-width: 768px) and (prefers-color-scheme: dark) {
+    nav {
+      border-top-color: #374151;
+    }
+    
+    nav a {
+      border-bottom-color: #374151;
+    }
+  }
+
   /* Page-specific tweaks */
   .about-copy p { text-align: justify; }
   .btn.block { display: block; width: 100%; text-align: center; }
+  
+  /* Mobile responsive layout for about page */
+  @media (max-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr !important;
+      gap: 24px !important;
+    }
+    
+    .about-grid figure {
+      max-width: 260px;
+      margin: 0 auto;
+    }
+  }
 </style>
 
 <script defer src="/assets/js/app.js"></script>
@@ -57,7 +129,8 @@
         </div>
       </a>
     </div>
-    <nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
       <a href="/index.html">Home</a>
       <a href="/articles/index.html">Articles</a>
       <a href="/tools/index.html">Tools</a>
@@ -73,7 +146,7 @@
 <section class="section">
   <h1>About</h1>
 
-  <div class="grid" style="grid-template-columns: 260px 1fr; align-items:start; gap:24px;">
+  <div class="grid about-grid" style="grid-template-columns: 260px 1fr; align-items:start; gap:24px;">
     <!-- Headshot -->
     <figure style="margin:0">
       <img src="/assets/img/rohail_headshot.jpg" alt="Rohail Naqvi headshot" style="width:100%;max-width:260px;border-radius:12px;display:block;">
@@ -84,29 +157,29 @@
 
     <!-- Content -->
     <div class="about-copy">
-      <h2 style="margin-top:0">👋 Hi, I’m Rohail — Welcome to Quantificate.ca</h2>
-      <p>If you’ve ever been fascinated by how numbers can reveal patterns, question assumptions, or tell deeply human stories — you’re in good company.</p>
-      <p>I’m <strong>Rohail</strong>, and <em>Quantificate</em> is my corner of the internet — a space to share the insights, tools, and perspectives I’ve gathered from over a decade working across <strong>North America, Asia, and a bit of Europe</strong>.</p>
+      <h2 style="margin-top:0">👋 Hi, I'm Rohail — Welcome to Quantificate.ca</h2>
+      <p>If you've ever been fascinated by how numbers can reveal patterns, question assumptions, or tell deeply human stories — you're in good company.</p>
+      <p>I'm <strong>Rohail</strong>, and <em>Quantificate</em> is my corner of the internet — a space to share the insights, tools, and perspectives I've gathered from over a decade working across <strong>North America, Asia, and a bit of Europe</strong>.</p>
       <p>My career has taken me through Corporate Finance, M&amp;A, Consulting, and Business Value — across industries as diverse as <strong>Technology, Banking, Telecom, Manufacturing, and Infrastructure</strong>.</p>
-      <p>Through these experiences, I’ve learned that whether you’re analyzing an investment, designing a growth strategy, or optimizing business performance — it all comes down to understanding the story behind the numbers.</p>
+      <p>Through these experiences, I've learned that whether you're analyzing an investment, designing a growth strategy, or optimizing business performance — it all comes down to understanding the story behind the numbers.</p>
 
       <hr style="margin:24px 0;border:none;border-top:1px solid #e5e7eb">
 
-      <h3>💡 Why “Quantificate”?</h3>
-      <p>The name comes from my lifelong fascination with quantifying the world around us — not just in spreadsheets or balance sheets, but in the stories numbers reveal. With a background that includes an MBA, and a Master in Finance, I’ve spent much of my career exploring how data and analysis can bring clarity to complex ideas.</p>
+      <h3>💡 Why "Quantificate"?</h3>
+      <p>The name comes from my lifelong fascination with quantifying the world around us — not just in spreadsheets or balance sheets, but in the stories numbers reveal. With a background that includes an MBA, and a Master in Finance, I've spent much of my career exploring how data and analysis can bring clarity to complex ideas.</p>
 
-      <h3>📊 What You’ll Find Here</h3>
-      <p>This site is my way of giving back — a <strong>free resource</strong> for anyone who loves to explore ideas, challenge assumptions, and grow through learning. You’ll find <strong>analyses, tools, frameworks, and reflections</strong> drawn from real-world experience — each meant to inspire curiosity, spark conversation, and maybe even shift your perspective a little.</p>
+      <h3>📊 What You'll Find Here</h3>
+      <p>This site is my way of giving back — a <strong>free resource</strong> for anyone who loves to explore ideas, challenge assumptions, and grow through learning. You'll find <strong>analyses, tools, frameworks, and reflections</strong> drawn from real-world experience — each meant to inspire curiosity, spark conversation, and maybe even shift your perspective a little.</p>
 
       <h3>🔍 My Philosophy</h3>
-      <p>Over the years, I’ve learned that <strong>numbers don’t just measure reality — they question it</strong>. During my analytical journeys, I’ve often discovered insights that challenged even my most long-held beliefs. Those “aha!” moments are what make this work so exciting — and they’re exactly what I hope to share with you.</p>
+      <p>Over the years, I've learned that <strong>numbers don't just measure reality — they question it</strong>. During my analytical journeys, I've often discovered insights that challenged even my most long-held beliefs. Those "aha!" moments are what make this work so exciting — and they're exactly what I hope to share with you.</p>
 
       <h3>🌱 The Purpose</h3>
-      <blockquote><strong><em>"Knowledge grows when it’s shared."</strong></blockquote></em>
+      <blockquote><strong><em>"Knowledge grows when it's shared."</strong></blockquote></em>
       <p>This platform is my contribution — a space for continuous learning, open exchange, and a fresh take on how we understand the world through numbers and ideas.</p>
 
       <h3>🚀 My Invitation to You</h3>
-      <p>Explore, question, build upon what’s here — and make it your own. If something here inspires you, challenges you, or sparks a new idea — then <em>Quantificate</em> has done its job.</p>
+      <p>Explore, question, build upon what's here — and make it your own. If something here inspires you, challenges you, or sparks a new idea — then <em>Quantificate</em> has done its job.</p>
 
       <p><strong>Welcome aboard!</strong></p>
     </div>
@@ -118,6 +191,34 @@
 <footer class="footer">
   <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
+
+<!-- ====================================
+     HAMBURGER MENU JAVASCRIPT
+     ==================================== -->
+
+<script>
+  // Hamburger menu toggle
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('mainNav').classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
+    
+    if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+      nav.classList.remove('active');
+    }
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mainNav').classList.remove('active');
+    });
+  });
+</script>
 
 </body>
 </html>

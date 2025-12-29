@@ -91,6 +91,65 @@
   .hero-text p { text-align: justify; line-height: 1.65; font-size: 16px; }
 
   /* ====================================
+     MOBILE HAMBURGER MENU STYLES
+     ==================================== */
+  
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px;
+    color: inherit;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    
+    .nav {
+      flex-wrap: wrap;
+    }
+    
+    nav {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    nav.active {
+      display: flex;
+    }
+    
+    nav a {
+      padding: 12px 0;
+      width: 100%;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    nav a:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @media (max-width: 768px) and (prefers-color-scheme: dark) {
+    nav {
+      border-top-color: #374151;
+    }
+    
+    nav a {
+      border-bottom-color: #374151;
+    }
+  }
+
+  /* ====================================
      COOKIE CONSENT BANNER STYLES
      ==================================== */
   
@@ -436,7 +495,8 @@
         </div>
       </a>
     </div>
-    <nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
       <a href="/index.html" aria-current="page">Home</a>
       <a href="/articles/index.html">Articles</a>
       <a href="/tools/index.html">Tools</a>
@@ -554,6 +614,34 @@
     </div>
   </div>
 </div>
+
+<!-- ====================================
+     HAMBURGER MENU JAVASCRIPT
+     ==================================== -->
+
+<script>
+  // Hamburger menu toggle
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('mainNav').classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
+    
+    if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+      nav.classList.remove('active');
+    }
+  });
+
+  // Close menu when a link is clicked (optional, for better UX)
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mainNav').classList.remove('active');
+    });
+  });
+</script>
 
 <!-- ====================================
      COOKIE CONSENT JAVASCRIPT

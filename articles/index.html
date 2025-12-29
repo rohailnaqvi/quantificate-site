@@ -57,6 +57,65 @@
   .card .note {
     flex-grow: 1;
   }
+
+  /* ====================================
+     MOBILE HAMBURGER MENU STYLES
+     ==================================== */
+  
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px;
+    color: inherit;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    
+    .nav {
+      flex-wrap: wrap;
+    }
+    
+    nav {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    nav.active {
+      display: flex;
+    }
+    
+    nav a {
+      padding: 12px 0;
+      width: 100%;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    nav a:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @media (max-width: 768px) and (prefers-color-scheme: dark) {
+    nav {
+      border-top-color: #374151;
+    }
+    
+    nav a {
+      border-bottom-color: #374151;
+    }
+  }
 </style>
 
 <script defer src="/assets/js/app.js"></script>
@@ -77,7 +136,8 @@
         </div>
       </a>
     </div>
-    <nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
       <a href="/index.html">Home</a>
       <a href="/articles/index.html" aria-current="page">Articles</a>
       <a href="/tools/index.html">Tools</a>
@@ -122,68 +182,33 @@
   <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
 
-<!-- Cookie Consent Banner -->
-<div id="cookieConsent">
-  <div class="cookie-container">
-    <div class="cookie-content">
-      <div class="cookie-text">
-        <h3>🍪 We Value Your Privacy</h3>
-        <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
-      </div>
-      <div class="cookie-buttons">
-        <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
-        <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
-        <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- ====================================
+     HAMBURGER MENU JAVASCRIPT
+     ==================================== -->
 
-<!-- Cookie Settings Modal -->
-<div id="cookieSettings">
-  <div class="settings-modal">
-    <div class="settings-header">
-      <h2>Cookie Preferences</h2>
-      <p>Manage your cookie preferences. You can enable or disable different types of cookies below.</p>
-    </div>
+<script>
+  // Hamburger menu toggle
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('mainNav').classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
     
-    <div class="settings-body">
-      <div class="cookie-category">
-        <div class="category-header">
-          <h3>Essential Cookies</h3>
-          <label class="toggle-switch">
-            <input type="checkbox" id="essentialCookies" checked disabled>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <p class="category-description">
-          These cookies are necessary for the website to function and cannot be disabled. They are usually set in response to actions you take, such as setting privacy preferences.
-        </p>
-      </div>
+    if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+      nav.classList.remove('active');
+    }
+  });
 
-      <div class="cookie-category">
-        <div class="category-header">
-          <h3>Analytics Cookies</h3>
-          <label class="toggle-switch">
-            <input type="checkbox" id="analyticsCookies">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <p class="category-description">
-          These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously using Google Analytics.
-        </p>
-      </div>
-    </div>
-
-    <div class="settings-footer">
-      <button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button>
-      <button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button>
-    </div>
-  </div>
-</div>
-
-<!-- Load Cookie Consent Script -->
-<script src="/assets/js/cookie-consent.js"></script>
+  // Close menu when a link is clicked
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mainNav').classList.remove('active');
+    });
+  });
+</script>
 
 <!-- Cookie Consent Banner -->
 <div id="cookieConsent">

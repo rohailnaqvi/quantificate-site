@@ -36,7 +36,103 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
 <!-- Article-specific styles -->
+<!-- Article-specific styles -->
 <style>
+  /* ====================================
+     MOBILE HAMBURGER MENU STYLES
+     ==================================== */
+  
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px;
+    color: inherit;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    
+    .nav {
+      flex-wrap: wrap;
+    }
+    
+    nav {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    nav.active {
+      display: flex;
+    }
+    
+    nav a {
+      padding: 12px 0;
+      width: 100%;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    nav a:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @media (max-width: 768px) and (prefers-color-scheme: dark) {
+    nav {
+      border-top-color: #374151;
+    }
+    
+    nav a {
+      border-bottom-color: #374151;
+    }
+  }
+  /* Dark mode color variables */
+  :root {
+    --disclaimer-bg: rgba(245, 158, 11, 0.05);
+    --disclaimer-border: #F59E0B;
+    --stat-bg: rgba(20, 184, 166, 0.05);
+    --stat-border: #14B8A6;
+    --stat-text: #0F172A;
+    --example-bg: rgba(109, 40, 217, 0.05);
+    --example-border: #6D28D9;
+    --example-result-bg: white;
+    --data-note-bg: rgba(245, 158, 11, 0.05);
+    --chart-note-bg: rgba(109, 40, 217, 0.05);
+    --negative-bg: rgba(239, 68, 68, 0.05);
+    --positive-bg: rgba(16, 185, 129, 0.05);
+    --video-placeholder-bg: #f3f4f6;
+    --video-placeholder-text: #6b7280;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --disclaimer-bg: rgba(245, 158, 11, 0.15);
+      --disclaimer-border: #F59E0B;
+      --stat-bg: rgba(20, 184, 166, 0.15);
+      --stat-border: #14B8A6;
+      --stat-text: #F1F5F9;
+      --example-bg: rgba(109, 40, 217, 0.15);
+      --example-border: #A78BFA;
+      --example-result-bg: rgba(30, 41, 59, 0.5);
+      --data-note-bg: rgba(245, 158, 11, 0.15);
+      --chart-note-bg: rgba(109, 40, 217, 0.15);
+      --negative-bg: rgba(239, 68, 68, 0.15);
+      --positive-bg: rgba(16, 185, 129, 0.15);
+      --video-placeholder-bg: rgba(30, 41, 59, 0.5);
+      --video-placeholder-text: #94a3b8;
+    }
+  }
+
   article {
     max-width: 800px;
     margin: 0 auto;
@@ -95,9 +191,9 @@
   }
   
   .disclaimer-box {
-    background: rgba(245, 158, 11, 0.05);
-    border: 1px solid #F59E0B;
-    border-left: 4px solid #F59E0B;
+    background: var(--disclaimer-bg);
+    border: 1px solid var(--disclaimer-border);
+    border-left: 4px solid var(--disclaimer-border);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 2rem;
@@ -132,8 +228,8 @@
   }
   
   .stat-box {
-    background: rgba(20, 184, 166, 0.05);
-    border-left: 4px solid #14B8A6;
+    background: var(--stat-bg);
+    border-left: 4px solid var(--stat-border);
     padding: 16px;
     margin: 1.5rem 0;
     border-radius: 8px;
@@ -142,7 +238,7 @@
   .stat-box p {
     margin: 0;
     font-weight: 600;
-    color: #0F172A;
+    color: var(--stat-text);
   }
   
   .study-link {
@@ -249,12 +345,12 @@
   }
   
   .stat-item.negative {
-    background: rgba(239, 68, 68, 0.05);
+    background: var(--negative-bg);
     border-left-color: #ef4444;
   }
   
   .stat-item.positive {
-    background: rgba(16, 185, 129, 0.05);
+    background: var(--positive-bg);
     border-left-color: #10b981;
   }
   
@@ -271,8 +367,8 @@
   }
   
   .chart-note {
-    background: rgba(109, 40, 217, 0.05);
-    border: 1px solid #6D28D9;
+    background: var(--chart-note-bg);
+    border: 1px solid var(--example-border);
     border-radius: 8px;
     padding: 12px 16px;
     margin-top: 16px;
@@ -297,8 +393,8 @@
   }
   
   .data-note {
-    background: rgba(245, 158, 11, 0.05);
-    border-left: 4px solid #F59E0B;
+    background: var(--data-note-bg);
+    border-left: 4px solid var(--disclaimer-border);
     padding: 12px 16px;
     margin-top: 16px;
     border-radius: 8px;
@@ -314,7 +410,7 @@
     overflow: hidden;
     border-radius: 12px;
     border: 2px dashed var(--border-color);
-    background: #f3f4f6;
+    background: var(--video-placeholder-bg);
     margin: 2rem 0;
   }
   
@@ -329,7 +425,7 @@
   }
   
   .video-placeholder-content p {
-    color: var(--text-secondary);
+    color: var(--video-placeholder-text);
     font-size: 1rem;
     margin: 0;
     text-align: center;
@@ -347,7 +443,7 @@
   .article-cta h3 {
     margin-top: 0;
     margin-bottom: 1rem;
-    color: #0F172A;
+    color: var(--text-primary);
   }
   
   .article-cta p {
@@ -462,7 +558,7 @@
   
   .returns-table .index-name {
     font-weight: 600;
-    color: #0F172A;
+    color: var(--text-primary);
   }
   
   .returns-table .return-value {
@@ -471,8 +567,8 @@
   }
   
   .example-box {
-    background: rgba(109, 40, 217, 0.05);
-    border: 1px solid #6D28D9;
+    background: var(--example-bg);
+    border: 1px solid var(--example-border);
     border-radius: 12px;
     padding: 20px;
     margin: 2rem 0;
@@ -481,7 +577,7 @@
   .example-box h4 {
     margin-top: 0;
     margin-bottom: 12px;
-    color: #6D28D9;
+    color: var(--example-border);
     font-size: 1.1rem;
   }
   
@@ -495,15 +591,15 @@
   }
   
   .example-result {
-    background: white;
+    background: var(--example-result-bg);
     border-radius: 8px;
     padding: 16px;
     margin-top: 12px;
-    border: 1px solid #6D28D9;
+    border: 1px solid var(--example-border);
   }
   
   .example-result strong {
-    color: #6D28D9;
+    color: var(--example-border);
     font-size: 1.05rem;
   }
   
@@ -542,7 +638,8 @@
         </div>
       </a>
     </div>
-    <nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
       <a href="/index.html">Home</a>
       <a href="/articles/index.html" aria-current="page">Articles</a>
       <a href="/tools/index.html">Tools</a>
@@ -1056,12 +1153,58 @@
 <!-- Load Cookie Consent Script -->
 <script src="/assets/js/cookie-consent.js"></script>
 
+<!-- ====================================
+     HAMBURGER MENU JAVASCRIPT
+     ==================================== -->
+
+<script>
+  // Hamburger menu toggle
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('mainNav').classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
+    
+    if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+      nav.classList.remove('active');
+    }
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mainNav').classList.remove('active');
+    });
+  });
+</script>
+
 </body>
 </html>
 <script>
+  // Helper function to detect dark mode
+  function isDarkMode() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  // Get appropriate colors based on theme
+  function getChartColors() {
+    const dark = isDarkMode();
+    return {
+      textColor: dark ? '#F1F5F9' : '#0F172A',
+      gridColor: dark ? '#334155' : '#f3f4f6',
+      tooltipBg: dark ? '#1e293b' : '#0F172A',
+      legendColor: dark ? '#F1F5F9' : '#0F172A'
+    };
+  }
+
   // Compounding Chart (Emily vs John)
   const compoundingCtx = document.getElementById('compoundingChart').getContext('2d');
-  new Chart(compoundingCtx, {
+  let colors = getChartColors();
+
+  const compoundingChart = new Chart(compoundingCtx, {
     type: 'line',
     data: {
       labels: Array.from({length: 41}, (_, i) => i + 25),
@@ -1101,6 +1244,9 @@
         legend: {
           display: true,
           position: 'top',
+          labels: {
+            color: colors.legendColor
+          }
         }
       },
       scales: {
@@ -1109,7 +1255,19 @@
           ticks: {
             callback: function(value) {
               return '$' + (value / 1000).toFixed(0) + 'k';
-            }
+            },
+            color: colors.textColor
+          },
+          grid: {
+            color: colors.gridColor
+          }
+        },
+        x: {
+          ticks: {
+            color: colors.textColor
+          },
+          grid: {
+            color: colors.gridColor
           }
         }
       }
@@ -1182,7 +1340,7 @@
           labels: {
             padding: 16,
             font: { size: 13, weight: '600' },
-            color: '#0F172A'
+            color: colors.legendColor
           }
         },
         tooltip: {
@@ -1191,7 +1349,7 @@
               return context.label + ': ' + context.parsed + '%';
             }
           },
-          backgroundColor: '#0F172A',
+          backgroundColor: colors.tooltipBg,
           padding: 12,
           titleFont: { size: 14 },
           bodyFont: { size: 13 }
@@ -1255,7 +1413,7 @@
   const growthYears = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
   const growthValues = [10000, 10980, 13260, 12710, 16540, 19560, 28410, 23240, 29270, 34456];
   
-  new Chart(growthCtx, {
+  const growthChart = new Chart(growthCtx, {
     type: 'line',
     data: {
       labels: growthYears,
@@ -1285,7 +1443,7 @@
               return '$' + context.parsed.y.toLocaleString();
             }
           },
-          backgroundColor: '#0F172A',
+          backgroundColor: colors.tooltipBg,
           padding: 12
         }
       },
@@ -1296,18 +1454,48 @@
           ticks: {
             callback: function(value) {
               return '$' + (value / 1000).toFixed(0) + 'k';
-            }
+            },
+            color: colors.textColor
           },
           grid: {
-            color: '#f3f4f6'
+            color: colors.gridColor
           }
         },
         x: {
+          ticks: {
+            color: colors.textColor
+          },
           grid: {
             display: false
           }
         }
       }
     }
+  });
+
+  // Listen for theme changes and update charts
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const newColors = getChartColors();
+    
+    // Update all charts
+    [compoundingChart, spivaChart, growthChart].forEach(chart => {
+      if (chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+        chart.options.plugins.legend.labels.color = newColors.legendColor;
+      }
+      if (chart.options.plugins.tooltip) {
+        chart.options.plugins.tooltip.backgroundColor = newColors.tooltipBg;
+      }
+      if (chart.options.scales) {
+        Object.keys(chart.options.scales).forEach(axis => {
+          if (chart.options.scales[axis].ticks) {
+            chart.options.scales[axis].ticks.color = newColors.textColor;
+          }
+          if (chart.options.scales[axis].grid) {
+            chart.options.scales[axis].grid.color = newColors.gridColor;
+          }
+        });
+      }
+      chart.update();
+    });
   });
 </script>
