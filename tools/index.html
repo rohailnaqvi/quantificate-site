@@ -34,7 +34,33 @@
 </script>
 
 <style>
-  /* Enhanced card button layout */
+  /* Section heading styles */
+  .section-group {
+    margin-bottom: 48px;
+  }
+  .section-group:last-child {
+    margin-bottom: 0;
+  }
+  .section-heading {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #14b8a6;
+    display: inline-block;
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .section-subtitle {
+      color: #9ca3af;
+    }
+  }
+
+  /* Card layout */
   .card-buttons {
     display: flex;
     flex-direction: column;
@@ -48,7 +74,6 @@
     display: block;
   }
   
-  /* Ensure card content takes up space, buttons at bottom */
   .card {
     display: flex;
     flex-direction: column;
@@ -56,6 +81,38 @@
   
   .card .note {
     flex-grow: 1;
+  }
+
+  /* Disabled / coming soon button */
+  .btn.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Video embed inside card */
+  .card-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #000;
+    margin-top: 12px;
+  }
+  .card-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  @media (prefers-color-scheme: dark) {
+    .card-video {
+      border-color: #1f2937;
+    }
   }
 
   /* ====================================
@@ -151,36 +208,82 @@
 
 <section class="section">
   <h1>Tools</h1>
-  <div class="grid cols-3" style="margin-top:12px">
-    
-    <!-- Personal Investment Planner -->
-    <div class="card">
-      <h3>Personal Investment Planner</h3>
-      <p class="note">Indices, metals, crypto — historical lookback and projections.</p>
-      <div class="card-buttons">
-        <a class="btn primary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Open Dashboard</a>
-        <a class="btn secondary" href="/articles/investment-basics.html">Read: Starting Your Investment Journey</a>
+
+  <!-- =============================================
+       SECTION 1: Personal Finance & Investments
+       ============================================= -->
+  <div class="section-group">
+    <h2 class="section-heading">Personal Finance &amp; Investments</h2>
+    <p class="section-subtitle">Interactive dashboards, planners, and models to support your financial decisions.</p>
+
+    <div class="grid cols-3">
+
+      <!-- Personal Investment Planner -->
+      <div class="card">
+        <h3>Personal Investment Planner</h3>
+        <p class="note">Indices, metals, crypto — historical lookback and projections.</p>
+        <div class="card-video">
+          <iframe
+            src="https://www.youtube.com/embed/OcqDihgt0UM"
+            title="Personal Investment Planner"
+            loading="lazy"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="card-buttons">
+          <a class="btn primary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Open Dashboard</a>
+          <a class="btn secondary disabled" href="#">Spreadsheet (coming soon)</a>
+          <a class="btn secondary" href="/articles/investment-basics.html">Read: Starting Your Investment Journey</a>
+        </div>
       </div>
+
+      <!-- Placeholder -->
+      <div class="card">
+        <h3>Coming Soon</h3>
+        <p class="note">More personal finance tools and models on the way.</p>
+      </div>
+
+      <!-- Placeholder -->
+      <div class="card">
+        <h3>Coming Soon</h3>
+        <p class="note">Have a suggestion? Head to the contact page and let us know.</p>
+      </div>
+
     </div>
-    
-    <!-- Excel Models -->
-    <div class="card">
-      <h3>Excel models</h3>
-      <p class="note">Coming soon: downloadable templates and walkthroughs.</p>
-    </div>
-    
-    <!-- Calculators -->
-    <div class="card">
-      <h3>Calculators</h3>
-      <p class="note">NPV, IRR, scenario tools and more (roadmap).</p>
-    </div>
-    
   </div>
+
+  <!-- =============================================
+       SECTION 2: Coming Soon
+       ============================================= -->
+  <div class="section-group">
+    <h2 class="section-heading">Coming Soon</h2>
+    <p class="section-subtitle">New tools and calculators are on the roadmap.</p>
+
+    <div class="grid cols-3">
+
+      <div class="card">
+        <h3>Excel Models</h3>
+        <p class="note">Coming soon: downloadable templates and walkthroughs.</p>
+      </div>
+
+      <div class="card">
+        <h3>Calculators</h3>
+        <p class="note">NPV, IRR, scenario tools and more (roadmap).</p>
+      </div>
+
+      <div class="card">
+        <h3>Coming Soon</h3>
+        <p class="note">More content on the way — stay tuned.</p>
+      </div>
+
+    </div>
+  </div>
+
 </section>
 
 </main>
 <footer class="footer">
-  <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
 
 <!-- ====================================

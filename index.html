@@ -6,7 +6,7 @@
 <title>Home — Quantificate</title>
 <meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/x-icon" href="/assets/img/favicon_light.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
@@ -548,7 +548,7 @@
 </main>
 
 <footer class="footer">
-  <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
 
 <!-- ====================================
@@ -642,170 +642,6 @@
     });
   });
 </script>
-
-<!-- ====================================
-     COOKIE CONSENT JAVASCRIPT
-     ==================================== -->
-
-<script>
-  // Cookie consent management
-  const CookieConsent = {
-    consentKey: 'cookieConsent',
-    
-    hasConsent: function() {
-      const consent = localStorage.getItem(this.consentKey);
-      return consent !== null;
-    },
-    
-    getConsent: function() {
-      const consent = localStorage.getItem(this.consentKey);
-      return consent ? JSON.parse(consent) : null;
-    },
-    
-    saveConsent: function(preferences) {
-      localStorage.setItem(this.consentKey, JSON.stringify(preferences));
-      this.applyCookiePreferences(preferences);
-    },
-    
-    applyCookiePreferences: function(preferences) {
-      // Update Google Analytics consent
-      if (typeof gtag === 'function') {
-        if (preferences.analytics) {
-          console.log('✅ Google Analytics enabled');
-          gtag('consent', 'update', {
-            'analytics_storage': 'granted'
-          });
-        } else {
-          console.log('❌ Google Analytics disabled');
-          gtag('consent', 'update', {
-            'analytics_storage': 'denied'
-          });
-        }
-      }
-    },
-    
-    showBanner: function() {
-      document.getElementById('cookieConsent').classList.add('show');
-    },
-    
-    hideBanner: function() {
-      document.getElementById('cookieConsent').classList.remove('show');
-    }
-  };
-  
-  function acceptAllCookies() {
-    const preferences = {
-      essential: true,
-      analytics: true,
-      timestamp: new Date().toISOString()
-    };
-    CookieConsent.saveConsent(preferences);
-    CookieConsent.hideBanner();
-  }
-  
-  function declineAllCookies() {
-    const preferences = {
-      essential: true,
-      analytics: false,
-      timestamp: new Date().toISOString()
-    };
-    CookieConsent.saveConsent(preferences);
-    CookieConsent.hideBanner();
-  }
-  
-  function showSettings() {
-    const consent = CookieConsent.getConsent();
-    if (consent) {
-      document.getElementById('analyticsCookies').checked = consent.analytics;
-    }
-    document.getElementById('cookieSettings').classList.add('show');
-  }
-  
-  function closeSettings() {
-    document.getElementById('cookieSettings').classList.remove('show');
-  }
-  
-  function saveSettings() {
-    const preferences = {
-      essential: true,
-      analytics: document.getElementById('analyticsCookies').checked,
-      timestamp: new Date().toISOString()
-    };
-    CookieConsent.saveConsent(preferences);
-    CookieConsent.hideBanner();
-    closeSettings();
-  }
-  
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    if (!CookieConsent.hasConsent()) {
-      CookieConsent.showBanner();
-    } else {
-      const consent = CookieConsent.getConsent();
-      CookieConsent.applyCookiePreferences(consent);
-    }
-  });
-</script>
-
-<!-- Cookie Consent Banner -->
-<div id="cookieConsent">
-  <div class="cookie-container">
-    <div class="cookie-content">
-      <div class="cookie-text">
-        <h3>🍪 We Value Your Privacy</h3>
-        <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
-      </div>
-      <div class="cookie-buttons">
-        <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
-        <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
-        <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Cookie Settings Modal -->
-<div id="cookieSettings">
-  <div class="settings-modal">
-    <div class="settings-header">
-      <h2>Cookie Preferences</h2>
-      <p>Manage your cookie preferences. You can enable or disable different types of cookies below.</p>
-    </div>
-    
-    <div class="settings-body">
-      <div class="cookie-category">
-        <div class="category-header">
-          <h3>Essential Cookies</h3>
-          <label class="toggle-switch">
-            <input type="checkbox" id="essentialCookies" checked disabled>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <p class="category-description">
-          These cookies are necessary for the website to function and cannot be disabled. They are usually set in response to actions you take, such as setting privacy preferences.
-        </p>
-      </div>
-
-      <div class="cookie-category">
-        <div class="category-header">
-          <h3>Analytics Cookies</h3>
-          <label class="toggle-switch">
-            <input type="checkbox" id="analyticsCookies">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <p class="category-description">
-          These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously using Google Analytics.
-        </p>
-      </div>
-    </div>
-
-    <div class="settings-footer">
-      <button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button>
-      <button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button>
-    </div>
-  </div>
-</div>
 
 <!-- Load Cookie Consent Script -->
 <script src="/assets/js/cookie-consent.js"></script>
