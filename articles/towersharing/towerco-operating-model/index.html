@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The TowerCo Operating Model: Understanding Communication Sites — Quantificate</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/styles.css">
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PC2NVFZ2J5"></script>
+<script> gtag('js', new Date()); gtag('config', 'G-PC2NVFZ2J5'); </script>
+
+<style>
+  .menu-toggle { display: none; background: none; border: none; font-size: 28px; cursor: pointer; padding: 8px; color: inherit; line-height: 1; }
+  @media (max-width: 768px) {
+    .menu-toggle { display: block; } .nav { flex-wrap: wrap; }
+    nav { display: none; width: 100%; flex-direction: column; gap: 0; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; }
+    nav.active { display: flex; } nav a { padding: 12px 0; width: 100%; border-bottom: 1px solid #e5e7eb; } nav a:last-child { border-bottom: none; }
+  }
+  @media (max-width: 768px) and (prefers-color-scheme: dark) { nav { border-top-color: #374151; } nav a { border-bottom-color: #374151; } }
+
+  :root { --disclaimer-bg: rgba(245,158,11,0.05); --disclaimer-border: #F59E0B; --stat-bg: rgba(20,184,166,0.05); --stat-border: #14B8A6; --stat-text: #0F172A; --example-bg: rgba(109,40,217,0.05); --example-border: #6D28D9; }
+  @media (prefers-color-scheme: dark) { :root { --disclaimer-bg: rgba(245,158,11,0.15); --stat-bg: rgba(20,184,166,0.15); --stat-text: #F1F5F9; --example-bg: rgba(109,40,217,0.15); --example-border: #A78BFA; } }
+
+  article { max-width: 800px; margin: 0 auto; }
+  article h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  article h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+  article h3 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+  article p { line-height: 1.7; margin-bottom: 1.25rem; text-align: justify; }
+  article ul, article ol { line-height: 1.7; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+  article li { margin-bottom: 0.5rem; }
+
+  .article-meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+  .disclaimer-box { background: var(--disclaimer-bg); border: 1px solid var(--disclaimer-border); border-left: 4px solid var(--disclaimer-border); border-radius: 8px; padding: 20px; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.6; }
+  .disclaimer-box p { margin-bottom: 0.75rem; } .disclaimer-box p:last-child { margin-bottom: 0; }
+  .stat-box { background: var(--stat-bg); border-left: 4px solid var(--stat-border); padding: 16px; margin: 1.5rem 0; border-radius: 8px; }
+  .stat-box p { margin: 0; font-weight: 600; color: var(--stat-text); }
+  .example-box { background: var(--example-bg); border: 1px solid var(--example-border); border-radius: 12px; padding: 20px; margin: 2rem 0; }
+  .example-box h4 { margin-top: 0; margin-bottom: 12px; color: var(--example-border); }
+  .example-box p { margin-bottom: 12px; text-align: left; } .example-box p:last-child { margin-bottom: 0; }
+  .article-image { width: 100%; max-width: 700px; margin: 2rem auto; display: block; border-radius: 12px; border: 1px solid var(--border-color); }
+  .image-caption { font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-top: 12px; margin-bottom: 2rem; font-style: italic; }
+  .article-cta { background: rgba(20,184,166,0.05); border: 1px solid #14B8A6; border-radius: 12px; padding: 2rem; margin: 2.5rem 0; text-align: center; }
+  .article-cta h3 { margin-top: 0; margin-bottom: 1rem; } .article-cta p { margin-bottom: 1.5rem; text-align: center; }
+  .btn { display: inline-block; padding: 12px 24px; background: #14B8A6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease; }
+  .btn:hover { background: #0d9488; transform: translateY(-2px); }
+  .btn.secondary { background: #6D28D9; } .btn.secondary:hover { background: #5b21b6; }
+  hr { border: none; border-top: 1px solid var(--border-color); margin: 2.5rem 0; }
+  .references { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--border-color); }
+  .references h3 { margin-top: 0; } .references a { color: #14B8A6; }
+  .emoji { font-size: 1.2em; margin: 0 4px; }
+  @media (max-width: 768px) { article h1 { font-size: 2rem; } article h2 { font-size: 1.5rem; } }
+</style>
+<script defer src="/assets/js/app.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="container nav">
+    <div class="brand">
+      <a class="brand-link" href="/">
+        <picture class="brand-mark">
+          <source srcset="/assets/img/avatar_dark_256.png" media="(prefers-color-scheme: dark)">
+          <source srcset="/assets/img/avatar_light_256.png" media="(prefers-color-scheme: light)">
+          <img src="/assets/img/avatar_light_256.png" alt="Quantificate mark">
+        </picture>
+        <div class="brand-text">
+          <div class="brand-name">Quantificate</div>
+          <div class="brand-sub">analysis • tools • insight</div>
+        </div>
+      </a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
+      <a href="/index.html">Home</a>
+      <a href="/articles/index.html" aria-current="page">Articles</a>
+      <a href="/tools/index.html">Tools</a>
+      <a href="/about/index.html">About</a>
+      <a href="/contact/index.html">Contact</a>
+      <a href="/disclaimer/index.html">Disclaimer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+    <h1>The TowerCo Operating Model <span class="emoji">⚙️</span></h1>
+    <h2 style="margin-top: 0; font-size: 1.3rem; color: var(--text-secondary); font-weight: 400;">Understanding Communication Sites and Assets</h2>
+
+    <div class="article-meta">
+      <strong>Published:</strong> August 9, 2024 | <strong>Read time:</strong> 20 minutes | <strong>Series:</strong> Towersharing Deep Dive (Part 4)
+    </div>
+
+    <div class="disclaimer-box">
+      <p><strong><em>Disclaimer:</em></strong></p>
+      <p><em>This article is for educational purposes only. The author is not an expert on Active Equipment; if any concept has been misrepresented, constructive feedback is welcome. Please also review the <a href="/disclaimer/index.html" style="color: #F59E0B; font-weight: 600;">General Disclaimer</a> covering all content in and/or directed from Quantificate.ca.</em></p>
+    </div>
+
+    <p>Before we dive into the different configurations of the TowerCo model, it is best to gather an insight into the types of wireless communication sites and their respective components. There are two broad types of communication sites: <strong>Rooftop Sites</strong> and <strong>Greenfield Sites</strong>.</p>
+
+    <!-- ==========================================
+         ROOFTOP SITES
+         ========================================== -->
+    <h2>Rooftop Sites <span class="emoji">🏙️</span></h2>
+
+    <p>Rooftop Sites (as the name suggests) are communications towers that are located on building rooftops. Since these towers are constructed on rooftops, they are usually light, easy to assemble and cover a considerably low amount of ground area as opposed to Greenfield Sites. These structures are also smaller in size compared to their counterparts and have less space on the towers to share (a concept called "<strong>Windloading Capacity</strong>", which will be discussed in the latter part of this article). This is because building rooftops have the capacity to withstand only a limited amount of structural weight, thereby making construction of heavy towers unfeasible.</p>
+
+    <p>Rooftop Sites are ideal for areas that have a high concentration of buildings (i.e. urban and suburban areas) and low (or expensive) availability of freehold land to construct towers on. Since areas with concentration of high-rise buildings usually conflict with the ComCo communication signals, Rooftop Sites are preferable as they are placed on rooftops that provide higher signal coverage in contrast to ground based towers.</p>
+
+    <p>Previously when MNOs were pursuing expansion of Coverage across regions, Rooftop Sites were utilized to provide said Coverage to urban regions due to the high amount of traffic generation potential (high traffic → high ARPU generation). Now, due to the exponential increase in demand for data, Rooftop Sites serve mostly to increase capacity of an MNO network in these high ARPU generating areas.</p>
+
+    <div class="stat-box">
+      <p>📏 <strong>Rooftop Tower Specs:</strong> Usually single pole towers, 15–20 meters high (due to weight and ground coverage considerations), used mostly by MNOs.</p>
+    </div>
+
+    <img src="images/rooftop_site.png" alt="Illustration of a Rooftop Site showing active equipment, tower structure and ground equipment on a building rooftop" class="article-image" style="max-width: 500px;">
+    <div class="image-caption">Illustration of a Rooftop Site — single pole tower on a building rooftop with active and passive equipment</div>
+
+    <!-- ==========================================
+         GREENFIELD SITES
+         ========================================== -->
+    <h2>Greenfield Sites <span class="emoji">🌿</span></h2>
+
+    <p>Greenfield Sites are ground based towers that are located on freehold land (as opposed to rooftops). These sites are taller than their rooftop counterparts and possess a significantly enhanced structure. Whereas Rooftop Sites are comparatively mobile (i.e. easy to dismantle, relocate and reassemble), Greenfield Sites have purpose built communications towers, constructed from the ground up and often require significant effort to dismantle and relocate. These sites are mostly located in areas where there is an abundance of freehold (and less expensive) land (i.e. suburban and rural areas) and are often used for long range communication (i.e. establishing the network grid).</p>
+
+    <p>Greenfield Sites normally have ComCo Active Equipment on-board that includes equipment to disseminate end user wireless signals (Radio Equipment) as well as long range Microwave ("MW") or Fiber Cabling installed to enable towers to communicate amongst themselves and establish a network grid.</p>
+
+    <div class="stat-box">
+      <p>📏 <strong>Greenfield Tower Specs:</strong> Multiple designs including Lattice (mesh) and Monopole structures. Average height 30–60 meters for MNOs (up to 100 meters for Broadcast Companies). Construction time averages 6–8 months.</p>
+    </div>
+
+    <img src="images/greenfield_site.png" alt="Illustration of a Greenfield Site showing a lattice tower structure with active equipment, tower structure and ground equipment on freehold land" class="article-image" style="max-width: 400px;">
+    <div class="image-caption">Illustration of a Greenfield Site — lattice tower on freehold land with ground-based passive and active equipment</div>
+
+    <!-- ==========================================
+         COMPONENTS OF A COMMUNICATION SITE
+         ========================================== -->
+    <h2>Components of a Communication Site <span class="emoji">🔧</span></h2>
+
+    <p>Now that we have an understanding of the two broad categories of communication towers, let us look at the general components of the sites that are used in facilitating wireless communication. The following diagram illustrates the components of a communication site, paying special attention to the passive elements relevant to a TowerCo.</p>
+
+    <img src="images/typical_site.png" alt="A typical communication site diagram showing active equipment (radio and microwave), tower structure, power solutions, tower cabling, auxiliary active equipment and fencing/security" class="article-image">
+    <div class="image-caption">A Typical Communication Site — showing all major active and passive components</div>
+
+    <img src="images/site_elements.png" alt="Detailed breakdown of communication site elements" class="article-image">
+    <div class="image-caption">Communication site elements breakdown — from ground space to security</div>
+
+    <!-- ==========================================
+         GROUND SPACE
+         ========================================== -->
+    <h3>1. Ground Space <span class="emoji">📍</span></h3>
+
+    <p>A communication site needs ground space to install/construct the tower and the supplementary equipment required to function it. Generally, the towers are located on ground space that is leased (rented) from individual/institutional or government entities. This is because the tower platform under ownership of ComCo/TowerCo consists of thousands of Tower Assets scattered across a diverse geography. It is therefore financially, legally or logistically unfeasible for a ComCo/TowerCo to own all of the properties where the Tower Assets are located.</p>
+
+    <p>The amount of ground space required depends on the type of Tower Asset. Rooftop Towers cover a low ground space as opposed to Greenfield Sites. Since Rooftop Sites are preferred in urban areas, they generally have good and stable access to power sourced from the national/regional grid. As a result, many Rooftop Sites do not require backup generators, thereby consuming less ground space. This helps in curbing ground rental costs since real estate in urban areas is more expensive than in rural areas.</p>
+
+    <p>Greenfield sites, on the other hand, require a higher ground space due to the large size of the tower and the supplementary equipment required (i.e. back-up gensets for potential power outages in rural areas). However, ground leases are less expensive in rural areas, making it justifiable to construct large towers for long-range communication and Coverage.</p>
+
+    <!-- ==========================================
+         TOWER STRUCTURE
+         ========================================== -->
+    <h3>2. Tower Structure <span class="emoji">🗼</span></h3>
+
+    <p>The Tower Structure is the most core component of a communication site. This "steel" asset is prime real estate that is marketed to ComCos to enable them to expand their network requirements (both Coverage and Capacity). The most common forms of Tower Assets are single pole (for Rooftops and Monopole for Greenfield) and Lattice structures (a four-legged mesh steel structure most commonly deployed on Greenfield Sites).</p>
+
+    <img src="images/tower_types.png" alt="Illustration showing different tower structure types — single pole, monopole and lattice" class="article-image" style="max-width: 400px;">
+    <div class="image-caption">Common tower structure types — Single Pole, Monopole and Lattice configurations</div>
+
+    <p>The most important consideration for a TowerCo when purchasing or constructing a Tower Asset is the amount of total space available to install communication equipment on (the shareable space). This is a factor of vertical space (height of the tower and shareable area) and the capacity of the tower to hold the weight of equipment — referred to as the <strong>"Windloading Capacity"</strong>.</p>
+
+    <img src="images/windloading.png" alt="Diagram showing windloading capacity relationship with tower height — inverse relationship where higher positions have lower capacity" class="article-image">
+    <div class="image-caption">Windloading Capacity — follows an inverse relationship with height on the tower</div>
+
+    <p>Windloading capacity follows an inverse relation with height. The higher a particular position on the tower, the lower the capacity to install Active Equipment. This is because higher positions are subjected to stronger wind speeds and are further from the tower base which provides structural support. This is why, for example, the top floors of the Burj Khalifa witness a small amount of sway from time to time.</p>
+
+    <div class="example-box">
+      <h4>💡 Why ComCos Want the Top</h4>
+      <p>The most desirable area on a Tower Structure for ComCos is near the top. Higher positions provide Active Equipment greater coverage capability (especially in urban settings where tall buildings restrict signal broadcast). However, newer high frequency equipment (2.1/2.6 and 2.8 GHz for Data traffic) has limited range, so if a strong network of nearby towers exists, equipment can be positioned lower where Windloading Capacity is greater.</p>
+    </div>
+
+    <p>The total Windloading Capacity differs from the shareable capacity. The <strong>Total Tower Windloading Capacity</strong> refers to the entire tower structure, whereas the <strong>Shareable Tower Windloading Capacity</strong> refers to the area and capacity of interest to ComCos — and is lesser than the total.</p>
+
+    <img src="images/windloading_example.png" alt="Example showing a ComCo interested in the windloading capacity of the top 10 meters of a 30 meter tower" class="article-image" style="max-width: 450px;">
+    <div class="image-caption">Example: A ComCo may only need the Windloading Capacity of the top 10 meters of a 30-meter tower</div>
+
+    <!-- ==========================================
+         ACTIVE EQUIPMENT
+         ========================================== -->
+    <h3>3. Active Tower Equipment <span class="emoji">📡</span></h3>
+
+    <p>Active Tower Equipment can be broadly assigned to two categories:</p>
+
+    <ul>
+      <li><strong>Radio Equipment:</strong> Facilitates communication to and from end consumers. The signals we receive on our cellular devices are transmitted from Radio Equipment. It uses antennas to disseminate communication signals, and significant progression has been made to make this equipment shareable (Multi-Band Antennas). Radio Equipment is generally lighter than Microwave equipment and is positioned <strong>higher</strong> on the tower.</li>
+      <li><strong>Microwave ("MW") Equipment:</strong> Deployed to facilitate the network grid of a ComCo (communication between towers). MW signals have the ability to penetrate through objects (buildings) with fair ease compared to Radio Equipment. As a result, MW Equipment is traditionally positioned <strong>lower</strong> on the towers.</li>
+    </ul>
+
+    <img src="images/cell_tower_photo.jpeg" alt="Photograph of a real communication tower showing radio and microwave equipment installed" class="article-image">
+    <div class="image-caption">A real-world communication tower with Radio and Microwave equipment installed</div>
+
+    <div class="stat-box">
+      <p>🌐 <strong>Hub Sites:</strong> These "Mother Sites" act as regional hubs that communicate directly to ComCo Processing Centers. They have large amounts of Radio and MW Equipment and are often complemented by Fiber Cable Networks for faster data transfer. Communication through Fiber Cables does not require a power source, whereas MW Equipment does.</p>
+    </div>
+
+    <!-- ==========================================
+         TOWER CABLING
+         ========================================== -->
+    <h3>4. Tower Cabling & Auxiliary Active Equipment <span class="emoji">🔌</span></h3>
+
+    <p>Tower Cabling connects the Active Equipment to ground-based sheds that house the Auxiliary Active Equipment. Auxiliary Active Equipment is the ground-based equipment that synthesizes and regulates the tower-specific communication flow (both to the end user and to other communication sites). This equipment is generally fragile and cannot withstand physical wear and tear from the environment.</p>
+
+    <p>Communication sites with Auxiliary Active Equipment located in sheds are known as <strong>indoor units</strong>. However, owing to advances in technology, sturdy Auxiliary Active Equipment that doesn't require a shed is coming into play — known as <strong>outdoor units</strong>.</p>
+
+    <!-- ==========================================
+         POWER SOLUTIONS
+         ========================================== -->
+    <h3>5. Power Solutions <span class="emoji">⚡</span></h3>
+
+    <p>Both the Active Equipment and the Auxiliary Active Equipment require round-the-clock power supply. Any period of interrupted power supply causes these equipments to go offline and not provide communication services to the end user — resulting in a loss of revenue for ComCos and a reduction in their ARPUs.</p>
+
+    <p>Power can be sourced from two broad sources: <strong>Grid</strong> and/or <strong>On-site power solutions</strong>.</p>
+
+    <p><strong>Grid power</strong> is sourced directly from national or regional Electricity Providers and is currently the least expensive form of power accessible to a communication site. Urban sites have more access to stable Grid power, while less progressive economies are prone to load shedding and blackouts.</p>
+
+    <p>Due to the critical nature of maintaining equipment online, communication sites connected to the Grid usually have backup power solutions as well. Historically, <strong>Diesel Generators ("gensets")</strong> had been the major backup source. However, tower operators have started relying more on <strong>batteries</strong> in urban sites, as investment in batteries is (on average) lower than gensets.</p>
+
+    <img src="images/power_solutions.png" alt="Diagram showing the various power solutions for communication sites including grid, gensets, batteries and solar" class="article-image">
+    <div class="image-caption">Power Solutions for Communication Sites — Grid, Batteries, Gensets and Alternative Energy</div>
+
+    <div class="stat-box">
+      <p>🔋 <strong>Battery Backup:</strong> Batteries on average provide 3–4 hours of backup power per 24-hour period. The duration depends on make, type, capacity and number of batteries in the Battery Pack.</p>
+    </div>
+
+    <p>In areas where Grid connectivity is poor, gensets are installed to ensure optimal power flow. Purchasing gensets requires heavier investment than Battery Packs. Considerations include the manufacturer (e.g. Siemens), capacity (e.g. 20 kVa), and volume discounts from bulk purchasing.</p>
+
+    <div class="example-box">
+      <h4>⚠️ The Sub-Optimal Power Problem</h4>
+      <p>ComCos have historically implemented "one size fits all" policies when purchasing gensets — buying similar capacity across their entire portfolio for bulk discounts, despite communication site operations not being their core function. This results in gensets with greater capacity than actually required, leading to heavier upfront CAPEX and greater OPEX (higher fuel consumption per hour).</p>
+      <p>TowerCos address this by working on a case-by-case or region-by-region basis to optimize the infrastructure grid — something ComCos could have done but deprioritized in favor of their core communication services.</p>
+    </div>
+
+    <p>There have been considerable advancements in alternative power solutions, with Solar Power Technology becoming financially feasible. TowerCos (and some ComCos) have been proactive in introducing these solutions on communication sites.</p>
+
+    <!-- ==========================================
+         FENCING / SECURITY
+         ========================================== -->
+    <h3>6. Fencing & Security <span class="emoji">🔒</span></h3>
+
+    <p>The final component of a communication site is fencing and security. Sites (especially in rural areas) are prone to thefts and vandalism requiring critical infrastructure and equipment to be secure at all costs.</p>
+
+    <img src="images/security_theft.png" alt="Diagram showing the different types of theft and security concerns at communication sites" class="article-image">
+    <div class="image-caption">Types of theft and security concerns at communication sites</div>
+
+    <p><strong>Fuel theft</strong> is common in impoverished and remote areas with little access to electricity. Stolen fuel can be resold or used to power other equipment. Alternatively, individuals can connect directly to on-site gensets for free electricity, resulting in greater load and fuel expenditure.</p>
+
+    <p><strong>Equipment theft</strong> covers Active Equipment, Auxiliary Equipment and Power Solutions — all at risk without proper security measures. A subset of this is <strong>vandalism</strong>, which usually occurs where tower operations urge individuals or groups to seek benefits (justifiable, such as environmental compensation, or unjustifiable, such as extortion).</p>
+
+    <p><strong>Information theft</strong> from Auxiliary Active Equipment through industrial espionage is possible but rare.</p>
+
+    <p>Security solutions include <strong>fencing</strong> (the most basic form), <strong>CCTV cameras</strong>, <strong>security guards</strong>, and <strong>Cluster Security</strong> (protecting a cluster of 4–5 nearby towers with a shared security solution).</p>
+
+    <!-- ==========================================
+         WHAT'S NEXT
+         ========================================== -->
+    <h2>What's Next? <span class="emoji">🚀</span></h2>
+
+    <p>This concludes the section on Understanding Communication Sites and Assets. If you have been able to read through the entire piece, congratulations (and thank you) on your grit and perseverance! This should hopefully be the largest one-piece reading of this series.</p>
+
+    <p>The next section will also be titled the TowerCo Operating Model but will focus on the different types of TowerCo models (i.e. Pureplay and Value-Added Model) and will be relatively shorter. <span class="emoji">📋</span></p>
+
+    <div class="article-cta">
+      <h3>Continue the Series <span class="emoji">📚</span></h3>
+      <p>This is Part 4 of the Towersharing Deep Dive series. Up next: TowerCo Operational Models (Pureplay, VAS & Managed Services).</p>
+      <a href="/articles/towersharing/history-of-towercos/index.html" class="btn secondary" style="margin-right: 8px;">← Part 3: History of TowerCos</a>
+      <a href="/articles/index.html" class="btn">Explore More Articles</a>
+    </div>
+
+    <hr>
+
+    <div class="references">
+      <h3>References & Sources <span class="emoji">📖</span></h3>
+      <ul>
+        <li><a href="https://www.networkworld.com/article/2945814/wireless/a-black-market-for-wireless-cell-service-has-popped-up-in-canada.html" target="_blank" rel="noopener">Cell tower photograph — Network World</a></li>
+      </ul>
+    </div>
+
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
+</footer>
+
+<div id="cookieConsent">
+  <div class="cookie-container"><div class="cookie-content"><div class="cookie-text">
+    <h3>🍪 We Value Your Privacy</h3>
+    <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
+  </div><div class="cookie-buttons">
+    <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
+    <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
+    <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
+  </div></div></div>
+</div>
+
+<div id="cookieSettings">
+  <div class="settings-modal">
+    <div class="settings-header"><h2>Cookie Preferences</h2><p>Manage your cookie preferences below.</p></div>
+    <div class="settings-body">
+      <div class="cookie-category"><div class="category-header"><h3>Essential Cookies</h3><label class="toggle-switch"><input type="checkbox" id="essentialCookies" checked disabled><span class="toggle-slider"></span></label></div><p class="category-description">Necessary for the website to function.</p></div>
+      <div class="cookie-category"><div class="category-header"><h3>Analytics Cookies</h3><label class="toggle-switch"><input type="checkbox" id="analyticsCookies"><span class="toggle-slider"></span></label></div><p class="category-description">Help us understand how visitors interact with our website using Google Analytics.</p></div>
+    </div>
+    <div class="settings-footer"><button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button><button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button></div>
+  </div>
+</div>
+
+<script src="/assets/js/cookie-consent.js"></script>
+<script>
+  document.getElementById('menuToggle').addEventListener('click', function() { document.getElementById('mainNav').classList.toggle('active'); });
+  document.addEventListener('click', function(event) { const nav = document.getElementById('mainNav'); const toggle = document.getElementById('menuToggle'); if (!nav.contains(event.target) && !toggle.contains(event.target)) { nav.classList.remove('active'); } });
+  document.querySelectorAll('#mainNav a').forEach(link => { link.addEventListener('click', function() { document.getElementById('mainNav').classList.remove('active'); }); });
+</script>
+</body>
+</html>

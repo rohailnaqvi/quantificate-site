@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Towersharing? — Quantificate</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/styles.css">
+
+<!-- Google Analytics 4 with Cookie Consent -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PC2NVFZ2J5"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'G-PC2NVFZ2J5');
+</script>
+
+<!-- Article-specific styles -->
+<style>
+  /* ====================================
+     MOBILE HAMBURGER MENU STYLES
+     ==================================== */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px;
+    color: inherit;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    .nav { flex-wrap: wrap; }
+    nav {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    nav.active { display: flex; }
+    nav a {
+      padding: 12px 0;
+      width: 100%;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    nav a:last-child { border-bottom: none; }
+  }
+
+  @media (max-width: 768px) and (prefers-color-scheme: dark) {
+    nav { border-top-color: #374151; }
+    nav a { border-bottom-color: #374151; }
+  }
+
+  /* Dark mode color variables */
+  :root {
+    --disclaimer-bg: rgba(245, 158, 11, 0.05);
+    --disclaimer-border: #F59E0B;
+    --stat-bg: rgba(20, 184, 166, 0.05);
+    --stat-border: #14B8A6;
+    --stat-text: #0F172A;
+    --example-bg: rgba(109, 40, 217, 0.05);
+    --example-border: #6D28D9;
+    --example-result-bg: white;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --disclaimer-bg: rgba(245, 158, 11, 0.15);
+      --disclaimer-border: #F59E0B;
+      --stat-bg: rgba(20, 184, 166, 0.15);
+      --stat-border: #14B8A6;
+      --stat-text: #F1F5F9;
+      --example-bg: rgba(109, 40, 217, 0.15);
+      --example-border: #A78BFA;
+      --example-result-bg: rgba(30, 41, 59, 0.5);
+    }
+  }
+
+  article { max-width: 800px; margin: 0 auto; }
+  article h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  article h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--text-primary); }
+  article h3 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--text-primary); }
+  article h4 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--text-primary); }
+  article p { line-height: 1.7; margin-bottom: 1.25rem; text-align: justify; }
+  article ul, article ol { line-height: 1.7; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+  article li { margin-bottom: 0.5rem; }
+  article strong { font-weight: 600; }
+  article em { font-style: italic; }
+
+  .article-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .disclaimer-box {
+    background: var(--disclaimer-bg);
+    border: 1px solid var(--disclaimer-border);
+    border-left: 4px solid var(--disclaimer-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .disclaimer-box p { margin-bottom: 0.75rem; }
+  .disclaimer-box p:last-child { margin-bottom: 0; }
+
+  .stat-box {
+    background: var(--stat-bg);
+    border-left: 4px solid var(--stat-border);
+    padding: 16px;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+  }
+  .stat-box p { margin: 0; font-weight: 600; color: var(--stat-text); }
+
+  .article-image {
+    width: 100%;
+    max-width: 700px;
+    margin: 2rem auto;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .image-caption {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .example-box {
+    background: var(--example-bg);
+    border: 1px solid var(--example-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 2rem 0;
+  }
+  .example-box h4 { margin-top: 0; margin-bottom: 12px; color: var(--example-border); font-size: 1.1rem; }
+  .example-box p { margin-bottom: 12px; text-align: left; }
+  .example-box p:last-child { margin-bottom: 0; }
+
+  .article-cta {
+    background: rgba(20, 184, 166, 0.05);
+    border: 1px solid #14B8A6;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2.5rem 0;
+    text-align: center;
+  }
+  .article-cta h3 { margin-top: 0; margin-bottom: 1rem; color: var(--text-primary); }
+  .article-cta p { margin-bottom: 1.5rem; text-align: center; }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #14B8A6;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  .btn:hover { background: #0d9488; transform: translateY(-2px); text-decoration: none; }
+  .btn.secondary { background: #6D28D9; }
+  .btn.secondary:hover { background: #5b21b6; }
+
+  hr { border: none; border-top: 1px solid var(--border-color); margin: 2.5rem 0; }
+
+  .references { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--border-color); }
+  .references h3 { margin-top: 0; }
+  .references a { color: #14B8A6; }
+
+  .emoji { font-size: 1.2em; margin: 0 4px; }
+
+  @media (max-width: 768px) {
+    article h1 { font-size: 2rem; }
+    article h2 { font-size: 1.5rem; }
+  }
+</style>
+
+<script defer src="/assets/js/app.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="container nav">
+    <div class="brand">
+      <a class="brand-link" href="/">
+        <picture class="brand-mark">
+          <source srcset="/assets/img/avatar_dark_256.png" media="(prefers-color-scheme: dark)">
+          <source srcset="/assets/img/avatar_light_256.png" media="(prefers-color-scheme: light)">
+          <img src="/assets/img/avatar_light_256.png" alt="Quantificate mark">
+        </picture>
+        <div class="brand-text">
+          <div class="brand-name">Quantificate</div>
+          <div class="brand-sub">analysis • tools • insight</div>
+        </div>
+      </a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
+      <a href="/index.html">Home</a>
+      <a href="/articles/index.html" aria-current="page">Articles</a>
+      <a href="/tools/index.html">Tools</a>
+      <a href="/about/index.html">About</a>
+      <a href="/contact/index.html">Contact</a>
+      <a href="/disclaimer/index.html">Disclaimer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+    <h1>Why Towersharing? <span class="emoji">🤔</span></h1>
+
+    <div class="article-meta">
+      <strong>Published:</strong> August 9, 2024 | <strong>Read time:</strong> 10 minutes | <strong>Series:</strong> Towersharing Deep Dive (Part 2)
+    </div>
+
+    <!-- Disclaimer Box -->
+    <div class="disclaimer-box">
+      <p><strong><em>Disclaimer:</em></strong></p>
+      <p><em>This article is for educational purposes only. Information presented has been compiled from multiple pieces of literature including Towerxchange.com and involves some data crunching conducted by the author. Since most TowerCos are under private ownership globally, data is available to the extent it is provided by Governments and/or TowerCos. Certain approximations have been made.</em></p>
+      <p><em>Please also review the <a href="/disclaimer/index.html" style="color: #F59E0B; font-weight: 600;">General Disclaimer</a> covering all content in and/or directed from Quantificate.ca.</em></p>
+    </div>
+
+    <!-- ==========================================
+         THE 1980S: INFANCY
+         ========================================== -->
+
+    <h2>The Birth of Mobile Telephony <span class="emoji">📱</span></h2>
+
+    <p>The value of Towersharing as a viable (and much needed) business model can be traced back as early as the 1990s. During the 1980s, commercial mobile telephony and wireless services were in the infancy stage in the United States of America ("<strong>US</strong>") and better part of the Developed World. MNOs such as Ameritech (1983) launched the first mobile phone in the US and contributed in launching the First Generation ("1G" or more commonly known as Analogue Cellular) in mobile telephony in the US<sup><a href="#fn1">1</a></sup>. Back then, the prime concern of the MNOs was to provide quality cellular services to a wider range of the population. Mobile phones and the cellular services that supplemented these phones were highly priced, resulting in only a select few being able to afford these services. During this era, Pagers (a predecessor to the present-day SMS) were more commonly used as a means of communication. These Pagers utilized a subsection of the same wireless services that were on offer by the early MNOs.</p>
+
+    <!-- ==========================================
+         THE ARPU SQUEEZE
+         ========================================== -->
+
+    <h2>The ARPU Squeeze <span class="emoji">📉</span></h2>
+
+    <p>As technology progressed in the early 1990s with the introduction of the Second Generation ("2G", "GSM" or Digital Cellular Services) in mobile telephony, the cost of provision of services reduced. However, margins charged to customers for the use of said services by the MNOs were still large resulting in the MNOs enjoying high Average Revenue Per User (or "<strong>ARPU</strong>").</p>
+
+    <p>These high ARPUs were justified by MNOs in light of aggressive expansion undertaken to increase the geographical coverage of the cellular services across the region (i.e. installing new towers across the country/region to expand the network coverage). As more and more MNOs entered the industry (backed by major investment groups), geographical coverage became one of the Unique Selling Propositions (or "<strong>USP</strong>") of an MNO.</p>
+
+    <p>As the geographical expansion of MNOs started nearing maturity and new cellular technology became less expensive, MNOs started competing against each other in terms of pricing (i.e. low-cost packages) and Value-Added Services (or "<strong>VAS</strong>" such as Data). In order to amass a significant subscriber base and therefore increase market share, prices for cellular services started to become more competitive to encourage the general population to start using these services. This meant that MNOs had to cut down on previously high margins charged to the customers, leading to a general reduction in the overall ARPUs of these MNOs and the respective regions.</p>
+
+    <p>Reduced margins did not necessarily mean that the MNOs were less profitable at this point. Since newer technology and cost of operating a tower were also becoming cost efficient, this merely meant that MNOs were not enjoying previously aggressive growth in earnings (all the while still being profitable)<sup><a href="#fn2">2</a></sup>.</p>
+
+    <!-- ==========================================
+         SATURATION & DATA ERA
+         ========================================== -->
+
+    <h2>Coverage Saturation & The Data Era <span class="emoji">🌐</span></h2>
+
+    <p>Eventually there was a point in the life cycle of these MNOs where the competitive advantage realized by providing greater Coverage across geographies had saturated (meaning competing MNOs had caught up on the Coverage constraints faced by them previously and had started providing almost like for like Coverage to their consumers). This led to MNOs focusing on realizing competitive advantages based on pricing and VAS.</p>
+
+    <p>During this period, the Global Telecommunications Industry was shifting from traditional mobile telephony to provision of Data (internet) services as well. Advancements in Voice over Internet Protocol (or "<strong>VoIP</strong>") and data backed text and media communication platforms (such as BBM, Skype etc.) led to a less reliance on mobile telephony. It was also during this time that Wireless Internet Service Providers (or Wireless Local Loop "<strong>WLL</strong>" providers) emerged. These WLL service providers were providing high quality internet services to consumers at prices that were at a significant discount to the rates being charged by the MNOs. As a result, to be competitive, MNOs started focusing more on price competition to stay relevant in the market. This put a further dent into the ARPUs generated by MNOs<sup><a href="#fn3">3</a></sup>.</p>
+
+    <div class="stat-box">
+      <p>📊 <strong>The Tipping Point:</strong> The reduction in ARPUs as a result of aggressive price competition outweighed the reduction in operational costs due to technological innovation and optimization. This encouraged MNOs to search for "out of the box" alternatives to remain competitive.</p>
+    </div>
+
+    <!-- ==========================================
+         WHY MNO-TO-MNO SHARING DIDN'T WORK
+         ========================================== -->
+
+    <h2>Why MNO-to-MNO Sharing Didn't Work <span class="emoji">🚫</span></h2>
+
+    <p>MNOs experimented to implement Towersharing amongst themselves, however this did not gain traction. There were a few reasons for this:</p>
+
+    <ul>
+      <li><strong>Strategic Asset Perception:</strong> MNOs viewed their towers as "Strategic Assets" — something they had invested a considerable amount of Capital Expenditure (or "<strong>CAPEX</strong>") into and were not willing to lease to a competitor at a low lease (or <strong>rental</strong>) rate. Appropriate pricing became one of the major issues.</li>
+      <li><strong>Competitive Advantage:</strong> Despite the fact that Coverage and Capacity were nearing saturation, the positioning of an MNO tower in a particular area provided a slight service superiority to that specific MNO. If this was a high revenue generating area (i.e. more traffic), MNOs would technically not want to give their competitive advantage up.</li>
+      <li><strong>Free-Rider Concerns:</strong> Certain smaller MNOs that were eager to <strong>Collocate</strong> (or lease a space on the main MNO's tower) for Coverage, Capacity or both considerations, were viewed unfavorably. These smaller MNOs were perceived to benefit from the investments already made by the main MNO (by not incurring CAPEX and building a tower) and would eventually become a major threat to the market share in possession of the main MNO.</li>
+      <li><strong>Confidentiality:</strong> Since MNOs in the market were competing entities, there was a major concern of data and operational confidentiality.</li>
+    </ul>
+
+    <p>The above concerns eventually paved the path for TowerCos to emerge as a lucrative business model. To be fair, the above concerns do not apply to MNOs operating across all geographies. For example, MNOs/ComCos in Europe have achieved a considerable amount of success in sharing infrastructure and networks among themselves<sup><a href="#fn4">4</a></sup>. This is probably one of the reasons why TowerCo backed Towersharing has not achieved critical mass in the region.</p>
+
+    <!-- ==========================================
+         THE TOWERCO SOLUTION
+         ========================================== -->
+
+    <h2>Enter the TowerCo <span class="emoji">🏗️</span></h2>
+
+    <p>Towersharing's USP rested in the ability of the model to optimize the Traditional ComCo Tower Operating Model. Operating towers was always viewed by ComCos as a supplementary service to enable the ComCos to focus on their primary objective of offering services to its customers (i.e. provision of wireless communication services to the end user). As a consequence of using supplementary assets and services to provide primary services to the end user, there was a general opinion in the TMT sector that these ComCo towers could be operated optimally, if provided the appropriate amount of focus.</p>
+
+    <p>TowerCos addressed many of the concerns that discouraged MNOs from sharing towers amongst themselves. A couple of noteworthy benefits on offer to MNOs for considering TowerCo backed Towersharing are as follows:</p>
+
+    <ul>
+      <li><strong>Value Maximization & OPEX Minimization<sup><a href="#fn5">5</a></sup>:</strong> MNOs can benefit from reducing their Operational Expenditure (or "<strong>OPEX</strong>") by paying a lower lease fee to TowerCo, and/or can maximize the value of their towers on sale and receive up-front consideration.</li>
+      <li><strong>Independence of TowerCo<sup><a href="#fn6">6</a></sup>:</strong> Since a TowerCo is not affiliated with any ComCo and operates independently, it satisfies concerns regarding confidentiality of data and operations of ComCos participating in Towersharing.</li>
+    </ul>
+
+    <img src="images/key_benefits.png" alt="Key Benefits of TowerCos — showing Value Maximization and OPEX Minimization flowing into Mobile Network Operators, and Independence of TowerCo flowing into Mobile Network Operators" class="article-image" style="max-width: 550px;">
+    <div class="image-caption">Key Benefits of TowerCos: Value Maximization & OPEX Minimization, and Independence of TowerCo</div>
+
+    <!-- ==========================================
+         MNO LIFECYCLE ILLUSTRATION
+         ========================================== -->
+
+    <h2>The MNO Journey: Four Decades at a Glance <span class="emoji">⏳</span></h2>
+
+    <p>The following illustration summarizes a brief history of the journey of MNOs in developed markets and the respective strategy adopted to gain competitive advantage (and the resulting consequences) during the decades.</p>
+
+    <img src="images/mno_lifecycle.png" alt="Life Cycle of the MNO Industry from 1980 to 2019 showing four phases: Infancy (1980s, very low coverage, very high ARPU, 1G technology), Expansion (1990s, medium coverage, high to medium ARPU, 1G and 2G), Saturation (2000s, high coverage, medium to low ARPU, 2G and 3G) and Towersharing (2010s, very high coverage, low ARPU, 3G and 4G)" class="article-image">
+    <div class="image-caption">Life Cycle of the MNO Industry — from Infancy (1980s) through Expansion, Saturation and into the Towersharing era (2010s)</div>
+
+    <div class="stat-box">
+      <p>💡 <strong>Key Takeaway:</strong> As coverage matured and ARPUs declined through each decade, the economic pressure on MNOs intensified — ultimately creating the conditions for TowerCos to emerge as a compelling, independent solution.</p>
+    </div>
+
+    <!-- ==========================================
+         WHAT'S NEXT
+         ========================================== -->
+
+    <h2>What's Next? <span class="emoji">🚀</span></h2>
+
+    <p>Before we dive into the Operational Model of the TowerCos, it is worthwhile to gather a brief understanding of the History of TowerCos and how they have expanded to various regions across the globe. The next section will focus on the History of TowerCos and a sneak peek into the evolution of the TowerCo Model (i.e. how the TowerCo model evolved to address the concerns of MNOs operating in different regions). <span class="emoji">🌍</span></p>
+
+    <!-- CTA Section -->
+    <div class="article-cta">
+      <h3>Continue the Series <span class="emoji">📚</span></h3>
+      <p>This is Part 2 of the Towersharing Deep Dive series. Up next: the history of TowerCos and their expansion from the US to a global phenomenon.</p>
+      <a href="/articles/towersharing/introduction/index.html" class="btn secondary" style="margin-right: 8px;">← Part 1: Introduction</a>
+      <a href="/articles/index.html" class="btn">Explore More Articles</a>
+    </div>
+
+    <hr>
+
+    <!-- References Section -->
+    <div class="references">
+      <h3>References & Sources <span class="emoji">📖</span></h3>
+      <ul>
+        <li id="fn1"><strong>[1]</strong> Wikipedia — History of Mobile Phones</li>
+        <li id="fn2"><strong>[2]</strong> Coverage & Capacity (page 34) — <a href="https://www2.deloitte.com/content/dam/Deloitte/in/Documents/technology-media-telecommunications/in-tmt-indian-tower-industry-noexp.pdf" target="_blank" rel="noopener">Deloitte: Indian Tower Industry — The Future is Data 2015</a></li>
+        <li id="fn3"><strong>[3]</strong> <a href="http://www.ey.com/Publication/vwLUAssets/EY_-_Optimize_network_OPEX_and_CAPEX_while_enhancing_the_quality_of_service/$FILE/EY-optimize-network-opex-and-capex.pdf" target="_blank" rel="noopener">Optimize network OPEX and CAPEX while enhancing the quality of service — EY January 2014</a></li>
+        <li id="fn4"><strong>[4]</strong> <a href="https://www.towerxchange.com/an-introduction-to-the-unique-tower-industry-in-europe/" target="_blank" rel="noopener">An introduction to the unique tower industry in Europe — Towerxchange</a></li>
+        <li id="fn5"><strong>[5]</strong> <a href="http://towershare.com/benefits-of-tower-sharing/" target="_blank" rel="noopener">Benefits to Operator — Towershare</a></li>
+        <li id="fn6"><strong>[6]</strong> <a href="http://towershare.com/the-towershare-advantage/" target="_blank" rel="noopener">Towershare Advantage — Towershare</a></li>
+      </ul>
+    </div>
+
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
+</footer>
+
+<!-- Cookie Consent Banner -->
+<div id="cookieConsent">
+  <div class="cookie-container">
+    <div class="cookie-content">
+      <div class="cookie-text">
+        <h3>🍪 We Value Your Privacy</h3>
+        <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
+      </div>
+      <div class="cookie-buttons">
+        <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
+        <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
+        <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div id="cookieSettings">
+  <div class="settings-modal">
+    <div class="settings-header">
+      <h2>Cookie Preferences</h2>
+      <p>Manage your cookie preferences. You can enable or disable different types of cookies below.</p>
+    </div>
+    <div class="settings-body">
+      <div class="cookie-category">
+        <div class="category-header">
+          <h3>Essential Cookies</h3>
+          <label class="toggle-switch">
+            <input type="checkbox" id="essentialCookies" checked disabled>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p class="category-description">These cookies are necessary for the website to function and cannot be disabled.</p>
+      </div>
+      <div class="cookie-category">
+        <div class="category-header">
+          <h3>Analytics Cookies</h3>
+          <label class="toggle-switch">
+            <input type="checkbox" id="analyticsCookies">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p class="category-description">These cookies help us understand how visitors interact with our website using Google Analytics.</p>
+      </div>
+    </div>
+    <div class="settings-footer">
+      <button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button>
+      <button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/cookie-consent.js"></script>
+
+<script>
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('mainNav').classList.toggle('active');
+  });
+  document.addEventListener('click', function(event) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
+    if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+      nav.classList.remove('active');
+    }
+  });
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mainNav').classList.remove('active');
+    });
+  });
+</script>
+
+</body>
+</html>
