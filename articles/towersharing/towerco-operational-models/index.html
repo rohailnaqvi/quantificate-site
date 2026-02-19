@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TowerCo Operational Models & Business Model Primer — Quantificate</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/styles.css">
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PC2NVFZ2J5"></script>
+<script> gtag('js', new Date()); gtag('config', 'G-PC2NVFZ2J5'); </script>
+
+<style>
+  .menu-toggle { display: none; background: none; border: none; font-size: 28px; cursor: pointer; padding: 8px; color: inherit; line-height: 1; }
+  @media (max-width: 768px) {
+    .menu-toggle { display: block; } .nav { flex-wrap: wrap; }
+    nav { display: none; width: 100%; flex-direction: column; gap: 0; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; }
+    nav.active { display: flex; } nav a { padding: 12px 0; width: 100%; border-bottom: 1px solid #e5e7eb; } nav a:last-child { border-bottom: none; }
+  }
+  @media (max-width: 768px) and (prefers-color-scheme: dark) { nav { border-top-color: #374151; } nav a { border-bottom-color: #374151; } }
+
+  :root { --disclaimer-bg: rgba(245,158,11,0.05); --disclaimer-border: #F59E0B; --stat-bg: rgba(20,184,166,0.05); --stat-border: #14B8A6; --stat-text: #0F172A; --example-bg: rgba(109,40,217,0.05); --example-border: #6D28D9; }
+  @media (prefers-color-scheme: dark) { :root { --disclaimer-bg: rgba(245,158,11,0.15); --stat-bg: rgba(20,184,166,0.15); --stat-text: #F1F5F9; --example-bg: rgba(109,40,217,0.15); --example-border: #A78BFA; } }
+
+  article { max-width: 800px; margin: 0 auto; }
+  article h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  article h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+  article h3 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+  article h4 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+  article p { line-height: 1.7; margin-bottom: 1.25rem; text-align: justify; }
+  article ul, article ol { line-height: 1.7; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+  article li { margin-bottom: 0.5rem; }
+
+  .article-meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+  .disclaimer-box { background: var(--disclaimer-bg); border: 1px solid var(--disclaimer-border); border-left: 4px solid var(--disclaimer-border); border-radius: 8px; padding: 20px; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.6; }
+  .disclaimer-box p { margin-bottom: 0.75rem; } .disclaimer-box p:last-child { margin-bottom: 0; }
+  .stat-box { background: var(--stat-bg); border-left: 4px solid var(--stat-border); padding: 16px; margin: 1.5rem 0; border-radius: 8px; }
+  .stat-box p { margin: 0; font-weight: 600; color: var(--stat-text); }
+  .example-box { background: var(--example-bg); border: 1px solid var(--example-border); border-radius: 12px; padding: 20px; margin: 2rem 0; }
+  .example-box h4 { margin-top: 0; margin-bottom: 12px; color: var(--example-border); }
+  .example-box p { margin-bottom: 12px; text-align: left; } .example-box p:last-child { margin-bottom: 0; }
+  .article-image { width: 100%; max-width: 700px; margin: 2rem auto; display: block; border-radius: 12px; border: 1px solid var(--border-color); }
+  .image-caption { font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-top: 12px; margin-bottom: 2rem; font-style: italic; }
+  .article-cta { background: rgba(20,184,166,0.05); border: 1px solid #14B8A6; border-radius: 12px; padding: 2rem; margin: 2.5rem 0; text-align: center; }
+  .article-cta h3 { margin-top: 0; margin-bottom: 1rem; } .article-cta p { margin-bottom: 1.5rem; text-align: center; }
+  .btn { display: inline-block; padding: 12px 24px; background: #14B8A6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease; }
+  .btn:hover { background: #0d9488; transform: translateY(-2px); }
+  .btn.secondary { background: #6D28D9; } .btn.secondary:hover { background: #5b21b6; }
+  hr { border: none; border-top: 1px solid var(--border-color); margin: 2.5rem 0; }
+  .references { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--border-color); }
+  .references h3 { margin-top: 0; } .references a { color: #14B8A6; }
+  .emoji { font-size: 1.2em; margin: 0 4px; }
+  .section-divider { margin: 3rem 0; padding: 2rem; background: linear-gradient(135deg, rgba(20,184,166,0.08), rgba(109,40,217,0.08)); border-radius: 12px; text-align: center; }
+  .section-divider h2 { margin: 0; }
+  @media (max-width: 768px) { article h1 { font-size: 2rem; } article h2 { font-size: 1.5rem; } }
+</style>
+<script defer src="/assets/js/app.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="container nav">
+    <div class="brand">
+      <a class="brand-link" href="/">
+        <picture class="brand-mark">
+          <source srcset="/assets/img/avatar_dark_256.png" media="(prefers-color-scheme: dark)">
+          <source srcset="/assets/img/avatar_light_256.png" media="(prefers-color-scheme: light)">
+          <img src="/assets/img/avatar_light_256.png" alt="Quantificate mark">
+        </picture>
+        <div class="brand-text">
+          <div class="brand-name">Quantificate</div>
+          <div class="brand-sub">analysis • tools • insight</div>
+        </div>
+      </a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
+      <a href="/index.html">Home</a>
+      <a href="/articles/index.html" aria-current="page">Articles</a>
+      <a href="/tools/index.html">Tools</a>
+      <a href="/about/index.html">About</a>
+      <a href="/contact/index.html">Contact</a>
+      <a href="/disclaimer/index.html">Disclaimer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+    <h1>TowerCo Operational Models <span class="emoji">📋</span></h1>
+    <h2 style="margin-top: 0; font-size: 1.3rem; color: var(--text-secondary); font-weight: 400;">Towersharing Operational Models & The TowerCo Business Model (A Primer)</h2>
+
+    <div class="article-meta">
+      <strong>Published:</strong> August 9, 2024 | <strong>Read time:</strong> 22 minutes | <strong>Series:</strong> Towersharing Deep Dive (Part 5)
+    </div>
+
+    <div class="disclaimer-box">
+      <p><strong><em>Disclaimer:</em></strong></p>
+      <p><em>This article is for educational purposes only. Information presented has been compiled from multiple pieces of literature including Towerxchange.com and involves some data crunching conducted by the author. Since most TowerCos are under private ownership globally, data is available to the extent it is provided by Governments and/or TowerCos. Certain approximations have been made.</em></p>
+      <p><em>Please also review the <a href="/disclaimer/index.html" style="color: #F59E0B; font-weight: 600;">General Disclaimer</a> covering all content in and/or directed from Quantificate.ca.</em></p>
+    </div>
+
+    <p>After having reviewed the core components of a communication site (ref. Part 4 — Understanding Communication Sites and Assets), it will now be easy to understand the different operational models that a TowerCo offers to market to ComCos. So far there have been three models (two main and one slightly limited). These three models are the Traditional (or "<strong>Pureplay</strong>") Model, a Complete Passive Infrastructure Solutions (or "<strong>Value Added Services</strong>" — VAS) Model and a <strong>Managed Services</strong> Model.</p>
+
+    <!-- ==========================================
+         PUREPLAY MODEL
+         ========================================== -->
+    <h2>1. The Pureplay Model <span class="emoji">🏠</span></h2>
+
+    <img src="images/pureplay_model.png" alt="Pureplay Model diagram showing ComCo ownership (red) vs TowerCo ownership (grey) of communication site components" class="article-image">
+    <div class="image-caption">The Pureplay Model — TowerCo provides tower structure and ground space only (grey). All other elements are ComCo responsibility (red).</div>
+
+    <p>The Pureplay Model deals with the provision of <strong>steel and grass</strong> services to a ComCo. Simply put, a TowerCo offers the ComCo space on the tower to install its Active Equipment and space on the ground to house the ComCo's Auxiliary Active Equipment. The TowerCo functioning according to this model can be assumed close to a Real Estate Investment Trust ("REIT") — essentially providing real estate to the tenant in return for rent.</p>
+
+    <p>The Pureplay Model entails that a ComCo intending to board its equipment on a communication site is responsible for managing and on-boarding all the passive elements (other than the Tower Asset and Ground Space) to function its Active Equipment. Therefore, all power concerns, maintenance concerns, and security concerns are the responsibility of the ComCo.</p>
+
+    <div class="example-box">
+      <h4>⚠️ The Duplication Problem</h4>
+      <p>If a site houses equipment of multiple ComCos, it leads to duplication of passive elements such as gensets, batteries and rectifiers (each ComCo brings its own). ComCos can theoretically reach sharing agreements, but issues arise around power sharing priorities, CAPEX sharing, and equipment quality standards.</p>
+      <p>To distance themselves from these difficult discussions, ComCos normally outsource these operational considerations to a TowerCo, governed under a <strong>Master Tower Service Agreement ("MTSA")</strong> with a <strong>Service Level Agreement ("SLA")</strong>.</p>
+    </div>
+
+    <p>One of the major reasons TowerCos initially adopted the Pureplay Model links to geography. The US is an economy not plagued with recurring power outages, heavy auxiliary power requirements, or general theft/vandalism. Therefore, the need for a TowerCo to provide passive equipment was not a necessity. However, once TowerCos expanded into less progressive economies plagued by such issues, the need for another entity to assume responsibility became a reality.</p>
+
+    <h3>Key SLA Components <span class="emoji">📝</span></h3>
+
+    <ul>
+      <li><strong>Service Levels ("Uptime"):</strong> ComCos expect TowerCos to provide seamless, constant power supply. Uptime is measured as the percentage of time in a prespecified period that Active Equipment receives quality power supply. ComCos and TowerCos agree on a minimum Uptime threshold; breaching it triggers monetary penalties.</li>
+    </ul>
+
+    <img src="images/uptime_calc.png" alt="Uptime calculation formula — number of days of power supply divided by total days in the prespecified period" class="article-image" style="max-width: 500px;">
+    <div class="image-caption">Uptime Calculation — 29 days of power supply out of 30 = 96.67% Uptime</div>
+
+    <ul>
+      <li><strong>Site Access:</strong> Optimal Site Access controls enable ComCos to service Active Equipment issues. The TowerCo serves as a bridge between the ComCo and the Ground Space landlord, with the SLA specifying procedures for both routine and emergency access.</li>
+      <li><strong>Security:</strong> Site and equipment security considerations are captured in the SLA — CCTV cameras, security guards, and other measures deployed at all times.</li>
+    </ul>
+
+    <!-- ==========================================
+         VAS MODEL
+         ========================================== -->
+    <h2>2. The Value Added Services (VAS) Model <span class="emoji">🔧</span></h2>
+
+    <img src="images/vas_model.png" alt="VAS Model diagram showing expanded TowerCo responsibility including power solutions, security and maintenance" class="article-image">
+    <div class="image-caption">The VAS Model — TowerCo responsibility (grey) now extends to power solutions, security and passive maintenance. Some elements are shared responsibility (mixed).</div>
+
+    <p>A TowerCo functioning under this model aims to provide a <strong>complete passive infrastructure solutions package</strong> to a ComCo. This extends from the traditional provision of tower space and ground space to the provision of power supply, security, Passive Equipment Maintenance, passive infrastructure insurance and more.</p>
+
+    <p>The need for the VAS Model arose in regions where managing Passive Telecom Infrastructure Operations became as challenging (if not more) as managing the Active Equipment. Since managing Passive Telecom Infrastructure was of second priority to a ComCo, TowerCos were perceived to be in a better position to handle these issues.</p>
+
+    <div class="stat-box">
+      <p>🌍 <strong>Regional Origins:</strong> The VAS Model was first implemented in the CALA and SSA regions, where power outages, grid unavailability, remote sites, and security concerns (fuel theft, equipment theft, vandalism) were rampant and required dedicated focus. TowerCos expanded their scope in return for a higher monthly Lease Fee.</p>
+    </div>
+
+    <p>Today, the VAS Model is considered the <strong>predominant model for TowerCos globally</strong>. TowerCos spanning from the Far East to the American continent follow this model.</p>
+
+    <!-- ==========================================
+         MANAGED SERVICES MODEL
+         ========================================== -->
+    <h2>3. The Managed Services Model <span class="emoji">🤝</span></h2>
+
+    <img src="images/managed_services_model.png" alt="Managed Services Model diagram showing ComCo ownership with TowerCo management responsibility" class="article-image">
+    <div class="image-caption">The Managed Services Model — ComCo retains ownership (red labels on ground space), TowerCo manages operations (green labels).</div>
+
+    <p>A slightly overlapping model with VAS, the Managed Services Model refers to a TowerCo assuming responsibility for <strong>managing</strong> the passive infrastructure component <strong>without assuming ownership</strong> of the communication site and its equipment. This differs from the VAS Model where the TowerCo purchases the infrastructure and leases it back (Sale and Leaseback).</p>
+
+    <p>The Managed Services Model entails a TowerCo charging a <strong>Managed Services Fee</strong> (normally monthly or quarterly, on a cost-plus margin basis) plus an agreed percentage of collocation benefits — revenues realized from on-boarding additional ComCos onto a communication site. The TowerCo actively seeks collocation opportunities and therefore aims to benefit from the additional revenue it helps generate.</p>
+
+    <!-- ==========================================
+         PART 2: BUSINESS MODEL PRIMER
+         ========================================== -->
+    <div class="section-divider">
+      <h2>The TowerCo Business Model: A Primer <span class="emoji">💼</span></h2>
+    </div>
+
+    <p>Before we jump into the TowerCo Business Model, let's take a step back and understand a few key terms. The TowerCo Business Model is built on <strong>5 primary drivers</strong> that govern different aspects of the acquisition and operation processes:</p>
+
+    <img src="images/bm_drivers.png" alt="5 TowerCo Business Model drivers — 1. Towers and Tenants, 2. Contracts, 3. Revenue and Operations, 4. Capital Expenditure, 5. Acquisition/Expansion Specifics" class="article-image" style="max-width: 600px;">
+    <div class="image-caption">The 5 Primary Drivers of the TowerCo Business Model</div>
+
+    <img src="images/bm_overlap.png" alt="Diagram showing the nature of relationship and overlap between the 5 business model drivers" class="article-image">
+    <div class="image-caption">The relationship and overlap between the 5 business model drivers</div>
+
+    <!-- DRIVER 1: TOWERS & TENANTS -->
+    <h3>Driver 1: Towers and Tenants <span class="emoji">🗼</span></h3>
+
+    <p>Towers and Tenants refer to the quantum of towers that constitute a portfolio, and the respective ComCos that house their equipment as tenants. A tower portfolio normally ranges from a few (20–30 towers) to thousands. To circumvent the complexity of tracking individual towers, TowerCos calculate the <strong>"average tenancy ratio"</strong> across the portfolio.</p>
+
+    <img src="images/bm_tenancy_ratio.png" alt="Tenancy ratio formula — total number of tenants divided by total number of towers" class="article-image" style="max-width: 600px;">
+    <div class="image-caption">Average Tenancy Ratio = Total Tenants ÷ Total Towers</div>
+
+    <!-- DRIVER 2: CONTRACTS -->
+    <h3>Driver 2: Contracts <span class="emoji">📄</span></h3>
+
+    <p>Contracts determine the nature of relationship between ComCo and TowerCo. They generally fall under three categories:</p>
+
+    <img src="images/bm_contracts.png" alt="Three categories of TowerCo contracts — Acquisition, Project and Services" class="article-image">
+    <div class="image-caption">Three categories of TowerCo contracts</div>
+
+    <h4>Acquisition Contracts</h4>
+    <p>The Asset Purchase Agreement (APA) or Share Purchase Agreement (SPA) covers the transfer of ownership. Common elements include: price, number and types of assets, transfer structure, taxes, warranties, pricing mechanism (lock box or closing accounts), conditions precedent, escrow mechanics, and payment schedules.</p>
+
+    <h4>Project Contracts</h4>
+    <p>Deal with Greenfield (new build) projects where a TowerCo constructs new towers. Usually paired with long term Services Contracts since the TowerCo needs to redeem capital invested. Cover: tower specifications, construction schedule, ownership, taxes, and warranties.</p>
+
+    <h4>Services Contracts</h4>
+    <p>Often referred to as "leaseback" in Sale and Leaseback. These are long term tenancy agreements (7+ years on average) and are the most comprehensive, regulating day-to-day engagements. Two major types:</p>
+    <ul>
+      <li><strong>Master Tower Services Agreement (MTSA):</strong> TowerCo owns the asset, ComCo is tenant. TowerCo receives a "Use Fee".</li>
+      <li><strong>Managed Services Agreement (MSA):</strong> ComCo owns the tower, TowerCo manages operations for a management fee.</li>
+    </ul>
+
+    <!-- DRIVER 3: REVENUE & OPERATIONS -->
+    <h3>Driver 3: Revenue and Operations <span class="emoji">💰</span></h3>
+
+    <p>TowerCo customers are primarily ComCos — a limited customer base that can tilt bargaining power in favor of ComCos. However, TowerCo services have <strong>inelastic demand</strong>. Revenue comes from the <strong>Use Fee</strong> (rental), normally bifurcated into energy and non-energy components, subject to periodic escalations.</p>
+
+    <img src="images/bm_use_fee.png" alt="Use Fee structure showing energy and non-energy components" class="article-image" style="max-width: 600px;">
+    <div class="image-caption">Use Fee structure — energy and non-energy components with periodic escalations</div>
+
+    <p>TowerCo expenditures break down into 8 main brackets: ground lease, energy, operations & maintenance, insurance, regulatory permits, security, other direct expenditures, and general & administration.</p>
+
+    <!-- DRIVER 4: CAPEX -->
+    <h3>Driver 4: Capital Expenditure <span class="emoji">🏗️</span></h3>
+
+    <p>Capital expenditure deals with assets that provide utility for more than 1 year. TowerCo capex is normally clubbed into:</p>
+
+    <img src="images/bm_capex.png" alt="TowerCo capital expenditure categories — Acquisition, Build-to-Suit, Refurbishment, Strengthening, Maintenance/Recurring, Office/Fleet" class="article-image">
+    <div class="image-caption">TowerCo Capital Expenditure categories</div>
+
+    <ul>
+      <li><strong>Acquisition:</strong> Purchasing a portfolio or adding towers. Most infrequent and largest expense head.</li>
+      <li><strong>Build-to-Suit:</strong> Constructing new towers for greenfield projects.</li>
+      <li><strong>Refurbishment:</strong> One-time upgrades when acquiring a new portfolio.</li>
+      <li><strong>Strengthening:</strong> Structural and technical upgrades to support new tenants (steel frames, power equipment).</li>
+      <li><strong>Maintenance/Recurring:</strong> The most frequent routine capex — battery replacement, generator overhaul etc.</li>
+      <li><strong>Office/Fleet and Others:</strong> Office equipment, automobile fleet and residual items.</li>
+    </ul>
+
+    <!-- DRIVER 5: ACQUISITION/EXPANSION SPECIFICS -->
+    <h3>Driver 5: Acquisition/Expansion Specifics <span class="emoji">📊</span></h3>
+
+    <p>When considering organic (construction) or inorganic (acquisition) growth, certain leakages beyond the purchase/construction price are factored in — loosely described as <strong>closing costs</strong>:</p>
+
+    <img src="images/bm_closing_costs.png" alt="Key closing items in the TowerCo business plan — Transaction Costs, Working Capital Reimbursements, Initial Working Capital Injection" class="article-image">
+    <div class="image-caption">Key closing items factored into the TowerCo Business Plan</div>
+
+    <ul>
+      <li><strong>Transaction Costs:</strong> Due diligence/feasibility studies, debt arrangement fees, and advisory services (tax, legal, M&A).</li>
+      <li><strong>Working Capital Reimbursements:</strong> Portfolio ground lease reimbursement, bank guarantees, and rental deposits required by landlords.</li>
+      <li><strong>Initial Working Capital Injection:</strong> Cash injection to commence operations until the TowerCo becomes cash flow positive. Usually done through equity and reverse-engineered via business plan modelling.</li>
+    </ul>
+
+    <!-- ==========================================
+         WHAT'S NEXT
+         ========================================== -->
+    <h2>What's Next? <span class="emoji">🚀</span></h2>
+
+    <p>This sums up the structure and a brief introduction of the TowerCo business plan and its drivers. Now that we are equipped with this information, the next few articles will dive deeper into the models, assumptions and mechanics of each business plan driver. <span class="emoji">📈</span></p>
+
+    <div class="article-cta">
+      <h3>Continue the Series <span class="emoji">📚</span></h3>
+      <p>This is Part 5 of the Towersharing Deep Dive series.</p>
+      <a href="/articles/towersharing/towerco-operating-model/index.html" class="btn secondary" style="margin-right: 8px;">← Part 4: Communication Sites</a>
+      <a href="/articles/index.html" class="btn">Explore More Articles</a>
+    </div>
+
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
+</footer>
+
+<div id="cookieConsent">
+  <div class="cookie-container"><div class="cookie-content"><div class="cookie-text">
+    <h3>🍪 We Value Your Privacy</h3>
+    <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
+  </div><div class="cookie-buttons">
+    <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
+    <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
+    <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
+  </div></div></div>
+</div>
+<div id="cookieSettings">
+  <div class="settings-modal">
+    <div class="settings-header"><h2>Cookie Preferences</h2><p>Manage your cookie preferences below.</p></div>
+    <div class="settings-body">
+      <div class="cookie-category"><div class="category-header"><h3>Essential Cookies</h3><label class="toggle-switch"><input type="checkbox" id="essentialCookies" checked disabled><span class="toggle-slider"></span></label></div><p class="category-description">Necessary for the website to function.</p></div>
+      <div class="cookie-category"><div class="category-header"><h3>Analytics Cookies</h3><label class="toggle-switch"><input type="checkbox" id="analyticsCookies"><span class="toggle-slider"></span></label></div><p class="category-description">Help us understand how visitors interact with our website using Google Analytics.</p></div>
+    </div>
+    <div class="settings-footer"><button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button><button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button></div>
+  </div>
+</div>
+<script src="/assets/js/cookie-consent.js"></script>
+<script>
+  document.getElementById('menuToggle').addEventListener('click', function() { document.getElementById('mainNav').classList.toggle('active'); });
+  document.addEventListener('click', function(event) { const nav = document.getElementById('mainNav'); const toggle = document.getElementById('menuToggle'); if (!nav.contains(event.target) && !toggle.contains(event.target)) { nav.classList.remove('active'); } });
+  document.querySelectorAll('#mainNav a').forEach(link => { link.addEventListener('click', function() { document.getElementById('mainNav').classList.remove('active'); }); });
+</script>
+</body>
+</html>

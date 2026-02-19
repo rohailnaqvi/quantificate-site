@@ -17,7 +17,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   
-  // Default: deny all tracking until user consents
   gtag('consent', 'default', {
     'analytics_storage': 'denied',
     'ad_storage': 'denied',
@@ -112,6 +111,115 @@
   @media (prefers-color-scheme: dark) {
     .card-video {
       border-color: #1f2937;
+    }
+  }
+
+  /* ====================================
+     TOWERSHARING SLIDER
+     ==================================== */
+
+  .slider-wrapper {
+    position: relative;
+  }
+
+  .slider-track-outer {
+    overflow: hidden;
+  }
+
+  .slider-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .slider-track .card {
+    /* Show 3 cards at once with gap accounted for */
+    flex: 0 0 calc((100% - 40px) / 3);
+    min-width: 0;
+  }
+
+  .slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .slider-btn {
+    background: none;
+    border: 2px solid #14b8a6;
+    color: #14b8a6;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .slider-btn:hover {
+    background: #14b8a6;
+    color: #fff;
+  }
+
+  .slider-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .slider-btn:disabled:hover {
+    background: none;
+    color: #14b8a6;
+  }
+
+  .slider-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .slider-dot.active {
+    background: #14b8a6;
+    transform: scale(1.25);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .slider-dot {
+      background: #374151;
+    }
+    .slider-dot.active {
+      background: #14b8a6;
+    }
+  }
+
+  /* On smaller screens show 1 card */
+  @media (max-width: 640px) {
+    .slider-track .card {
+      flex: 0 0 100%;
+    }
+  }
+
+  /* On medium screens show 2 cards */
+  @media (min-width: 641px) and (max-width: 900px) {
+    .slider-track .card {
+      flex: 0 0 calc((100% - 20px) / 2);
     }
   }
 
@@ -259,61 +367,76 @@
     <h2 class="section-heading">Industry Knowledge — Towersharing</h2>
     <p class="section-subtitle">Insights from the telecom infrastructure and tower sharing industry.</p>
 
-    <div class="grid cols-3">
-
-      <!-- Towersharing Introduction Article -->
-      <div class="card">
-        <h3>Towersharing (An Introduction)</h3>
-        <img src="/articles/towersharing/introduction/images/banner.png" alt="Towersharing: A Game Changer" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
-        <p class="note">What is tower sharing, who are the key players (TowerCos, ComCos, MNOs), and how did this revolutionary telecom infrastructure model come to be?</p>
-        <div class="card-buttons">
-          <a class="btn primary" href="/articles/towersharing/introduction/index.html">Read Article</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Why Towersharing?</h3>
-        <img src="/articles/towersharing/why-towersharing/images/banner.jpeg" alt="Why Towersharing" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
-        <p class="note">A look into the life cycle of the MNOs, their growth and the concerns that led to the need for Towersharing.</p>
-        <div class="card-buttons">
-          <a class="btn primary" href="/articles/towersharing/why-towersharing/index.html">Read Article</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>History of TowerCos</h3>
-        <img src="/articles/towersharing/history-of-towercos/images/banner.jpeg" alt="History of TowerCos" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
-        <p class="note">History of TowerCos and a sneak peek into the evolution of the TowerCo Model across regions.</p>
-        <div class="card-buttons">
-          <a class="btn primary" href="/articles/towersharing/history-of-towercos/index.html">Read Article</a>
-        </div>
-      </div>
-
+    <!-- Slider nav controls -->
+    <div class="slider-nav">
+      <div class="slider-dots" id="towerDots"></div>
+      <button class="slider-btn" id="towerPrev" aria-label="Previous">&#8592;</button>
+      <button class="slider-btn" id="towerNext" aria-label="Next">&#8594;</button>
     </div>
 
-    <div class="grid cols-3" style="margin-top: 24px;">
+    <!-- Slider -->
+    <div class="slider-wrapper">
+      <div class="slider-track-outer">
+        <div class="slider-track" id="towerTrack">
 
-      <!-- TowerCo Operating Model Article -->
-      <div class="card">
-        <h3>The TowerCo Operating Model (P.1)</h3>
-        <img src="/articles/towersharing/towerco-operating-model/images/banner.jpeg" alt="TowerCo Operating Model" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
-        <p class="note">Understanding Communication Sites and Assets — Rooftop vs Greenfield sites, tower components, windloading, power solutions and security.</p>
-        <div class="card-buttons">
-          <a class="btn primary" href="/articles/towersharing/towerco-operating-model/index.html">Read Article</a>
-        </div>
-      </div>
+          <div class="card">
+            <h3>Towersharing (An Introduction)</h3>
+            <img src="/articles/towersharing/introduction/images/banner.png" alt="Towersharing: A Game Changer" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
+            <p class="note">What is tower sharing, who are the key players (TowerCos, ComCos, MNOs), and how did this revolutionary telecom infrastructure model come to be?</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/towersharing/introduction/index.html">Read Article</a>
+            </div>
+          </div>
 
-      <div class="card">
-        <h3>Coming Soon</h3>
-        <p class="note">More content on the way — stay tuned.</p>
-      </div>
+          <div class="card">
+            <h3>Why Towersharing?</h3>
+            <img src="/articles/towersharing/why-towersharing/images/banner.jpeg" alt="Why Towersharing" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
+            <p class="note">A look into the life cycle of the MNOs, their growth and the concerns that led to the need for Towersharing.</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/towersharing/why-towersharing/index.html">Read Article</a>
+            </div>
+          </div>
 
-      <div class="card">
-        <h3>Coming Soon</h3>
-        <p class="note">Have a suggestion? Head to the contact page and let us know.</p>
-      </div>
+          <div class="card">
+            <h3>History of TowerCos</h3>
+            <img src="/articles/towersharing/history-of-towercos/images/banner.jpeg" alt="History of TowerCos" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
+            <p class="note">History of TowerCos and a sneak peek into the evolution of the TowerCo Model across regions.</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/towersharing/history-of-towercos/index.html">Read Article</a>
+            </div>
+          </div>
 
-    </div>
+          <div class="card">
+            <h3>The TowerCo Operating Model (P.1)</h3>
+            <img src="/articles/towersharing/towerco-operating-model/images/banner.jpeg" alt="TowerCo Operating Model" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
+            <p class="note">Understanding Communication Sites and Assets — Rooftop vs Greenfield sites, tower components, windloading, power solutions and security.</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/towersharing/towerco-operating-model/index.html">Read Article</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>TowerCo Operational Models (P.2)</h3>
+            <img src="/articles/towersharing/towerco-operational-models/images/banner.jpeg" alt="TowerCo Operational Models" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
+            <p class="note">Pureplay, Value Added Services & Managed Services models — plus a primer on the TowerCo Business Model and its 5 key drivers.</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/towersharing/towerco-operational-models/index.html">Read Article</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>TowerCo Business Model (A Primer)</h3>
+            <img src="/articles/towersharing/towerco-business-model/images/banner.png" alt="TowerCo Business Model" style="width:100%; border-radius:8px; margin-top:12px; border:1px solid #e5e7eb;">
+            <p class="note">Introduction and key concepts governing the TowerCo Business Model — Towers & Tenants, Contracts, Revenue, Capex and Expansion Specifics.</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/towersharing/towerco-business-model/index.html">Read Article</a>
+            </div>
+          </div>
+
+        </div><!-- /slider-track -->
+      </div><!-- /slider-track-outer -->
+    </div><!-- /slider-wrapper -->
+
   </div>
 
   <!-- =============================================
@@ -347,7 +470,7 @@
 
 </main>
 <footer class="footer">
-  <div class="container">© 2025 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer.html">Disclaimer</a></div>
 </footer>
 
 <!-- ====================================
@@ -355,27 +478,113 @@
      ==================================== -->
 
 <script>
-  // Hamburger menu toggle
   document.getElementById('menuToggle').addEventListener('click', function() {
     document.getElementById('mainNav').classList.toggle('active');
   });
 
-  // Close menu when clicking outside
   document.addEventListener('click', function(event) {
     const nav = document.getElementById('mainNav');
     const toggle = document.getElementById('menuToggle');
-    
     if (!nav.contains(event.target) && !toggle.contains(event.target)) {
       nav.classList.remove('active');
     }
   });
 
-  // Close menu when a link is clicked
   document.querySelectorAll('#mainNav a').forEach(link => {
     link.addEventListener('click', function() {
       document.getElementById('mainNav').classList.remove('active');
     });
   });
+</script>
+
+<!-- ====================================
+     TOWERSHARING SLIDER JAVASCRIPT
+     ==================================== -->
+
+<script>
+  (function () {
+    const track = document.getElementById('towerTrack');
+    const prevBtn = document.getElementById('towerPrev');
+    const nextBtn = document.getElementById('towerNext');
+    const dotsContainer = document.getElementById('towerDots');
+
+    const cards = Array.from(track.children);
+    let currentIndex = 0;
+
+    // Determine how many cards are visible based on viewport
+    function getVisibleCount() {
+      const w = window.innerWidth;
+      if (w <= 640) return 1;
+      if (w <= 900) return 2;
+      return 3;
+    }
+
+    function getTotalSteps() {
+      return Math.ceil(cards.length / getVisibleCount());
+    }
+
+    function buildDots() {
+      dotsContainer.innerHTML = '';
+      const steps = getTotalSteps();
+      for (let i = 0; i < steps; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'slider-dot' + (i === currentIndex ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateDots() {
+      const dots = dotsContainer.querySelectorAll('.slider-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+
+    function goTo(index) {
+      const visibleCount = getVisibleCount();
+      const totalSteps = getTotalSteps();
+      currentIndex = Math.max(0, Math.min(index, totalSteps - 1));
+
+      // Calculate card width + gap
+      const cardEl = cards[0];
+      const gap = 20;
+      const cardWidth = cardEl.getBoundingClientRect().width;
+      const offset = currentIndex * (cardWidth + gap) * visibleCount;
+
+      track.style.transform = `translateX(-${offset}px)`;
+
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex >= totalSteps - 1;
+      updateDots();
+    }
+
+    prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+    // Init
+    buildDots();
+    goTo(0);
+
+    // Rebuild on resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        buildDots();
+        goTo(0);
+      }, 150);
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const delta = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(delta) > 50) {
+        delta > 0 ? goTo(currentIndex + 1) : goTo(currentIndex - 1);
+      }
+    }, { passive: true });
+  })();
 </script>
 
 <!-- Cookie Consent Banner -->
@@ -438,7 +647,6 @@
   </div>
 </div>
 
-<!-- Load Cookie Consent Script -->
 <script src="/assets/js/cookie-consent.js"></script>
 
 </body>
