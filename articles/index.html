@@ -115,7 +115,7 @@
   }
 
   /* ====================================
-     TOWERSHARING SLIDER
+     SHARED SLIDER STYLES
      ==================================== */
 
   .slider-wrapper {
@@ -134,7 +134,6 @@
   }
 
   .slider-track .card {
-    /* Show 3 cards at once with gap accounted for */
     flex: 0 0 calc((100% - 40px) / 3);
     min-width: 0;
   }
@@ -209,14 +208,12 @@
     }
   }
 
-  /* On smaller screens show 1 card */
   @media (max-width: 640px) {
     .slider-track .card {
       flex: 0 0 100%;
     }
   }
 
-  /* On medium screens show 2 cards */
   @media (min-width: 641px) and (max-width: 900px) {
     .slider-track .card {
       flex: 0 0 calc((100% - 20px) / 2);
@@ -324,40 +321,56 @@
     <h2 class="section-heading">Personal Finance &amp; Investments</h2>
     <p class="section-subtitle">Building wealth through simple, time-tested principles.</p>
 
-    <div class="grid cols-3">
-
-      <!-- Investment Basics Article -->
-      <div class="card">
-        <h3>Starting Your Investment Journey</h3>
-        <p class="note">Why simple beats complex — the power of compounding, index investing, and time-tested principles.</p>
-        <div class="card-video">
-          <iframe
-            src="https://www.youtube.com/embed/X9uVqbTz0SQ"
-            title="Starting Your Investment Journey"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div class="card-buttons">
-          <a class="btn primary" href="/articles/investment-basics.html">Read Article</a>
-          <a class="btn secondary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Try Personal Investment Planner</a>
-          <a class="btn secondary disabled" href="#">Spreadsheet (coming soon)</a>
-        </div>
-      </div>
-
-      <!-- Placeholder -->
-      <div class="card">
-        <h3>More articles</h3>
-        <p class="note">Coming soon: more deep dives on personal finance, saving strategies, and investment analysis.</p>
-      </div>
-
-      <!-- Placeholder -->
-      <div class="card">
-        <h3>Case studies</h3>
-        <p class="note">Real-world portfolio breakdowns and financial planning examples (roadmap).</p>
-      </div>
-
+    <!-- Slider nav controls -->
+    <div class="slider-nav">
+      <div class="slider-dots" id="pfDots"></div>
+      <button class="slider-btn" id="pfPrev" aria-label="Previous">&#8592;</button>
+      <button class="slider-btn" id="pfNext" aria-label="Next">&#8594;</button>
     </div>
+
+    <!-- Slider -->
+    <div class="slider-wrapper">
+      <div class="slider-track-outer">
+        <div class="slider-track" id="pfTrack">
+
+          <!-- Investment Basics Article -->
+          <div class="card">
+            <h3>Starting Your Investment Journey</h3>
+            <p class="note">Why simple beats complex — the power of compounding, index investing, and time-tested principles.</p>
+            <div class="card-video">
+              <iframe
+                src="https://www.youtube.com/embed/X9uVqbTz0SQ"
+                title="Starting Your Investment Journey"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="card-buttons">
+              <a class="btn primary" href="/articles/investment-basics.html">Read Article</a>
+              <a class="btn secondary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Try Personal Investment Planner</a>
+              <a class="btn secondary disabled" href="#">Spreadsheet (coming soon)</a>
+            </div>
+          </div>
+
+          <!-- Retirement Calculator -->
+          <div class="card">
+            <h3>Retirement Calculator</h3>
+            <p class="note">How much do you need to retire? Enter your current expenses and get a personalised month-by-month savings plan.</p>
+            <div class="card-buttons">
+              <a class="btn secondary" href="/tools/retirement-calculator/index.html">Try Retirement Calculator</a>
+            </div>
+          </div>
+
+          <!-- Case Studies placeholder -->
+          <div class="card">
+            <h3>Case Studies</h3>
+            <p class="note">Real-world portfolio breakdowns and financial planning examples (roadmap).</p>
+          </div>
+
+        </div><!-- /slider-track -->
+      </div><!-- /slider-track-outer -->
+    </div><!-- /slider-wrapper -->
+
   </div>
 
   <!-- =============================================
@@ -498,20 +511,19 @@
 </script>
 
 <!-- ====================================
-     TOWERSHARING SLIDER JAVASCRIPT
+     SHARED SLIDER JAVASCRIPT (reusable)
      ==================================== -->
 
 <script>
-  (function () {
-    const track = document.getElementById('towerTrack');
-    const prevBtn = document.getElementById('towerPrev');
-    const nextBtn = document.getElementById('towerNext');
-    const dotsContainer = document.getElementById('towerDots');
+  function initSlider(trackId, prevId, nextId, dotsId) {
+    const track = document.getElementById(trackId);
+    const prevBtn = document.getElementById(prevId);
+    const nextBtn = document.getElementById(nextId);
+    const dotsContainer = document.getElementById(dotsId);
 
     const cards = Array.from(track.children);
     let currentIndex = 0;
 
-    // Determine how many cards are visible based on viewport
     function getVisibleCount() {
       const w = window.innerWidth;
       if (w <= 640) return 1;
@@ -526,6 +538,11 @@
     function buildDots() {
       dotsContainer.innerHTML = '';
       const steps = getTotalSteps();
+      // Only show dots/arrows if more than one page of cards
+      const needsSlider = steps > 1;
+      prevBtn.style.display = needsSlider ? '' : 'none';
+      nextBtn.style.display = needsSlider ? '' : 'none';
+      if (!needsSlider) return;
       for (let i = 0; i < steps; i++) {
         const dot = document.createElement('button');
         dot.className = 'slider-dot' + (i === currentIndex ? ' active' : '');
@@ -545,7 +562,6 @@
       const totalSteps = getTotalSteps();
       currentIndex = Math.max(0, Math.min(index, totalSteps - 1));
 
-      // Calculate card width + gap
       const cardEl = cards[0];
       const gap = 20;
       const cardWidth = cardEl.getBoundingClientRect().width;
@@ -561,11 +577,9 @@
     prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
     nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
 
-    // Init
     buildDots();
     goTo(0);
 
-    // Rebuild on resize
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
@@ -575,7 +589,6 @@
       }, 150);
     });
 
-    // Touch/swipe support
     let touchStartX = 0;
     track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
     track.addEventListener('touchend', e => {
@@ -584,7 +597,11 @@
         delta > 0 ? goTo(currentIndex + 1) : goTo(currentIndex - 1);
       }
     }, { passive: true });
-  })();
+  }
+
+  // Init both sliders
+  initSlider('pfTrack',    'pfPrev',    'pfNext',    'pfDots');
+  initSlider('towerTrack', 'towerPrev', 'towerNext', 'towerDots');
 </script>
 
 <!-- Cookie Consent Banner -->

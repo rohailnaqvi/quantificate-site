@@ -1,0 +1,3026 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retirement Calculator — Quantificate</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="/assets/img/favicon_64.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/assets/img/favicon_dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon_dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied', 'ad_storage': 'denied',
+    'ad_user_data': 'denied', 'ad_personalization': 'denied'
+  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PC2NVFZ2J5"></script>
+<script>gtag('js', new Date()); gtag('config', 'G-PC2NVFZ2J5');</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<!-- SheetJS for Excel export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    /* ── Quantificate brand tokens ── */
+    :root {
+      --ink:          #0F172A;
+      --teal:         #14B8A6;
+      --teal-dark:    #0d9488;
+      --teal-light:   rgba(20,184,166,0.08);
+      --teal-border:  rgba(20,184,166,0.3);
+      --royal:        #6D28D9;
+      --gold:         #F59E0B;
+      --gold-light:   rgba(245,158,11,0.08);
+      --gold-border:  rgba(245,158,11,0.3);
+      --sky:          #0284C7;
+      --gray:         #94A3B8;
+      --white:        #FFFFFF;
+      --cream:        #F8FAFC;
+      --ink-light:    #475569;
+      --ink-xlight:   #94A3B8;
+      --border:       #E2E8F0;
+      --border-light: #F1F5F9;
+      --panel:        #FFFFFF;
+      /* Semantic aliases */
+      --accent:        var(--teal);
+      --accent-mid:    var(--teal-dark);
+      --accent-light:  var(--teal-light);
+      --accent-border: var(--teal-border);
+      --warn:          #EF4444;
+      --warn-light:    rgba(239,68,68,0.07);
+      --warn-border:   rgba(239,68,68,0.25);
+      --shadow:        0 2px 14px rgba(15,23,42,0.07);
+      --radius:        10px;
+      --font-body:     'Helvetica Neue', Arial, sans-serif;
+      --font-mono:     monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:          #F1F5F9;
+        --ink-light:    #94A3B8;
+        --ink-xlight:   #64748B;
+        --cream:        #0F172A;
+        --white:        #0F172A;
+        --panel:        #1E293B;
+        --border:       #334155;
+        --border-light: #1E293B;
+        --teal-light:   rgba(20,184,166,0.15);
+        --teal-border:  rgba(20,184,166,0.4);
+        --gold-light:   rgba(245,158,11,0.15);
+        --gold-border:  rgba(245,158,11,0.35);
+        --warn-light:   rgba(239,68,68,0.15);
+        --warn-border:  rgba(239,68,68,0.35);
+        --shadow:        0 2px 14px rgba(0,0,0,0.3);
+      }
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Scope smaller base font-size to calculator content only, not the site chrome */
+    .page-hero,
+    .calc-layout {
+      font-size: 14.5px;
+    }
+
+    /* ── Quantificate site chrome ── */
+    .menu-toggle {
+      display: none; background: none; border: none; font-size: 28px;
+      cursor: pointer; padding: 8px; color: inherit; line-height: 1;
+    }
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      .nav { flex-wrap: wrap; }
+      nav { display: none; width: 100%; flex-direction: column; gap: 0; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+      nav.active { display: flex; }
+      nav a { padding: 12px 0; width: 100%; border-bottom: 1px solid var(--border); }
+      nav a:last-child { border-bottom: none; }
+    }
+
+    /* Hero */
+    .page-hero { max-width: 1300px; margin: 0 auto; padding: 36px 32px 20px; }
+    .page-hero h1 { font-family: var(--font-mono); font-size: 2rem; letter-spacing: -0.4px; margin-bottom: 6px; }
+    .page-hero p { color: var(--ink-light); font-size: 0.92rem; max-width: 560px; }
+
+    /* Layout */
+    .calc-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Collapsible inputs panel */
+    .collapsible-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid var(--border-light);
+      transition: background 0.15s;
+    }
+    .collapsible-header:hover { background: var(--border-light); }
+    .collapsible-header-left { display: flex; align-items: center; gap: 10px; }
+    .collapsible-header .dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+    .collapsible-header h2 { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .collapsible-header .summary-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .summary-chip {
+      font-size: 0.7rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+      background: var(--teal-light); color: var(--teal);
+      border: 1px solid var(--teal-border);
+    }
+    .collapsible-chevron {
+      font-size: 0.75rem; color: var(--ink-xlight);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+    .collapsible-chevron.open { transform: rotate(180deg); }
+
+    .collapsible-body {
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+    .collapsible-body.open {
+      max-height: 9999px;
+      opacity: 1;
+    }
+
+    /* Inside the open inputs panel: use a responsive 2-col grid for the non-expense fields */
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 32px;
+    }
+    .inputs-grid-full { grid-column: 1 / -1; }
+
+    /* Expense table stays full width inside the inputs panel */
+    .expense-section { grid-column: 1 / -1; }
+
+    /* Panel */
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .panel-header { padding: 14px 20px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; gap: 8px; }
+    .panel-header .dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+    .panel-header h2 { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-light); }
+    .panel-body { padding: 20px; }
+
+    /* Section divider */
+    .section-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0 10px; }
+    .section-divider:first-child { margin-top: 0; }
+    .sd-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); white-space: nowrap; }
+    .sd-line { flex: 1; height: 1px; background: var(--teal-light); }
+
+    /* Simple field row */
+    .field-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+    .field-row label { flex: 1; font-size: 0.86rem; color: var(--ink); }
+    .field-row .hint { font-size: 0.74rem; color: var(--ink-xlight); }
+    .num-input-wrap { position: relative; width: 140px; flex-shrink: 0; }
+    .num-input-wrap .prefix {
+      position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
+      font-size: 0.82rem; color: var(--ink-xlight); pointer-events: none;
+    }
+    input[type="number"] {
+      width: 100%; padding: 8px 10px 8px 35px;
+      border: 1px solid var(--border); border-radius: 7px;
+      background: var(--cream); font-family: var(--font-body);
+      font-size: 0.88rem; color: var(--ink);
+      -moz-appearance: textfield;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus {
+      outline: none; border-color: var(--accent);
+      background: var(--white); box-shadow: 0 0 0 3px rgba(44,95,74,0.1);
+    }
+    input[type="number"].no-prefix { padding-left: 10px; }
+
+    /* Expense column headers — 6 columns */
+    .expense-col-headers {
+      display: grid;
+      grid-template-columns: 1fr 86px 46px 26px 26px 90px;
+      gap: 5px; margin-bottom: 6px;
+      padding-bottom: 6px; border-bottom: 1px solid var(--border-light);
+    }
+    .expense-col-headers span {
+      font-size: 0.67rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-xlight);
+    }
+    .expense-col-headers span:nth-child(n+2) { text-align: center; }
+    .expense-col-headers span:last-child { text-align: right; color: var(--gold); }
+
+    /* Expense row — 6 columns */
+    .expense-row {
+      display: grid;
+      grid-template-columns: 1fr 86px 46px 26px 26px 90px;
+      gap: 5px; align-items: center; margin-bottom: 6px;
+    }
+    .exp-label { font-size: 0.83rem; color: var(--ink); line-height: 1.3; }
+    .exp-input-wrap { position: relative; }
+    .exp-input-wrap .prefix {
+      position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+      font-size: 0.8rem; color: var(--ink-xlight); pointer-events: none;
+    }
+    .exp-input-wrap input[type="number"] { padding: 7px 5px 7px 35px; font-size: 0.83rem; }
+
+    /* M/A toggle */
+    .ma-toggle {
+      display: flex; background: var(--cream); border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden; height: 32px;
+    }
+    .ma-toggle button {
+      flex: 1; border: none; background: transparent;
+      font-family: var(--font-body); font-size: 0.72rem; font-weight: 600;
+      color: var(--ink-xlight); cursor: pointer; transition: background 0.12s, color 0.12s;
+    }
+    .ma-toggle button.active { background: var(--accent); color: white; }
+
+    /* Checkboxes */
+    .chk-cell { display: flex; align-items: center; justify-content: center; }
+    .chk-cell input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; }
+    .chk-cell input[type="checkbox"].ret-chk { accent-color: var(--accent); }
+    .chk-cell input[type="checkbox"].inf-chk { accent-color: var(--gold); }
+
+    /* Projected at retirement box */
+    .proj-wrap { position: relative; }
+    .proj-wrap .prefix {
+      position: absolute; left: 7px; top: 50%; transform: translateY(-50%);
+      font-size: 0.75rem; color: var(--ink-xlight); pointer-events: none; z-index: 1;
+    }
+    .proj-wrap input[type="number"] {
+      padding: 5px 5px 5px 35px;
+      font-size: 0.78rem;
+      background: var(--gold-light);
+      border-color: var(--gold-border);
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .proj-wrap input[type="number"]:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+      background: var(--white);
+    }
+    .proj-wrap input[type="number"].overridden {
+      background: #fff8e1;
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+    .proj-period {
+      font-size: 0.65rem; color: var(--gold); text-align: right;
+      margin-top: 2px; line-height: 1; opacity: 0.8;
+    }
+
+    /* Category subtotal — aligned to expense row grid */
+    .cat-subtotal {
+      display: grid;
+      grid-template-columns: 1fr 86px 46px 26px 26px 90px;
+      gap: 5px;
+      padding: 5px 0 4px;
+      border-top: 1px dashed var(--border-light);
+      margin-top: 2px; margin-bottom: 2px;
+      align-items: center;
+    }
+    .cst-label {
+      font-size: 0.7rem; color: var(--ink-xlight);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      grid-column: 1;
+    }
+    .cst-amt {
+      font-size: 0.8rem; font-weight: 600; color: var(--accent);
+      text-align: center; grid-column: 2;
+    }
+    .cst-ret {
+      font-size: 0.8rem; font-weight: 600; color: var(--gold);
+      text-align: right; grid-column: 6;
+    }
+
+    /* Expense total box */
+    .expense-total-box {
+      background: var(--teal-light); border: 1px solid var(--teal-border);
+      border-radius: 8px; padding: 12px 16px; margin-top: 14px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .etb-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 2px; }
+    .etb-sub { font-size: 0.75rem; color: var(--ink-light); }
+    .etb-value { font-family: var(--font-mono); font-size: 1.6rem; color: var(--teal); line-height: 1; }
+    .etb-value-sub { font-size: 0.73rem; color: var(--ink-light); margin-top: 2px; }
+
+    /* Sliders */
+    .slider-field { margin-bottom: 12px; }
+    .slider-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .slider-top label { font-size: 0.86rem; color: var(--ink); }
+    .slider-top .sv { font-size: 0.86rem; font-weight: 600; color: var(--accent); }
+    input[type="range"] {
+      -webkit-appearance: none; width: 100%; height: 4px;
+      background: var(--border); border-radius: 4px; outline: none; cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 15px; height: 15px;
+      border-radius: 50%; background: var(--accent);
+      border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Account type toggle */
+    .acct-toggle {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .acct-toggle button {
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 2px; padding: 10px 12px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: var(--cream); cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      text-align: left; font-family: var(--font-body);
+    }
+    .acct-toggle button:hover { border-color: var(--accent-border); background: var(--teal-light); }
+    .acct-toggle button.active {
+      border-color: var(--accent); background: var(--accent-light);
+      box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
+    }
+    .at-icon { font-size: 1.1rem; }
+    .at-label { font-size: 0.82rem; font-weight: 600; color: var(--ink); }
+    .at-sub { font-size: 0.72rem; color: var(--ink-xlight); }
+    .acct-toggle button.active .at-label { color: var(--accent); }
+
+    /* Tax info box */
+    .tax-info-box {
+      display: flex; gap: 8px; align-items: flex-start;
+      background: #f0f7ff; border: 1px solid #c8dff8;
+      border-radius: 7px; padding: 10px 12px;
+      font-size: 0.78rem; color: #2c4a6e; line-height: 1.5;
+    }
+    .tib-icon { flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+    .tib-text strong { color: #1a3a5c; }
+    .tib-text em { color: #4a6a8c; }
+
+    /* Monthly schedule */
+    .sched-legend { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+    .sched-pill { font-size:0.72rem; font-weight:600; padding:3px 10px; border-radius:20px; }
+    .sched-pill.accum { background:rgba(44,95,74,0.12); color:var(--accent); border:1px solid var(--accent-border); }
+    .sched-pill.draw  { background:rgba(109,40,217,0.1); color:#6D28D9;      border:1px solid rgba(109,40,217,0.3); }
+    .sched-wrap { overflow-x:auto; max-height:480px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; }
+    .sched-table { width:100%; border-collapse:collapse; font-size:0.78rem; font-family:var(--font-body); }
+    .sched-table thead tr { background:var(--panel,#fff); position:sticky; top:0; z-index:2; }
+    .sched-table th { padding:8px 10px; text-align:left; font-weight:600; color:var(--ink-light); border-bottom:2px solid var(--border); white-space:nowrap; }
+    .sched-table th.num, .sched-table td.num { text-align:right; }
+    .sched-table td { padding:6px 10px; border-bottom:1px solid var(--border-light); white-space:nowrap; }
+    .sched-table tr.sched-accum td { background:#f5faf7; }
+    .sched-table tr.sched-accum:hover td { background:#eaf4ee; }
+    .sched-table tr.sched-draw td { background:#f5f3ff; }
+    .sched-table tr.sched-draw:hover td { background:#ede9fe; }
+    .sched-table tr.sched-phase-marker td {
+      background: var(--ink); color:#fff; font-weight:600; font-size:0.78rem;
+      text-align:center; padding:7px; letter-spacing:0.02em;
+    }
+    .sched-table td.contrib { color:var(--accent); font-weight:500; }
+    .sched-table td.ret     { color:#2980b9; font-weight:500; }
+    .sched-table td.withdraw{ color:#6D28D9; font-weight:500; }
+    .sched-table td.bal     { font-weight:700; color:var(--ink); }
+
+    /* Calculate button */
+    .calc-btn {
+      width: 100%; padding: 12px; background: var(--accent); color: white;
+      border: none; border-radius: 8px; font-family: var(--font-body);
+      font-size: 0.88rem; font-weight: 600; letter-spacing: 0.02em;
+      cursor: pointer; margin-top: 16px; transition: background 0.15s, transform 0.1s;
+    }
+    .calc-btn:hover { background: var(--teal-dark); }
+    .calc-btn:active { transform: scale(0.99); }
+
+    /* Results */
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+    .result-card {
+      border-radius: 8px; padding: 14px 16px;
+      border: 1px solid var(--border); background: var(--cream);
+    }
+    .result-card.primary { background: var(--accent-light); border-color: var(--accent-border); }
+    .result-card.action  { background: var(--gold-light);   border-color: var(--gold-border); }
+    .result-card.neutral { background: var(--white);        border-color: var(--border); }
+    .result-card.draw    { background: rgba(109,40,217,0.06); border-color: rgba(109,40,217,0.25); }
+    .rc-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-xlight); margin-bottom: 5px; }
+    .result-card.primary .rc-label { color: var(--accent-mid); }
+    .result-card.action  .rc-label { color: var(--gold); }
+    .result-card.draw    .rc-label { color: #5B21B6; }
+    .rc-value { font-family: var(--font-mono); font-size: 1.5rem; color: var(--ink); line-height: 1.1; }
+    .result-card.primary .rc-value { color: var(--accent); }
+    .result-card.action  .rc-value { color: var(--gold); }
+    .result-card.draw    .rc-value { color: #6D28D9; }
+    .rc-sub { font-size: 0.74rem; color: var(--ink-xlight); margin-top: 3px; }
+
+    /* Hero result */
+    .hero-result {
+      background: var(--teal); border-radius: 10px;
+      padding: 20px 22px; margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .hr-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 4px; }
+    .hr-value { font-family: var(--font-mono); font-size: 2.2rem; color: white; line-height: 1; }
+    .hr-sub { font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 5px; }
+    .hr-note { font-size: 0.76rem; color: rgba(255,255,255,0.6); line-height: 1.5; max-width: 180px; text-align: right; }
+
+    /* Chart */
+    .chart-wrap { position: relative; height: 320px; margin-bottom: 16px; }
+
+    /* Tabs */
+    .result-tabs {
+      display: flex; gap: 2px; align-items: center;
+      background: var(--cream);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 3px; margin-bottom: 18px;
+    }
+    .result-tabs button {
+      flex: 1; padding: 7px 10px; border: none; background: transparent;
+      font-family: var(--font-body); font-size: 0.8rem; font-weight: 500;
+      color: var(--ink-light); border-radius: 6px; cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+    }
+    .result-tabs button.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-weight: 600; }
+    .result-tabs button.pdf-btn {
+      flex: 0 0 auto; margin-left: 6px;
+      background: var(--ink); color: #fff;
+      font-weight: 600; font-size: 0.78rem;
+      padding: 6px 12px; border-radius: 6px;
+    }
+    .result-tabs button.pdf-btn:hover { background: var(--accent); }
+    /* Excel download button */
+    .result-tabs button.xlsx-btn {
+      flex: 0 0 auto; margin-left: 4px;
+      background: #1e6e3d; color: #fff;
+      font-weight: 600; font-size: 0.78rem;
+      padding: 6px 12px; border-radius: 6px;
+    }
+    .result-tabs button.xlsx-btn:hover { background: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Breakdown table */
+    .breakdown-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 16px; }
+    .breakdown-table th { text-align: left; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-xlight); padding: 6px 8px; border-bottom: 1px solid var(--border); }
+    .breakdown-table td { padding: 5px 8px; border-bottom: 1px solid var(--border-light); }
+    .breakdown-table tr:last-child td { border-bottom: none; }
+    .breakdown-table .cat-row td { font-weight: 600; color: var(--accent); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--accent-light); padding: 4px 8px; }
+    .breakdown-table .total-row td { font-weight: 700; border-top: 2px solid var(--border); padding-top: 8px; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    td.ctr { text-align: center; }
+
+    .assumptions { padding: 12px 14px; background: var(--border-light); border-radius: 8px; border: 1px solid var(--border); font-size: 0.76rem; color: var(--ink-light); line-height: 1.8; }
+    /* Schedule totals rows */
+    .sched-table tr.sched-totals-row td {
+      font-weight: 700; font-size: 0.79rem;
+      border-top: 2px solid var(--border);
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+    .sched-table tr.accum-totals td { background: #e4f3ec; color: var(--ink); }
+    .sched-table tr.draw-totals td  { background: #ede9fe; color: var(--ink); }
+    .sched-totals-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-light); }
+
+    /* Tax breakdown box */
+    .tax-breakdown-box {
+      margin-top: 20px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 0.82rem;
+    }
+    .tbb-title {
+      background: var(--ink); color: #fff;
+      font-weight: 700; font-size: 0.8rem;
+      padding: 10px 16px; letter-spacing: 0.03em;
+    }
+    .tbb-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    @media (max-width: 700px) { .tbb-grid { grid-template-columns: 1fr; } }
+    .tbb-section {
+      padding: 14px 16px;
+      border-right: 1px solid var(--border);
+    }
+    .tbb-section:last-child { border-right: none; }
+    .tbb-section-title {
+      font-weight: 700; font-size: 0.74rem;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tbb-green  .tbb-section-title  { color: var(--teal); border-color: rgba(20,184,166,0.25); }
+    .tbb-warn   .tbb-section-title  { color: var(--warn); border-color: rgba(239,68,68,0.25); }
+    .tbb-royal  .tbb-section-title  { color: #6D28D9;     border-color: rgba(109,40,217,0.25); }
+    .tbb-neutral .tbb-section-title { color: var(--ink-light); }
+    .tbb-rows { display: flex; flex-direction: column; gap: 5px; }
+    .tbb-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px; padding: 3px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.8rem; color: var(--ink-light);
+    }
+    .tbb-row:last-of-type { border-bottom: none; }
+    .tbb-row span:last-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .tbb-highlight-green { background: rgba(20,184,166,0.08); border-radius: 4px; padding: 4px 6px; margin: 2px 0; }
+    .tbb-highlight-green span:last-child { color: var(--teal); }
+    .tbb-highlight-warn  { background: rgba(239,68,68,0.07);  border-radius: 4px; padding: 4px 6px; margin: 2px 0; }
+    .tbb-highlight-warn  span:last-child { color: var(--warn); }
+    .tbb-highlight-teal  { background: rgba(20,184,166,0.08); border-radius: 4px; padding: 4px 6px; margin: 2px 0; }
+    .tbb-highlight-teal  span:last-child { color: var(--teal); font-weight: 700; }
+    .tbb-highlight-neutral { background: var(--border-light); border-radius: 4px; padding: 4px 6px; margin: 2px 0; }
+    .tbb-note {
+      margin-top: 8px; font-size: 0.74rem; color: var(--ink-xlight);
+      font-style: italic; line-height: 1.5;
+    }
+    .tbb-net-summary {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 16px; background: var(--border-light);
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem; font-weight: 600; color: var(--ink-light);
+      flex-wrap: wrap; gap: 8px;
+    }
+    .tbb-net-positive { color: var(--teal); }
+    .tbb-net-negative { color: var(--warn); }
+
+    .sched-table th.tax-col  { color: var(--warn); }
+    .sched-table th.net-col  { color: var(--teal); }
+    .sched-table td.tax-save { color: var(--teal);   font-weight: 600; }
+    .sched-table td.tax-cost { color: var(--warn);   font-weight: 600; }
+    .sched-table td.net-draw { color: var(--accent); font-weight: 600; }
+    .assumptions strong { color: var(--ink); }
+
+    /* Legend pills */
+    .legend-pills { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .legend-pill {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.74rem; color: var(--ink-light);
+      background: var(--cream); border: 1px solid var(--border);
+      border-radius: 20px; padding: 3px 10px;
+    }
+    .legend-pill .pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    .empty-state { text-align: center; padding: 56px 24px; color: var(--ink-light); }
+    .empty-state .es-icon { font-size: 2.2rem; margin-bottom: 12px; opacity: 0.35; }
+    .empty-state p { font-size: 0.88rem; }
+
+
+
+    @media (max-width: 700px) {
+      .inputs-grid { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
+      .hero-result { flex-direction: column; align-items: flex-start; }
+      .hr-note { text-align: left; }
+    }
+  
+    /* Disclaimer / tool info box */
+    .tool-disclaimer {
+      background: rgba(245,158,11,0.07);
+      border: 1px solid var(--gold-border);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .tool-disclaimer strong { color: var(--ink); }
+
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container nav">
+    <div class="brand">
+      <a class="brand-link" href="/">
+        <picture class="brand-mark">
+          <source srcset="/assets/img/avatar_dark_256.png" media="(prefers-color-scheme: dark)">
+          <source srcset="/assets/img/avatar_light_256.png" media="(prefers-color-scheme: light)">
+          <img src="/assets/img/avatar_light_256.png" alt="Quantificate mark">
+        </picture>
+        <div class="brand-text">
+          <div class="brand-name">Quantificate</div>
+          <div class="brand-sub">analysis • tools • insight</div>
+        </div>
+      </a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    <nav id="mainNav">
+      <a href="/index.html">Home</a>
+      <a href="/articles/index.html">Articles</a>
+      <a href="/tools/index.html" aria-current="page">Tools</a>
+      <a href="/about/index.html">About</a>
+      <a href="/contact/index.html">Contact</a>
+      <a href="/disclaimer/index.html">Disclaimer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<section class="section">
+  <h1>Retirement Calculator 🏦</h1>
+  <p style="color:var(--ink-light);max-width:620px;margin-bottom:16px">Enter your current lifestyle expenses below and we'll calculate exactly what you need to save each month — starting today — to fully fund your retirement.</p>
+  <div class="tool-disclaimer"><strong>For educational purposes only.</strong> This calculator provides estimates based on the assumptions you enter. It does not constitute financial advice. Please review our <a href="/disclaimer/index.html" style="color:var(--gold);font-weight:600">General Disclaimer</a> and consult a qualified financial advisor before making investment decisions.</div>
+
+<div class="calc-layout">
+
+  <!-- INPUTS (collapsible) -->
+  <div class="panel">
+    <div class="collapsible-header" onclick="toggleInputs()" id="inputsHeader">
+      <div class="collapsible-header-left">
+        <div class="dot"></div>
+        <h2>Your Inputs ✏️</h2>
+        <div class="summary-chips" id="inputSummaryChips"></div>
+      </div>
+      <span class="collapsible-chevron open" id="inputsChevron">▼</span>
+    </div>
+    <div class="collapsible-body open" id="inputsBody">
+      <div class="panel-body">
+
+        <div class="inputs-grid">
+
+          <!-- Column 1: Profile + Savings -->
+          <div>
+            <div class="section-divider"><span class="sd-label">👤 Profile</span><div class="sd-line"></div></div>
+            <div class="field-row">
+              <label>Currency</label>
+              <div class="num-input-wrap" style="padding:0">
+                <select id="currencySelect" onchange="updateCurrencyPrefixes();" style="width:100%;height:100%;border:none;background:transparent;font-size:0.9rem;color:var(--ink);padding:0 8px;cursor:pointer;outline:none;">
+                  <optgroup label="── Common Currencies ──" style="font-weight:600">
+                    <option value="$" selected>$ — US Dollar (USD)</option>
+                    <option value="€">€ — Euro (EUR)</option>
+                    <option value="£">£ — British Pound (GBP)</option>
+                    <option value="C$">C$ — Canadian Dollar (CAD)</option>
+                    <option value="A$">A$ — Australian Dollar (AUD)</option>
+                    <option value="¥">¥ — Japanese Yen (JPY)</option>
+                    <option value="¥">¥ — Chinese Yuan (CNY)</option>
+                    <option value="CHF">CHF — Swiss Franc (CHF)</option>
+                    <option value="kr">kr — Swedish Krona (SEK)</option>
+                    <option value="NZ$">NZ$ — New Zealand Dollar (NZD)</option>
+                    <option value="S$">S$ — Singapore Dollar (SGD)</option>
+                    <option value="HK$">HK$ — Hong Kong Dollar (HKD)</option>
+                    <option value="₹">₹ — Indian Rupee (INR)</option>
+                    <option value="R$">R$ — Brazilian Real (BRL)</option>
+                    <option value="MX$">MX$ — Mexican Peso (MXN)</option>
+                    <option value="kr">kr — Norwegian Krone (NOK)</option>
+                    <option value="kr">kr — Danish Krone (DKK)</option>
+                    <option value="₩">₩ — South Korean Won (KRW)</option>
+                    <option value="AED">AED — UAE Dirham (AED)</option>
+                    <option value="SAR">SAR — Saudi Riyal (SAR)</option>
+                  </optgroup>
+                  <optgroup label="── All Currencies ──" style="font-weight:600">
+                    <option value="AFN">AFN — Afghan Afghani</option>
+                    <option value="ALL">ALL — Albanian Lek</option>
+                    <option value="DZD">DZD — Algerian Dinar</option>
+                    <option value="AOA">AOA — Angolan Kwanza</option>
+                    <option value="ARS">ARS — Argentine Peso</option>
+                    <option value="AMD">AMD — Armenian Dram</option>
+                    <option value="AWG">AWG — Aruban Florin</option>
+                    <option value="AZN">AZN — Azerbaijani Manat</option>
+                    <option value="BSD">BSD — Bahamian Dollar</option>
+                    <option value="BHD">BHD — Bahraini Dinar</option>
+                    <option value="BDT">BDT — Bangladeshi Taka</option>
+                    <option value="BBD">BBD — Barbadian Dollar</option>
+                    <option value="BYN">BYN — Belarusian Ruble</option>
+                    <option value="BZD">BZD — Belize Dollar</option>
+                    <option value="XOF">XOF — West African CFA Franc</option>
+                    <option value="BTN">BTN — Bhutanese Ngultrum</option>
+                    <option value="BOB">BOB — Bolivian Boliviano</option>
+                    <option value="BAM">BAM — Bosnia Mark</option>
+                    <option value="BWP">BWP — Botswanan Pula</option>
+                    <option value="BND">BND — Brunei Dollar</option>
+                    <option value="BGN">BGN — Bulgarian Lev</option>
+                    <option value="BIF">BIF — Burundian Franc</option>
+                    <option value="CVE">CVE — Cape Verdean Escudo</option>
+                    <option value="KHR">KHR — Cambodian Riel</option>
+                    <option value="XAF">XAF — Central African CFA Franc</option>
+                    <option value="CLP">CLP — Chilean Peso</option>
+                    <option value="COP">COP — Colombian Peso</option>
+                    <option value="KMF">KMF — Comorian Franc</option>
+                    <option value="CDF">CDF — Congolese Franc</option>
+                    <option value="CRC">CRC — Costa Rican Colón</option>
+                    <option value="HRK">HRK — Croatian Kuna</option>
+                    <option value="CUP">CUP — Cuban Peso</option>
+                    <option value="CZK">CZK — Czech Koruna</option>
+                    <option value="DJF">DJF — Djiboutian Franc</option>
+                    <option value="DOP">DOP — Dominican Peso</option>
+                    <option value="EGP">EGP — Egyptian Pound</option>
+                    <option value="ETB">ETB — Ethiopian Birr</option>
+                    <option value="FJD">FJ$ — Fijian Dollar</option>
+                    <option value="GMD">GMD — Gambian Dalasi</option>
+                    <option value="GEL">GEL — Georgian Lari</option>
+                    <option value="GHS">GHS — Ghanaian Cedi</option>
+                    <option value="GTQ">GTQ — Guatemalan Quetzal</option>
+                    <option value="GNF">GNF — Guinean Franc</option>
+                    <option value="GYD">GYD — Guyanese Dollar</option>
+                    <option value="HTG">HTG — Haitian Gourde</option>
+                    <option value="HNL">HNL — Honduran Lempira</option>
+                    <option value="HUF">HUF — Hungarian Forint</option>
+                    <option value="ISK">ISK — Icelandic Króna</option>
+                    <option value="IDR">Rp — Indonesian Rupiah</option>
+                    <option value="IRR">IRR — Iranian Rial</option>
+                    <option value="IQD">IQD — Iraqi Dinar</option>
+                    <option value="ILS">₪ — Israeli Shekel</option>
+                    <option value="JMD">JMD — Jamaican Dollar</option>
+                    <option value="JOD">JOD — Jordanian Dinar</option>
+                    <option value="KZT">KZT — Kazakhstani Tenge</option>
+                    <option value="KES">KSh — Kenyan Shilling</option>
+                    <option value="KWD">KWD — Kuwaiti Dinar</option>
+                    <option value="KGS">KGS — Kyrgystani Som</option>
+                    <option value="LAK">LAK — Laotian Kip</option>
+                    <option value="LBP">LBP — Lebanese Pound</option>
+                    <option value="LSL">LSL — Lesotho Loti</option>
+                    <option value="LRD">LRD — Liberian Dollar</option>
+                    <option value="LYD">LYD — Libyan Dinar</option>
+                    <option value="MOP">MOP — Macanese Pataca</option>
+                    <option value="MKD">MKD — Macedonian Denar</option>
+                    <option value="MGA">MGA — Malagasy Ariary</option>
+                    <option value="MWK">MWK — Malawian Kwacha</option>
+                    <option value="MYR">RM — Malaysian Ringgit</option>
+                    <option value="MVR">MVR — Maldivian Rufiyaa</option>
+                    <option value="MRU">MRU — Mauritanian Ouguiya</option>
+                    <option value="MUR">MUR — Mauritian Rupee</option>
+                    <option value="MDL">MDL — Moldovan Leu</option>
+                    <option value="MNT">MNT — Mongolian Tögrög</option>
+                    <option value="MAD">MAD — Moroccan Dirham</option>
+                    <option value="MZN">MZN — Mozambican Metical</option>
+                    <option value="MMK">MMK — Myanmar Kyat</option>
+                    <option value="NAD">NAD — Namibian Dollar</option>
+                    <option value="NPR">Rs — Nepalese Rupee</option>
+                    <option value="NIO">NIO — Nicaraguan Córdoba</option>
+                    <option value="NGN">₦ — Nigerian Naira</option>
+                    <option value="OMR">OMR — Omani Rial</option>
+                    <option value="PKR">Rs — Pakistani Rupee</option>
+                    <option value="PAB">PAB — Panamanian Balboa</option>
+                    <option value="PGK">PGK — Papua New Guinean Kina</option>
+                    <option value="PYG">PYG — Paraguayan Guaraní</option>
+                    <option value="PEN">PEN — Peruvian Sol</option>
+                    <option value="PHP">₱ — Philippine Peso</option>
+                    <option value="PLN">PLN — Polish Zloty</option>
+                    <option value="QAR">QAR — Qatari Riyal</option>
+                    <option value="RON">RON — Romanian Leu</option>
+                    <option value="RUB">₽ — Russian Ruble</option>
+                    <option value="RWF">RWF — Rwandan Franc</option>
+                    <option value="STN">STN — São Tomé Dobra</option>
+                    <option value="SVC">SVC — Salvadoran Colón</option>
+                    <option value="WST">WST — Samoan Tala</option>
+                    <option value="SRD">SRD — Surinamese Dollar</option>
+                    <option value="SZL">SZL — Swazi Lilangeni</option>
+                    <option value="TJS">TJS — Tajikistani Somoni</option>
+                    <option value="TZS">TZS — Tanzanian Shilling</option>
+                    <option value="THB">฿ — Thai Baht</option>
+                    <option value="TOP">TOP — Tongan Paʻanga</option>
+                    <option value="TTD">TTD — Trinidad Dollar</option>
+                    <option value="TND">TND — Tunisian Dinar</option>
+                    <option value="TRY">₺ — Turkish Lira</option>
+                    <option value="TMT">TMT — Turkmenistani Manat</option>
+                    <option value="UGX">UGX — Ugandan Shilling</option>
+                    <option value="UAH">₴ — Ukrainian Hryvnia</option>
+                    <option value="UYU">UYU — Uruguayan Peso</option>
+                    <option value="UZS">UZS — Uzbekistani Som</option>
+                    <option value="VUV">VUV — Vanuatu Vatu</option>
+                    <option value="VES">VES — Venezuelan Bolívar</option>
+                    <option value="VND">₫ — Vietnamese Dong</option>
+                    <option value="YER">YER — Yemeni Rial</option>
+                    <option value="ZMW">ZMW — Zambian Kwacha</option>
+                    <option value="ZWL">ZWL — Zimbabwean Dollar</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <label>Current Age <span class="hint">yrs</span></label>
+              <div class="num-input-wrap"><input type="number" id="currentAge" value="30" min="18" max="80" class="no-prefix" oninput="updateAllProjections(); updateSummaryChips();" /></div>
+            </div>
+            <div class="field-row">
+              <label>Retirement Age <span class="hint">yrs</span></label>
+              <div class="num-input-wrap"><input type="number" id="retirementAge" value="65" min="40" max="85" class="no-prefix" oninput="updateAllProjections(); updateSummaryChips();" /></div>
+            </div>
+            <div class="field-row">
+              <label>Life Expectancy <span class="hint">yrs</span></label>
+              <div class="num-input-wrap"><input type="number" id="lifeExpectancy" value="90" min="60" max="110" class="no-prefix" oninput="updateSummaryChips();" /></div>
+            </div>
+
+            <div class="section-divider"><span class="sd-label">💰 Current Savings</span><div class="sd-line"></div></div>
+            <div class="field-row">
+              <label>Total Savings / Investments</label>
+              <div class="num-input-wrap"><span class="prefix">$</span><input type="number" id="currentSavings" value="20000" min="0" step="1000" oninput="updateSummaryChips();" /></div>
+            </div>
+          </div>
+
+          <!-- Column 2: Rates + Tax -->
+          <div>
+            <div class="section-divider"><span class="sd-label">📈 Growth &amp; Rates</span><div class="sd-line"></div></div>
+            <div class="slider-field">
+              <div class="slider-top"><label>Portfolio CAGR (pre-retirement)</label><span class="sv" id="lbl-cagr">7.0%</span></div>
+              <input type="range" id="cagr" min="1" max="15" step="0.5" value="7"
+                oninput="document.getElementById('lbl-cagr').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+            </div>
+            <div class="slider-field">
+              <div class="slider-top"><label>Portfolio CAGR (in retirement)</label><span class="sv" id="lbl-retcagr">4.0%</span></div>
+              <input type="range" id="retCagr" min="1" max="12" step="0.5" value="4"
+                oninput="document.getElementById('lbl-retcagr').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+            </div>
+            <div class="slider-field">
+              <div class="slider-top"><label>Inflation Rate</label><span class="sv" id="lbl-inflation">2.5%</span></div>
+              <input type="range" id="inflation" min="0" max="8" step="0.5" value="2.5"
+                oninput="document.getElementById('lbl-inflation').textContent=parseFloat(this.value).toFixed(1)+'%'; updateAllProjections();" />
+            </div>
+
+            <div class="section-divider"><span class="sd-label">🧾 Tax &amp; Account Type</span><div class="sd-line"></div></div>
+            <div style="margin-bottom:14px">
+              <div style="font-size:0.82rem;color:var(--ink);margin-bottom:8px;font-weight:500">Account type</div>
+              <div class="acct-toggle">
+                <button id="btn-taxadv" class="active" onclick="setAcctType('taxadv')">
+                  <span class="at-icon">🏦</span>
+                  <span class="at-label">Tax-Advantaged</span>
+                  <span class="at-sub">RRSP, 401(k)…</span>
+                </button>
+                <button id="btn-taxable" onclick="setAcctType('taxable')">
+                  <span class="at-icon">📈</span>
+                  <span class="at-label">Regular Investment</span>
+                  <span class="at-sub">Brokerage account</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tax-advantaged block -->
+            <div id="tax-taxadv-block">
+              <div class="tax-info-box">
+                <div class="tib-icon">ℹ️</div>
+                <div class="tib-text">Withdrawals from tax-advantaged accounts (e.g. RRSP) are taxed as <strong>ordinary income</strong>. Your after-tax expense target is grossed up so you withdraw enough to cover both your lifestyle <em>and</em> the tax bill.</div>
+              </div>
+              <div class="slider-field" style="margin-top:10px">
+                <div class="slider-top">
+                  <label>Marginal income tax rate at retirement</label>
+                  <span class="sv" id="lbl-incometax">25.0%</span>
+                </div>
+                <input type="range" id="incomeTax" min="0" max="60" step="0.5" value="25"
+                  oninput="document.getElementById('lbl-incometax').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+              </div>
+            </div>
+
+            <!-- Regular account block -->
+            <div id="tax-taxable-block" style="display:none">
+              <div class="tax-info-box">
+                <div class="tib-icon">ℹ️</div>
+                <div class="tib-text">In a regular investment account, only the <strong>growth portion</strong> of each withdrawal is subject to capital gains tax. Your cost basis (contributions) is returned tax-free.</div>
+              </div>
+              <div class="slider-field" style="margin-top:10px">
+                <div class="slider-top">
+                  <label>Capital gains tax rate</label>
+                  <span class="sv" id="lbl-capgains">15.0%</span>
+                </div>
+                <input type="range" id="capGains" min="0" max="50" step="0.5" value="15"
+                  oninput="document.getElementById('lbl-capgains').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /inputs-grid -->
+
+        <!-- Expenses: full width -->
+        <div class="expense-section">
+          <div class="section-divider"><span class="sd-label">🧮 Your Current Expenses</span><div class="sd-line"></div></div>
+
+          <div class="legend-pills">
+            <div class="legend-pill"><div class="pip" style="background:var(--accent)"></div>Ret. = continues in retirement</div>
+            <div class="legend-pill"><div class="pip" style="background:var(--gold)"></div>Inf. = grows with inflation</div>
+            <div class="legend-pill"><div class="pip" style="background:var(--gold);opacity:0.5"></div>@ Retire = projected value (editable)</div>
+          </div>
+
+          <div class="expense-col-headers">
+            <span>Expense</span>
+            <span>Amount</span>
+            <span>M / A</span>
+            <span title="Continues in retirement?">Ret.</span>
+            <span title="Grows with inflation?">Inf.</span>
+            <span title="Projected value at your retirement age — editable">@ Retire</span>
+          </div>
+
+          <div class="section-divider" style="margin-top:4px"><span class="sd-label">🏠 Property</span><div class="sd-line"></div></div>
+          <div id="cat-property"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Property</span>
+            <span class="cst-amt" id="sub-property">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-property">—</span>
+          </div>
+
+          <div class="section-divider"><span class="sd-label">🚗 Transportation</span><div class="sd-line"></div></div>
+          <div id="cat-transport"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Transport</span>
+            <span class="cst-amt" id="sub-transport">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-transport">—</span>
+          </div>
+
+          <div class="section-divider"><span class="sd-label">🛡️ Insurance</span><div class="sd-line"></div></div>
+          <div id="cat-insurance"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Insurance</span>
+            <span class="cst-amt" id="sub-insurance">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-insurance">—</span>
+          </div>
+
+          <div class="section-divider"><span class="sd-label">🛒 Daily Living</span><div class="sd-line"></div></div>
+          <div id="cat-living"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Daily Living</span>
+            <span class="cst-amt" id="sub-living">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-living">—</span>
+          </div>
+
+          <div class="section-divider"><span class="sd-label">✈️ Lifestyle</span><div class="sd-line"></div></div>
+          <div id="cat-lifestyle"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Lifestyle</span>
+            <span class="cst-amt" id="sub-lifestyle">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-lifestyle">—</span>
+          </div>
+
+          <div class="section-divider"><span class="sd-label">🏥 Health &amp; Wellness</span><div class="sd-line"></div></div>
+          <div id="cat-health"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Health</span>
+            <span class="cst-amt" id="sub-health">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-health">—</span>
+          </div>
+
+          <div class="section-divider"><span class="sd-label">📦 Other</span><div class="sd-line"></div></div>
+          <div id="cat-other"></div>
+          <div class="cat-subtotal">
+            <span class="cst-label">Other</span>
+            <span class="cst-amt" id="sub-other">—</span>
+            <span></span><span></span><span></span>
+            <span class="cst-ret" id="subret-other">—</span>
+          </div>
+
+          <!-- Total -->
+          <div class="expense-total-box">
+            <div>
+              <div class="etb-label">Today's Total</div>
+              <div class="etb-sub">All Ret. expenses / yr</div>
+              <div class="etb-value" id="expTotalDisplay">$0</div>
+            </div>
+            <div style="width:1px;background:var(--accent-border);align-self:stretch;margin:0 4px"></div>
+            <div style="text-align:right">
+              <div class="etb-label" style="color:var(--gold)">At Retirement</div>
+              <div class="etb-sub">Inflation-projected / yr</div>
+              <div class="etb-value" style="color:var(--gold)" id="expRetTotalDisplay">$0</div>
+            </div>
+          </div>
+
+          <button class="calc-btn" onclick="calculate()">Calculate What I Need to Save →</button>
+        </div><!-- /expense-section -->
+
+      </div><!-- /panel-body -->
+    </div><!-- /collapsible-body -->
+  </div><!-- /inputs panel -->
+
+  <!-- RESULTS (full width) -->
+  <div class="panel" id="resultsPanel">
+    <div class="panel-header"><div class="dot"></div><h2>Results 📊</h2></div>
+    <div class="panel-body" id="resultsBody">
+      <div class="empty-state">
+        <div class="es-icon">📊</div>
+        <p>Fill in your expenses above and click <strong>Calculate What I Need to Save</strong> to see your plan.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /calc-layout -->
+
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">© 2026 Quantificate · <a href="/disclaimer/index.html">Disclaimer</a> · For educational purposes only · Not financial advice</div>
+</footer>
+
+<!-- Hamburger menu -->
+<script>
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('mainNav').classList.toggle('active');
+  });
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
+    if (!nav.contains(e.target) && !toggle.contains(e.target)) nav.classList.remove('active');
+  });
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', function() { document.getElementById('mainNav').classList.remove('active'); });
+  });
+</script>
+
+<!-- Cookie Consent Banner -->
+<div id="cookieConsent">
+  <div class="cookie-container">
+    <div class="cookie-content">
+      <div class="cookie-text">
+        <h3>🍪 We Value Your Privacy</h3>
+        <p>We use cookies to analyze site traffic and improve your experience. By clicking "Accept All", you consent to our use of analytics cookies. <a href="/disclaimer/index.html" class="cookie-link">Privacy Policy</a></p>
+      </div>
+      <div class="cookie-buttons">
+        <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">Accept All</button>
+        <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">Decline All</button>
+        <button class="cookie-btn cookie-btn-settings" onclick="showSettings()">Cookie Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="cookieSettings">
+  <div class="settings-modal">
+    <div class="settings-header">
+      <h2>Cookie Preferences</h2>
+      <p>Manage your cookie preferences below.</p>
+    </div>
+    <div class="settings-body">
+      <div class="cookie-category">
+        <div class="category-header">
+          <h3>Essential Cookies</h3>
+          <label class="toggle-switch"><input type="checkbox" id="essentialCookies" checked disabled><span class="toggle-slider"></span></label>
+        </div>
+        <p class="category-description">Necessary for the website to function. Cannot be disabled.</p>
+      </div>
+      <div class="cookie-category">
+        <div class="category-header">
+          <h3>Analytics Cookies</h3>
+          <label class="toggle-switch"><input type="checkbox" id="analyticsCookies"><span class="toggle-slider"></span></label>
+        </div>
+        <p class="category-description">Help us understand how visitors interact with our website using Google Analytics.</p>
+      </div>
+    </div>
+    <div class="settings-footer">
+      <button class="cookie-btn cookie-btn-decline" onclick="closeSettings()">Cancel</button>
+      <button class="cookie-btn cookie-btn-accept" onclick="saveSettings()">Save Preferences</button>
+    </div>
+  </div>
+</div>
+<script src="/assets/js/cookie-consent.js"></script>
+
+<script>
+const CATEGORIES = {
+  property: [
+    { id: 'mortgage',      label: 'Mortgage payment',                              defRet: true,  defInf: true },
+    { id: 'rent',          label: 'Rent',                                          defRet: true,  defInf: true  },
+    { id: 'homemaint',     label: 'Home maintenance (garden, improvements)',        defRet: true,  defInf: true  },
+    { id: 'propTax',       label: 'Property tax & HOA fees',                       defRet: true,  defInf: true  },
+    { id: 'utilities',     label: 'Electricity, gas & utilities',                  defRet: true,  defInf: true  },
+    { id: 'internet',      label: 'Internet, phone & mobile',                      defRet: true,  defInf: true  },
+  ],
+  transport: [
+    { id: 'carlease',      label: 'Car lease / financing',                         defRet: true, defInf: true },
+    { id: 'carmaint',      label: 'Car maintenance',                               defRet: true,  defInf: true  },
+    { id: 'fuel',          label: 'Fuel',                                          defRet: true,  defInf: true  },
+    { id: 'transit',       label: 'Public transit & ride-sharing',                 defRet: true,  defInf: true  },
+    { id: 'tolls',         label: 'Parking & tolls',                               defRet: true,  defInf: true  },
+  ],
+  insurance: [
+    { id: 'ins_home',      label: 'Home / condo / renters insurance',              defRet: true,  defInf: true  },
+    { id: 'ins_auto',      label: 'Automobile insurance (cars, motorcycles, etc.)',defRet: true,  defInf: true  },
+    { id: 'ins_health',    label: 'Health & dental insurance',                     defRet: true,  defInf: true  },
+    { id: 'ins_life',      label: 'Life insurance',                                defRet: true, defInf: true  },
+    { id: 'ins_disability',label: 'Disability / critical illness insurance',       defRet: true, defInf: true },
+    { id: 'ins_travel',    label: 'Travel insurance',                              defRet: true,  defInf: true  },
+    { id: 'ins_other',     label: 'Other insurance (umbrella, pet, legal, etc.)',  defRet: true,  defInf: true  },
+  ],
+  living: [
+    { id: 'groceries',     label: 'Groceries & food at home',                      defRet: true,  defInf: true  },
+    { id: 'household',     label: 'Household supplies & cleaning products',        defRet: true,  defInf: true  },
+    { id: 'personalcare',  label: 'Personal care & grooming (haircuts, etc.)',     defRet: true,  defInf: true  },
+    { id: 'dependents',    label: 'Children / dependents',                         defRet: true, defInf: true  },
+  ],
+  lifestyle: [
+    { id: 'entertainment', label: 'Entertainment (dining out, events)',            defRet: true,  defInf: true  },
+    { id: 'hobbies',       label: 'Hobbies, sports equipment & activities',        defRet: true,  defInf: true  },
+    { id: 'subscriptions', label: 'Streaming & digital subscriptions',             defRet: true,  defInf: true  },
+    { id: 'fitness',       label: 'Sports & fitness (gym, classes, leagues)',      defRet: true,  defInf: true  },
+    { id: 'vacation',      label: 'Vacation fund',                                 defRet: true,  defInf: true  },
+  ],
+  health: [
+    { id: 'hlt_rx',        label: 'Prescription medications',                      defRet: true,  defInf: true  },
+    { id: 'hlt_vision',    label: 'Vision care (glasses, contacts, eye exams)',    defRet: true,  defInf: true  },
+    { id: 'hlt_therapy',   label: 'Physiotherapy, massage & chiropractic',        defRet: true,  defInf: true  },
+    { id: 'hlt_mental',    label: 'Mental health & counselling',                   defRet: true,  defInf: true  },
+    { id: 'hlt_dental',    label: 'Out-of-pocket dental & specialist visits',      defRet: true,  defInf: true  },
+    { id: 'hlt_ltc',       label: 'Long-term / home care planning',               defRet: true,  defInf: true  },
+    { id: 'hlt_other',     label: 'Other out-of-pocket medical expenses',          defRet: true,  defInf: true  },
+  ],
+  other: [
+    { id: 'other_charity',  label: 'Charitable donations / tithing',               defRet: true,  defInf: true },
+    { id: 'other_gifts',    label: 'Gifts (birthdays, holidays, weddings)',         defRet: true,  defInf: true  },
+    { id: 'other_clothing', label: 'Clothing',                                     defRet: true,  defInf: true  },
+    { id: 'other_edu',      label: 'Education & professional development',         defRet: true, defInf: true  },
+    { id: 'other_sub',      label: 'Other subscriptions & memberships',            defRet: true,  defInf: true  },
+    { id: 'other_misc',     label: 'Miscellaneous / unexpected expenses',          defRet: true,  defInf: true  },
+  ],
+};
+
+const state = {};
+
+function initState() {
+  for (const items of Object.values(CATEGORIES)) {
+    for (const item of items) {
+      state[item.id] = { value: null, mode: 'M', retirement: item.defRet, inflation: item.defInf, projOverride: null };
+    }
+  }
+}
+
+function buildExpenseRows(catKey) {
+  const container = document.getElementById('cat-' + catKey);
+  container.innerHTML = '';
+  for (const item of CATEGORIES[catKey]) {
+    const s = state[item.id];
+    const row = document.createElement('div');
+    row.className = 'expense-row';
+    row.innerHTML = `
+      <span class="exp-label">${item.label}</span>
+      <div class="exp-input-wrap">
+        <span class="prefix">$</span>
+        <input type="number" id="inp-${item.id}" placeholder="—"
+          value="${s.value !== null ? s.value : ''}"
+          min="0" step="100"
+          oninput="onExpInput('${item.id}', this.value)" />
+      </div>
+      <div class="ma-toggle">
+        <button id="btnM-${item.id}" class="${s.mode==='M'?'active':''}" onclick="setMode('${item.id}','M')">M</button>
+        <button id="btnA-${item.id}" class="${s.mode==='A'?'active':''}" onclick="setMode('${item.id}','A')">A</button>
+      </div>
+      <div class="chk-cell">
+        <input type="checkbox" class="ret-chk" id="chkRet-${item.id}"
+          ${s.retirement ? 'checked' : ''}
+          onchange="setRet('${item.id}', this.checked)"
+          title="This expense continues in retirement" />
+      </div>
+      <div class="chk-cell">
+        <input type="checkbox" class="inf-chk" id="chkInf-${item.id}"
+          ${s.inflation ? 'checked' : ''}
+          onchange="setInf('${item.id}', this.checked)"
+          title="This expense grows with inflation over time" />
+      </div>
+      <div>
+        <div class="proj-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="proj-${item.id}" placeholder="—"
+            min="0" step="10"
+            oninput="onProjOverride('${item.id}', this.value)"
+            title="Projected value at retirement — edit to override" />
+        </div>
+        <div class="proj-period" id="projPeriod-${item.id}">— /mo</div>
+      </div>
+    `;
+    container.appendChild(row);
+  }
+}
+
+function onExpInput(id, val) {
+  state[id].value = val === '' ? null : parseFloat(val);
+  recalcTotals();
+  updateProjection(id);
+}
+function setMode(id, mode) {
+  state[id].mode = mode;
+  document.getElementById('btnM-'+id).className = mode==='M' ? 'active' : '';
+  document.getElementById('btnA-'+id).className = mode==='A' ? 'active' : '';
+  recalcTotals();
+  updateProjection(id);
+}
+function setRet(id, checked) { state[id].retirement = checked; recalcTotals(); }
+function setInf(id, checked) {
+  state[id].inflation = checked;
+  if (state[id].projOverride !== null) {
+    state[id].projOverride = null;
+    const el = document.getElementById('proj-'+id);
+    if (el) { el.value = ''; el.classList.remove('overridden'); }
+  }
+  updateProjection(id);
+}
+
+function onProjOverride(id, val) {
+  if (val === '' || isNaN(parseFloat(val))) {
+    state[id].projOverride = null;
+    document.getElementById('proj-'+id).classList.remove('overridden');
+  } else {
+    state[id].projOverride = parseFloat(val);
+    document.getElementById('proj-'+id).classList.add('overridden');
+  }
+  recalcTotals();
+}
+
+function updateProjection(id) {
+  const s = state[id];
+  const el = document.getElementById('proj-'+id);
+  const periodEl = document.getElementById('projPeriod-'+id);
+  if (!el || !periodEl) return;
+  if (s.projOverride !== null) return;
+
+  const av = annualVal(id);
+  if (av === 0 || s.value === null) {
+    el.value = '';
+    el.placeholder = '—';
+    periodEl.textContent = s.mode === 'M' ? '— /mo' : '— /yr';
+    return;
+  }
+
+  const ytr = getYTR();
+  const infl = getInfl();
+  const projAnnual = s.inflation ? av * Math.pow(1 + infl, ytr) : av;
+  const displayVal = s.mode === 'M' ? projAnnual / 12 : projAnnual;
+  el.value = Math.round(displayVal);
+  periodEl.textContent = s.mode === 'M' ? '/mo at retire' : '/yr at retire';
+}
+
+function updateAllProjections() {
+  for (const items of Object.values(CATEGORIES)) {
+    for (const item of items) {
+      if (state[item.id].projOverride === null) updateProjection(item.id);
+    }
+  }
+  recalcTotals();
+}
+
+function getYTR() {
+  const cur = parseFloat(document.getElementById('currentAge').value) || 30;
+  const ret = parseFloat(document.getElementById('retirementAge').value) || 65;
+  return Math.max(ret - cur, 0);
+}
+function getInfl() {
+  return (parseFloat(document.getElementById('inflation').value) || 2.5) / 100;
+}
+
+function annualVal(id) {
+  const s = state[id];
+  if (s.value === null || isNaN(s.value)) return 0;
+  return s.mode === 'M' ? s.value * 12 : s.value;
+}
+function retAnnualVal(id) { return state[id].retirement ? annualVal(id) : 0; }
+function catTotal(catKey, retOnly=false) {
+  return CATEGORIES[catKey].reduce((sum, item) => sum + (retOnly ? retAnnualVal(item.id) : annualVal(item.id)), 0);
+}
+function grandTotal(retOnly=false) {
+  return Object.keys(CATEGORIES).reduce((sum, k) => sum + catTotal(k, retOnly), 0);
+}
+
+function getCurrencySymbol() {
+  const el = document.getElementById('currencySelect');
+  return el ? el.value : '$';
+}
+function fmtShort(n) { const s = getCurrencySymbol(); return s + Math.round(n).toLocaleString(); }
+function fmt(n) {
+  const s = getCurrencySymbol();
+  if (Math.abs(n) >= 1e6) return s + (n/1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return s + (n/1000).toFixed(0) + 'K';
+  return s + Math.round(n).toLocaleString();
+}
+function fmtFull(n) { const s = getCurrencySymbol(); return s + Math.round(Math.abs(n)).toLocaleString(); }
+function updateCurrencyPrefixes() {
+  const s = getCurrencySymbol();
+  document.querySelectorAll('.prefix').forEach(el => { el.textContent = s; });
+  // Refresh expense totals which use fmtShort
+  recalcTotals();
+  // If results have been calculated, re-render them with new symbol
+  if (lastCalc) calculate();
+}
+
+
+function recalcTotals() {
+  const ytr  = getYTR();
+  const infl = getInfl();
+
+  let grandAmt = 0;
+  let grandRet = 0;
+
+  Object.keys(CATEGORIES).forEach(k => {
+    let catAmt = 0;
+    let catRet = 0;
+
+    for (const item of CATEGORIES[k]) {
+      const s = state[item.id];
+      const av = annualVal(item.id);
+      catAmt += av;
+
+      if (s.retirement && av > 0) {
+        let projAnnual;
+        if (s.projOverride !== null) {
+          projAnnual = s.mode === 'M' ? s.projOverride * 12 : s.projOverride;
+        } else {
+          projAnnual = s.inflation ? av * Math.pow(1 + infl, ytr) : av;
+        }
+        catRet += projAnnual;
+        grandRet += projAnnual;
+      }
+      grandAmt += av;
+    }
+
+    const amtEl = document.getElementById('sub-' + k);
+    const retEl = document.getElementById('subret-' + k);
+    if (amtEl) amtEl.textContent = catAmt > 0 ? fmtShort(catAmt) + '/yr' : '—';
+    if (retEl) retEl.textContent = catRet > 0 ? fmtShort(catRet) + '/yr' : '—';
+  });
+
+  const retFlaggedAmt = (() => {
+    let t = 0;
+    for (const items of Object.values(CATEGORIES))
+      for (const item of items)
+        if (state[item.id].retirement) t += annualVal(item.id);
+    return t;
+  })();
+
+  const totalEl = document.getElementById('expTotalDisplay');
+  const retTotalEl = document.getElementById('expRetTotalDisplay');
+  if (totalEl) totalEl.textContent = fmtShort(retFlaggedAmt > 0 ? retFlaggedAmt : grandAmt);
+  if (retTotalEl) retTotalEl.textContent = fmtShort(grandRet > 0 ? grandRet : 0);
+}
+
+let acctType = 'taxadv';
+let growthChart = null;
+let lastCalc = null;
+
+function setAcctType(type) {
+  acctType = type;
+  document.getElementById('btn-taxadv').classList.toggle('active', type === 'taxadv');
+  document.getElementById('btn-taxable').classList.toggle('active', type === 'taxable');
+  document.getElementById('tax-taxadv-block').style.display  = type === 'taxadv'  ? '' : 'none';
+  document.getElementById('tax-taxable-block').style.display = type === 'taxable' ? '' : 'none';
+}
+
+function calculate() {
+  const currentAge  = parseFloat(document.getElementById('currentAge').value);
+  const retireAge   = parseFloat(document.getElementById('retirementAge').value);
+  const lifeExp     = parseFloat(document.getElementById('lifeExpectancy').value);
+  const currentSav  = parseFloat(document.getElementById('currentSavings').value) || 0;
+  const cagrPct     = parseFloat(document.getElementById('cagr').value);
+  const retCagrPct  = parseFloat(document.getElementById('retCagr').value);
+  const inflPct     = parseFloat(document.getElementById('inflation').value);
+  const incomeTaxPct = acctType === 'taxadv'  ? (parseFloat(document.getElementById('incomeTax').value) || 0) : 0;
+  const capGainsPct  = acctType === 'taxable' ? (parseFloat(document.getElementById('capGains').value)  || 0) : 0;
+
+  const ytr = retireAge - currentAge;
+  const yir = lifeExp - retireAge;
+  if (ytr <= 0 || yir <= 0) { alert('Please check your age inputs.'); return; }
+
+  const cagr    = cagrPct / 100;
+  const retCagr = retCagrPct / 100;
+  const infl    = inflPct / 100;
+
+  let futureAnnual = 0;
+  let retTotal = 0;
+
+  for (const items of Object.values(CATEGORIES)) {
+    for (const item of items) {
+      const s = state[item.id];
+      if (!s.retirement) continue;
+      const av = annualVal(item.id);
+      if (av === 0) continue;
+      retTotal += av;
+
+      if (s.projOverride !== null) {
+        futureAnnual += s.mode === 'M' ? s.projOverride * 12 : s.projOverride;
+      } else if (s.inflation) {
+        futureAnnual += av * Math.pow(1 + infl, ytr);
+      } else {
+        futureAnnual += av;
+      }
+    }
+  }
+
+  if (retTotal === 0) {
+    for (const items of Object.values(CATEGORIES)) {
+      for (const item of items) {
+        const s = state[item.id];
+        const av = annualVal(item.id);
+        if (av === 0) continue;
+        futureAnnual += s.projOverride !== null
+          ? (s.mode === 'M' ? s.projOverride * 12 : s.projOverride)
+          : (s.inflation ? av * Math.pow(1 + infl, ytr) : av);
+      }
+    }
+  }
+
+  if (futureAnnual === 0) {
+    alert('Please enter at least one expense to calculate.');
+    return;
+  }
+
+  const annualToday = grandTotal(true) || grandTotal(false);
+
+  const incomeTax = incomeTaxPct / 100;
+  const capGains  = capGainsPct  / 100;
+
+  let grossFutureAnnual;
+  if (acctType === 'taxadv') {
+    grossFutureAnnual = incomeTax < 1 ? futureAnnual / (1 - incomeTax) : futureAnnual;
+  } else {
+    const retireMrPass1 = retCagr / 12;
+    let nestEggPass1 = 0;
+    for (let m = 1; m <= yir * 12; m++) {
+      const yearIdx = Math.floor((m - 1) / 12);
+      const mw = (futureAnnual * Math.pow(1 + infl, yearIdx)) / 12;
+      nestEggPass1 += mw / Math.pow(1 + retireMrPass1, m);
+    }
+    const costBasisRatio = nestEggPass1 > 0 ? Math.min(currentSav / nestEggPass1, 1) : 0;
+    const taxableShare = 1 - costBasisRatio;
+    const effectiveTaxRate = taxableShare * capGains;
+    grossFutureAnnual = effectiveTaxRate < 1 ? futureAnnual / (1 - effectiveTaxRate) : futureAnnual;
+  }
+
+  const afterTaxAnnual = futureAnnual;
+  const preTaxAnnual   = grossFutureAnnual;
+  const taxDragAnnual  = preTaxAnnual - afterTaxAnnual;
+
+  const futureAnnualForCalc = grossFutureAnnual;
+
+  const retireMrCalc = retCagr / 12;
+  let nestEgg = 0;
+  for (let m = 1; m <= yir * 12; m++) {
+    const yearIdx = Math.floor((m - 1) / 12);
+    const monthlyW = (futureAnnualForCalc * Math.pow(1 + infl, yearIdx)) / 12;
+    nestEgg += monthlyW / Math.pow(1 + retireMrCalc, m);
+  }
+
+  const mr = cagr / 12;
+  const nm = ytr * 12;
+  const fvCurrentSavings = currentSav * Math.pow(1 + mr, nm);
+
+  const remainingNeeded = nestEgg - fvCurrentSavings;
+  let reqMonthly = 0;
+  if (remainingNeeded > 0) {
+    reqMonthly = remainingNeeded / ((Math.pow(1 + mr, nm) - 1) / mr);
+  }
+  const alreadyFunded = remainingNeeded <= 0;
+
+  // Chart data
+  const chartLabels = [];
+  const dsSavingsPrincipal = [];
+  const dsSavingsReturns   = [];
+  const dsContribAmt       = [];
+  const dsContribRet       = [];
+  const dsDrawdown         = [];
+
+  for (let y = 0; y <= ytr; y++) {
+    chartLabels.push(currentAge + y);
+    const savingsGrown          = currentSav * Math.pow(1 + mr, y * 12);
+    const savingsReturns        = savingsGrown - currentSav;
+    const totalContribPrincipal = reqMonthly * y * 12;
+    const fvContribs            = reqMonthly > 0 ? reqMonthly * ((Math.pow(1 + mr, y * 12) - 1) / mr) : 0;
+    const returnsOnContribs     = Math.max(0, fvContribs - totalContribPrincipal);
+    dsSavingsPrincipal.push(Math.round(currentSav));
+    dsSavingsReturns.push(Math.round(currentSav + savingsReturns));
+    dsContribAmt.push(Math.round(currentSav + savingsReturns + totalContribPrincipal));
+    dsContribRet.push(Math.round(currentSav + savingsReturns + totalContribPrincipal + returnsOnContribs));
+    dsDrawdown.push(null);
+  }
+
+  let portfolioBalance = nestEgg;
+  dsDrawdown[ytr] = Math.round(nestEgg);
+  for (let k = 1; k <= yir; k++) {
+    chartLabels.push(retireAge + k);
+    for (let mo = 0; mo < 12; mo++) {
+      const yearIdx = k - 1;
+      const monthlyW = (futureAnnualForCalc * Math.pow(1 + infl, yearIdx)) / 12;
+      portfolioBalance = portfolioBalance * (1 + retCagr / 12) - monthlyW;
+    }
+    portfolioBalance = Math.max(0, portfolioBalance);
+    dsSavingsPrincipal.push(null);
+    dsSavingsReturns.push(null);
+    dsContribAmt.push(null);
+    dsContribRet.push(null);
+    dsDrawdown.push(Math.round(portfolioBalance));
+  }
+
+  // Expense breakdown table
+  const catNames = { property:'Property', transport:'Transportation', insurance:'Insurance', living:'Daily Living', lifestyle:'Lifestyle', health:'Health & Wellness', other:'Other' };
+  const catNamesDisplay = { property:'🏠 Property', transport:'🚗 Transport', insurance:'🛡️ Insurance', living:'🛒 Daily Living', lifestyle:'✈️ Lifestyle', health:'🏥 Health & Wellness', other:'📦 Other' };
+  let tableRows = '';
+  let retirementGrandTotal = 0;
+  for (const [catKey, items] of Object.entries(CATEGORIES)) {
+    const ct = catTotal(catKey);
+    if (ct === 0) continue;
+    tableRows += `<tr class="cat-row"><td colspan="5">${catNamesDisplay[catKey]}</td></tr>`;
+    for (const item of items) {
+      const av = annualVal(item.id);
+      if (av === 0) continue;
+      const s = state[item.id];
+      const retMark = s.retirement ? `<span style="color:var(--accent);font-weight:600">✓</span>` : `<span style="color:var(--ink-xlight)">—</span>`;
+      const infMark = s.inflation  ? `<span style="color:var(--gold);font-weight:600">✓</span>`  : `<span style="color:var(--ink-xlight)">—</span>`;
+      let retAnnual = null;
+      if (s.retirement) {
+        if (s.projOverride !== null) { retAnnual = s.mode === 'M' ? s.projOverride * 12 : s.projOverride; }
+        else { retAnnual = s.inflation ? av * Math.pow(1 + infl, ytr) : av; }
+        retirementGrandTotal += retAnnual;
+      }
+      const retCostCell = retAnnual !== null
+        ? `<td class="num" style="color:var(--gold);font-weight:500">${fmtShort(retAnnual)}/yr</td>`
+        : `<td class="num" style="color:var(--ink-xlight)">—</td>`;
+      tableRows += `<tr><td>${item.label}</td><td class="num">${fmtShort(av)}/yr</td>${retCostCell}<td class="ctr">${retMark}</td><td class="ctr">${infMark}</td></tr>`;
+    }
+  }
+  tableRows += `<tr class="total-row"><td>Total (all expenses)</td><td class="num">${fmtShort(grandTotal())}/yr</td><td class="num" style="color:var(--gold);font-weight:700">${fmtShort(retirementGrandTotal)}/yr</td><td></td><td></td></tr>
+  <tr class="total-row" style="background:var(--accent-light)"><td style="color:var(--accent)">Retirement income base*</td><td class="num" style="color:var(--accent)">${fmtShort(annualToday)}/yr</td><td class="num" style="color:var(--accent);font-weight:700">${fmtShort(afterTaxAnnual)}/yr</td><td></td><td></td></tr>`;
+
+  const totalTaxSaved = (acctType === 'taxadv' && !alreadyFunded) ? reqMonthly * (incomeTaxPct / 100) * 12 * ytr : 0;
+  const monthlTaxSaved = (acctType === 'taxadv' && !alreadyFunded) ? reqMonthly * (incomeTaxPct / 100) : 0;
+  const showTaxRelief = acctType === 'taxadv' && !alreadyFunded && incomeTaxPct > 0;
+  const taxLabel = acctType === 'taxadv' ? `Income tax @ ${incomeTaxPct}%` : `Cap gains tax @ ${capGainsPct}%`;
+  const taxApplied = acctType === 'taxadv' ? incomeTaxPct > 0 : capGainsPct > 0;
+
+  // Monthly Schedule
+  let schedRows = '';
+  const schedData = [];
+  let bal = currentSav;
+  let costBasis = currentSav;
+  let accumTotContrib = 0, accumTotRet = 0, accumTotTaxSaved = 0;
+
+  for (let m = 1; m <= nm; m++) {
+    const openBal  = bal;
+    const ret      = bal * mr;
+    const contrib  = reqMonthly;
+    bal            = bal + ret + contrib;
+    costBasis     += contrib;
+    const taxSaved = acctType === 'taxadv' ? contrib * incomeTax : 0;
+    accumTotContrib   += contrib;
+    accumTotRet       += ret;
+    accumTotTaxSaved  += taxSaved;
+    const age = (currentAge + (m - 1) / 12).toFixed(1);
+    schedData.push({ phase:'accum', age, month: m, openBal, contrib, ret, taxSaved, withdrawal: 0, tax: 0, netWithdrawal: 0, bal });
+    schedRows += `<tr class="sched-accum">
+      <td>${age}</td><td>${m}</td><td class="num">${fmtFull(openBal)}</td>
+      <td class="num contrib">${fmtFull(contrib)}</td><td class="num ret">${fmtFull(ret)}</td>
+      <td class="num">—</td>
+      <td class="num tax-save">${acctType === 'taxadv' ? fmtFull(taxSaved) : '—'}</td>
+      <td class="num">—</td><td class="num bal">${fmtFull(bal)}</td>
+    </tr>`;
+  }
+
+  schedRows += `<tr class="sched-totals-row accum-totals">
+    <td colspan="2" class="sched-totals-label">Phase Totals</td><td class="num">—</td>
+    <td class="num contrib">${fmtFull(accumTotContrib)}</td><td class="num ret">${fmtFull(accumTotRet)}</td>
+    <td class="num">—</td>
+    <td class="num tax-save">${acctType === 'taxadv' ? fmtFull(accumTotTaxSaved) : '—'}</td>
+    <td class="num">—</td><td class="num bal">${fmtFull(bal)}</td>
+  </tr>`;
+  schedRows += `<tr class="sched-phase-marker"><td colspan="9">Retirement begins at age ${retireAge} — Portfolio: ${fmtFull(bal)}</td></tr>`;
+
+  const retireMr = retCagr / 12;
+  let drawTotRet = 0, drawTotGross = 0, drawTotTax = 0, drawTotNet = 0;
+  let drawTotPrincipalReturned = 0, drawTotGrowthTaxed = 0;
+  const basisAtRetire = costBasis;
+
+  for (let m = 1; m <= yir * 12; m++) {
+    const openBal         = bal;
+    const ret             = bal * retireMr;
+    const yearIdx         = Math.floor((m - 1) / 12);
+    const grossWithdrawal = (futureAnnualForCalc * Math.pow(1 + infl, yearIdx)) / 12;
+    let tax = 0, principalPortion = 0, growthPortion = 0;
+    if (acctType === 'taxadv') {
+      tax = grossWithdrawal * incomeTax;
+    } else if (acctType === 'taxable' && capGains > 0) {
+      const portfolioVal    = openBal + ret;
+      const basisRatio      = portfolioVal > 0 ? Math.min(costBasis / portfolioVal, 1) : 0;
+      principalPortion      = grossWithdrawal * basisRatio;
+      growthPortion         = grossWithdrawal - principalPortion;
+      tax                   = growthPortion * capGains;
+      costBasis             = Math.max(0, costBasis - principalPortion);
+      drawTotPrincipalReturned += principalPortion;
+      drawTotGrowthTaxed       += growthPortion;
+    }
+    const netWithdrawal = grossWithdrawal - tax;
+    bal = Math.max(0, bal + ret - grossWithdrawal);
+    drawTotRet   += ret;
+    drawTotGross += grossWithdrawal;
+    drawTotTax   += tax;
+    drawTotNet   += netWithdrawal;
+    const age = (retireAge + (m - 1) / 12).toFixed(1);
+    schedData.push({ phase:'draw', age, month: m, openBal, contrib: 0, ret, taxSaved: 0, withdrawal: grossWithdrawal, tax, netWithdrawal, bal });
+    schedRows += `<tr class="sched-draw">
+      <td>${age}</td><td>${m}</td><td class="num">${fmtFull(openBal)}</td>
+      <td class="num contrib">—</td><td class="num ret">${fmtFull(ret)}</td>
+      <td class="num withdraw">${fmtFull(grossWithdrawal)}</td>
+      <td class="num tax-cost">${tax > 0 ? fmtFull(tax) : '—'}</td>
+      <td class="num net-draw">${fmtFull(netWithdrawal)}</td>
+      <td class="num bal">${fmtFull(bal)}</td>
+    </tr>`;
+  }
+
+  const effectiveTaxRateDraw = drawTotGross > 0 ? (drawTotTax / drawTotGross * 100).toFixed(1) : '0.0';
+  schedRows += `<tr class="sched-totals-row draw-totals">
+    <td colspan="2" class="sched-totals-label">Phase Totals</td><td class="num">—</td><td class="num">—</td>
+    <td class="num ret">${fmtFull(drawTotRet)}</td><td class="num withdraw">${fmtFull(drawTotGross)}</td>
+    <td class="num tax-cost">${drawTotTax > 0 ? fmtFull(drawTotTax) : '—'}</td>
+    <td class="num net-draw">${fmtFull(drawTotNet)}</td><td class="num">—</td>
+  </tr>`;
+
+  // Tax breakdown box
+  let taxBreakdownHtml = '';
+  if (taxApplied) {
+    if (acctType === 'taxadv') {
+      taxBreakdownHtml = `
+      <div class="tax-breakdown-box">
+        <div class="tbb-title">Tax Breakdown — Tax-Advantaged Account (${incomeTaxPct}% Marginal Rate)</div>
+        <div class="tbb-grid">
+          <div class="tbb-section tbb-green">
+            <div class="tbb-section-title">Accumulation Phase · Tax Relief on Contributions</div>
+            <div class="tbb-rows">
+              <div class="tbb-row"><span>Total contributions made</span><span>${fmtFull(accumTotContrib)}</span></div>
+              <div class="tbb-row"><span>Marginal income tax rate</span><span>${incomeTaxPct}%</span></div>
+              <div class="tbb-row tbb-highlight-green"><span>Estimated tax saved (contributions × rate)</span><span>${fmtFull(accumTotTaxSaved)}</span></div>
+              <div class="tbb-note">Each month your contribution reduces your taxable income. At ${incomeTaxPct}% you save ${fmtFull(reqMonthly * incomeTax)}/mo.</div>
+            </div>
+          </div>
+          <div class="tbb-section tbb-royal">
+            <div class="tbb-section-title">Drawdown Phase · Income Tax on Withdrawals</div>
+            <div class="tbb-rows">
+              <div class="tbb-row"><span>Total gross withdrawals</span><span>${fmtFull(drawTotGross)}</span></div>
+              <div class="tbb-row"><span>Income tax rate at retirement</span><span>${incomeTaxPct}%</span></div>
+              <div class="tbb-row tbb-highlight-warn"><span>Total income tax paid on withdrawals</span><span>${fmtFull(drawTotTax)}</span></div>
+              <div class="tbb-row tbb-highlight-teal"><span>Total net received (after tax)</span><span>${fmtFull(drawTotNet)}</span></div>
+              <div class="tbb-row"><span>Effective tax rate on withdrawals</span><span>${effectiveTaxRateDraw}%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="tbb-net-summary">
+          <span>Net tax position over full horizon:</span>
+          <span class="${accumTotTaxSaved > drawTotTax ? 'tbb-net-positive' : 'tbb-net-negative'}">
+            ${accumTotTaxSaved >= drawTotTax
+              ? `Net tax saving of ${fmtFull(accumTotTaxSaved - drawTotTax)}`
+              : `Net tax cost of ${fmtFull(drawTotTax - accumTotTaxSaved)}`}
+          </span>
+        </div>
+      </div>`;
+    } else if (acctType === 'taxable' && capGainsPct > 0) {
+      const avgBasisRatio = drawTotGross > 0 ? (drawTotPrincipalReturned / drawTotGross * 100).toFixed(1) : '0.0';
+      const avgGrowthShare = (100 - parseFloat(avgBasisRatio)).toFixed(1);
+      const initBasisRatioPct = nestEgg > 0 ? (basisAtRetire / nestEgg * 100).toFixed(1) : '0.0';
+      taxBreakdownHtml = `
+      <div class="tax-breakdown-box">
+        <div class="tbb-title">Tax Breakdown — Regular Investment Account (${capGainsPct}% Cap Gains Rate)</div>
+        <div class="tbb-grid">
+          <div class="tbb-section tbb-neutral">
+            <div class="tbb-section-title">Accumulation Phase · No Upfront Tax Benefit</div>
+            <div class="tbb-rows">
+              <div class="tbb-row"><span>Total contributions (cost basis built)</span><span>${fmtFull(accumTotContrib)}</span></div>
+              <div class="tbb-row"><span>Portfolio at retirement</span><span>${fmtFull(nestEgg)}</span></div>
+              <div class="tbb-row"><span>Unrealised gains at retirement</span><span>${fmtFull(nestEgg - basisAtRetire)}</span></div>
+              <div class="tbb-row tbb-highlight-neutral"><span>Cost basis ratio at retirement</span><span>${initBasisRatioPct}% principal / ${(100-parseFloat(initBasisRatioPct)).toFixed(1)}% growth</span></div>
+            </div>
+          </div>
+          <div class="tbb-section tbb-royal">
+            <div class="tbb-section-title">Drawdown Phase · Cap Gains Tax on Growth Portion Only</div>
+            <div class="tbb-rows">
+              <div class="tbb-row"><span>Total gross withdrawals</span><span>${fmtFull(drawTotGross)}</span></div>
+              <div class="tbb-row"><span>Principal returned tax-free</span><span>${fmtFull(drawTotPrincipalReturned)}</span></div>
+              <div class="tbb-row"><span>Growth portion subject to cap gains</span><span>${fmtFull(drawTotGrowthTaxed)}</span></div>
+              <div class="tbb-row"><span>Avg split (principal / growth)</span><span>${avgBasisRatio}% / ${avgGrowthShare}%</span></div>
+              <div class="tbb-row"><span>Cap gains tax rate</span><span>${capGainsPct}%</span></div>
+              <div class="tbb-row tbb-highlight-warn"><span>Total cap gains tax paid</span><span>${fmtFull(drawTotTax)}</span></div>
+              <div class="tbb-row tbb-highlight-teal"><span>Total net received (after tax)</span><span>${fmtFull(drawTotNet)}</span></div>
+              <div class="tbb-row"><span>Effective tax rate on total withdrawals</span><span>${effectiveTaxRateDraw}%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+  }
+
+  const html = `
+    <div class="result-tabs">
+      <button class="active" onclick="switchTab('summary',this)">📋 Summary</button>
+      <button onclick="switchTab('breakdown',this)">💸 Expense Breakdown</button>
+      <button onclick="switchTab('schedule',this)">📅 Monthly Schedule</button>
+      <button class="pdf-btn" onclick="downloadPDF()">⬇ PDF</button>
+      <button class="xlsx-btn" onclick="downloadExcel()">⬇ Excel</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-summary">
+      <div class="hero-result">
+        <div>
+          <div class="hr-label">Required Monthly Contribution</div>
+          <div class="hr-value">${alreadyFunded ? '$0' : fmtFull(reqMonthly)}<span style="font-family:'DM Sans';font-size:1.1rem;opacity:0.7">/mo</span></div>
+          <div class="hr-sub">${alreadyFunded
+            ? 'Your current savings already cover your retirement goal.'
+            : `Starting today to retire at ${retireAge} and live to ${lifeExp}`}</div>
+        </div>
+        <div class="hr-note">Includes ${taxApplied ? taxLabel + ' gross-up.' : 'no tax adjustment.'} Funded to age ${lifeExp}.</div>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-card primary">
+          <div class="rc-label">Nest Egg Needed at ${retireAge}</div>
+          <div class="rc-value">${fmt(nestEgg)}</div>
+          <div class="rc-sub">Pre-tax portfolio target (future $)</div>
+        </div>
+        <div class="result-card neutral">
+          <div class="rc-label">Your Savings Will Grow To</div>
+          <div class="rc-value">${fmt(fvCurrentSavings)}</div>
+          <div class="rc-sub">${fmtShort(currentSav)} compounded monthly at ${cagrPct}% for ${ytr} yrs</div>
+        </div>
+        <div class="result-card neutral">
+          <div class="rc-label">After-Tax Income Needed</div>
+          <div class="rc-value">${fmt(afterTaxAnnual)}</div>
+          <div class="rc-sub">Your lifestyle cost in future $</div>
+        </div>
+        <div class="result-card draw">
+          <div class="rc-label">Pre-Tax Withdrawal Needed</div>
+          <div class="rc-value">${fmt(preTaxAnnual)}</div>
+          <div class="rc-sub">${taxApplied ? `Grossed up · ${taxLabel}` : 'No tax applied'}</div>
+        </div>
+        ${showTaxRelief ? `
+        <div class="result-card" style="background:rgba(20,184,166,0.07);border-color:rgba(20,184,166,0.35);grid-column:span 2">
+          <div class="rc-label" style="color:var(--teal)">Tax Relief on Contributions</div>
+          <div class="rc-value" style="color:var(--teal)">${fmt(totalTaxSaved)}</div>
+          <div class="rc-sub">Est. tax saved over ${ytr} yrs · ${fmtShort(monthlTaxSaved)}/mo back in your pocket at ${incomeTaxPct}% marginal rate</div>
+        </div>` : ''}
+        ${taxApplied ? `
+        <div class="result-card" style="background:var(--warn-light);border-color:var(--warn-border);${showTaxRelief ? '' : 'grid-column:span 2'}">
+          <div class="rc-label" style="color:var(--warn)">Annual Tax Drag at Retirement</div>
+          <div class="rc-value" style="color:var(--warn)">${fmt(taxDragAnnual)}/yr</div>
+          <div class="rc-sub">Extra withdrawal needed to cover taxes · grows with inflation over ${yir}-yr retirement</div>
+        </div>` : ''}
+        <div class="result-card action" style="${taxApplied ? '' : 'grid-column:span 2'}">
+          <div class="rc-label">Still Needs Funding via Contributions</div>
+          <div class="rc-value">${alreadyFunded ? '$0' : fmt(remainingNeeded)}</div>
+          <div class="rc-sub">Nest egg minus what current savings cover</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap"><canvas id="growthCanvas"></canvas></div>
+
+      <div class="assumptions">
+        <strong>How it's calculated:</strong>
+        Your retirement expenses of ${fmtShort(annualToday)}/yr (today's $) are inflation-adjusted to
+        <strong>${fmtShort(afterTaxAnnual)}/yr</strong> at retirement.
+        ${taxApplied
+          ? acctType === 'taxadv'
+            ? `Since you're using a <strong>tax-advantaged account</strong> (e.g. RRSP), withdrawals are taxed as ordinary income at ${incomeTaxPct}%.
+               To net ${fmtShort(afterTaxAnnual)}/yr after tax, you need to withdraw <strong>${fmtShort(preTaxAnnual)}/yr</strong> pre-tax.`
+            : `Since you're using a <strong>regular investment account</strong>, the growth portion of each withdrawal is taxed at the ${capGainsPct}% capital gains rate.
+               The effective gross-up brings withdrawals to <strong>${fmtShort(preTaxAnnual)}/yr</strong>.`
+          : 'No tax rate applied — income target is used as-is.'}
+        This pre-tax withdrawal stream is discounted at your ${retCagrPct}% post-retirement CAGR to produce a nest egg target of <strong>${fmt(nestEgg)}</strong>.
+        Your current savings of ${fmtShort(currentSav)} grow to ${fmt(fvCurrentSavings)}, leaving
+        <strong>${alreadyFunded ? '$0' : fmt(remainingNeeded)}</strong> to fund via
+        <strong>${alreadyFunded ? '$0' : fmtFull(reqMonthly)}/mo</strong> in contributions.
+        <br><br><em>For educational purposes only. Not financial advice.</em>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-breakdown">
+      <table class="breakdown-table">
+        <thead><tr>
+          <th>Expense</th>
+          <th style="text-align:right">Today (Annual)</th>
+          <th style="text-align:right;color:var(--gold)">@ Retirement (Annual)</th>
+          <th style="text-align:center" title="Continues in retirement">Ret.</th>
+          <th style="text-align:center" title="Grows with inflation">Inf.</th>
+        </tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+      <div class="assumptions">
+        <strong>Ret.</strong> = expense continues into retirement and is included in your income target.<br>
+        <strong>Inf.</strong> = expense grows with the inflation rate (${inflPct}%/yr) between now and retirement.
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-schedule">
+      <div class="sched-legend">
+        <span class="sched-pill accum">Accumulation</span>
+        <span class="sched-pill draw">Drawdown</span>
+        <span style="font-size:0.75rem;color:var(--ink-xlight)">All values in future $.</span>
+      </div>
+      <div class="sched-wrap">
+        <table class="sched-table">
+          <thead>
+            <tr>
+              <th>Age</th><th>Month #</th><th class="num">Opening Balance</th>
+              <th class="num contrib">Contribution</th><th class="num ret">Return</th>
+              <th class="num withdraw">Gross Withdrawal</th>
+              <th class="num tax-col">${acctType === 'taxadv' ? 'Income Tax' : acctType === 'taxable' && capGainsPct > 0 ? 'Cap Gains Tax' : 'Tax'}</th>
+              <th class="num net-col">Net to You</th>
+              <th class="num bal">Closing Balance</th>
+            </tr>
+          </thead>
+          <tbody>${schedRows}</tbody>
+        </table>
+      </div>
+      <div class="assumptions">
+        Returns calculated monthly at <strong>${(cagrPct/12).toFixed(3)}%/mo</strong> (pre-retirement) and
+        <strong>${(retCagrPct/12).toFixed(3)}%/mo</strong> (post-retirement).
+        Gross withdrawals grow with inflation (${inflPct}%/yr) annually during drawdown.
+      </div>
+      ${taxBreakdownHtml}
+    </div>
+  `;
+
+  document.getElementById('resultsBody').innerHTML = html;
+  collapseInputs();
+  setTimeout(() => {
+    document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+
+  // Build expense table data for export
+  const expenseTableData = [];
+  for (const [catKey, items] of Object.entries(CATEGORIES)) {
+    for (const item of items) {
+      const av = annualVal(item.id);
+      if (av === 0) continue;
+      const s = state[item.id];
+      let retAnnualPdf = null;
+      if (s.retirement) {
+        if (s.projOverride !== null) { retAnnualPdf = s.mode === 'M' ? s.projOverride * 12 : s.projOverride; }
+        else { retAnnualPdf = s.inflation ? av * Math.pow(1 + infl, ytr) : av; }
+      }
+      expenseTableData.push({
+        category: catNames[catKey] || catKey,
+        label: item.label,
+        today: av,
+        atRetirement: retAnnualPdf,
+        retirement: s.retirement,
+        inflation: s.inflation
+      });
+    }
+  }
+
+  lastCalc = {
+    currentAge, retireAge, lifeExp, currentSav, cagrPct, retCagrPct, inflPct,
+    incomeTaxPct, capGainsPct, acctType,
+    ytr, yir, nm, nestEgg, fvCurrentSavings, remainingNeeded, reqMonthly,
+    afterTaxAnnual, preTaxAnnual, taxDragAnnual, taxApplied, taxLabel,
+    annualToday, futureAnnualForCalc, alreadyFunded,
+    totalTaxSaved, monthlTaxSaved, showTaxRelief,
+    accumTotContrib, accumTotRet, accumTotTaxSaved,
+    drawTotRet, drawTotGross, drawTotTax, drawTotNet,
+    drawTotPrincipalReturned, drawTotGrowthTaxed, basisAtRetire,
+    expenseTableData, schedData
+  };
+
+  if (growthChart) growthChart.destroy();
+  const ctx = document.getElementById('growthCanvas').getContext('2d');
+  growthChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [
+        { label: 'Current Savings (Principal)', data: dsSavingsPrincipal, borderColor: '#1a3d2e', backgroundColor: 'rgba(26,61,46,0.55)', borderWidth: 1.5, fill: 'origin', tension: 0.3, pointRadius: 0, pointHoverRadius: 5, order: 5 },
+        { label: 'Returns on Current Savings',  data: dsSavingsReturns,   borderColor: '#2c5f4a', backgroundColor: 'rgba(44,95,74,0.5)',   borderWidth: 1.5, fill: '-1', tension: 0.3, pointRadius: 0, pointHoverRadius: 5, order: 4 },
+        { label: 'Cumulative Contributions',    data: dsContribAmt,       borderColor: '#3d9970', backgroundColor: 'rgba(61,153,112,0.5)', borderWidth: 1.5, fill: '-1', tension: 0.3, pointRadius: 0, pointHoverRadius: 5, order: 3 },
+        { label: 'Returns on Contributions',    data: dsContribRet,       borderColor: '#a8d8c2', backgroundColor: 'rgba(168,216,194,0.6)', borderWidth: 1.5, fill: '-1', tension: 0.3, pointRadius: 0, pointHoverRadius: 5, order: 2 },
+        { label: 'Drawdown (Post-Retirement)',  data: dsDrawdown,         borderColor: '#6D28D9', backgroundColor: 'rgba(109,40,217,0.10)', borderWidth: 2.5, fill: 'origin', tension: 0.3, pointRadius: 0, pointHoverRadius: 5, order: 0 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', labels: { font: { family:'Helvetica Neue', size:11 }, usePointStyle: true, pointStyleWidth: 12, boxHeight: 8 } },
+        tooltip: {
+          callbacks: {
+            title: items => `Age ${items[0].label}`,
+            label: item => {
+              if (item.raw === null) return null;
+              const i = item.dataIndex;
+              let band = item.raw;
+              if (item.datasetIndex === 1) band = item.raw - (dsSavingsPrincipal[i] ?? 0);
+              if (item.datasetIndex === 2) band = item.raw - (dsSavingsReturns[i]   ?? 0);
+              if (item.datasetIndex === 3) band = item.raw - (dsContribAmt[i]       ?? 0);
+              return ` ${item.dataset.label}: ${fmtFull(band)}`;
+            },
+            footer: items => {
+              const age = parseInt(items[0].label);
+              if (age === retireAge) return `─ Retirement begins`;
+              if (age === lifeExp)   return `─ Life expectancy`;
+              return '';
+            }
+          },
+          bodyFont: { family:'Helvetica Neue' }, titleFont: { family:'Helvetica Neue', weight:'600' },
+          footerFont: { family:'Helvetica Neue', style:'italic' }, footerColor: 'rgba(255,255,255,0.6)',
+          filter: item => item.raw !== null,
+        },
+      },
+      scales: {
+        x: {
+          title: { display:true, text:'Age', font:{family:'Helvetica Neue',size:11} },
+          grid: { color:'rgba(0,0,0,0.04)' },
+          ticks: {
+            font: { family:'Helvetica Neue', size:11 },
+            callback: function(val, idx) {
+              const age = chartLabels[idx];
+              if (age === retireAge) return `${age} ▶`;
+              if (age === lifeExp)   return `${age} ✕`;
+              return age % 5 === 0 ? age : '';
+            }
+          }
+        },
+        y: {
+          title: { display:true, text:'Portfolio Value (Future $)', font:{family:'Helvetica Neue',size:11} },
+          grid: { color:'rgba(0,0,0,0.04)' }, min: 0,
+          ticks: { font: { family:'Helvetica Neue', size:11 }, callback: v => v >= 1e6 ? '$'+(v/1e6).toFixed(1)+'M' : '$'+(v/1000).toFixed(0)+'K' }
+        }
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// EXCEL DOWNLOAD — Monthly Schedule + Summary + Expenses
+// ══════════════════════════════════════════════════════
+function downloadExcel() {
+  if (!lastCalc) { alert('Please calculate first.'); return; }
+  if (typeof XLSX === 'undefined') { alert('Excel library not loaded. Please refresh the page and try again.'); return; }
+
+  const {
+    currentAge, retireAge, lifeExp, currentSav, cagrPct, retCagrPct, inflPct,
+    incomeTaxPct, capGainsPct, acctType, ytr, yir, nm,
+    nestEgg, fvCurrentSavings, remainingNeeded, reqMonthly,
+    afterTaxAnnual, preTaxAnnual, taxDragAnnual, taxApplied, taxLabel,
+    annualToday, alreadyFunded,
+    accumTotContrib, accumTotRet, accumTotTaxSaved,
+    drawTotRet, drawTotGross, drawTotTax, drawTotNet,
+    expenseTableData, schedData
+  } = lastCalc;
+
+  const wb = XLSX.utils.book_new();
+  const currency = v => Math.round(Math.abs(v || 0));
+
+  // ── Helper: style object shortcuts ──
+  const hdr    = { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '2C5F4A' } }, alignment: { horizontal: 'center' } };
+  const hdrGold= { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: 'B8860B' } }, alignment: { horizontal: 'center' } };
+  const hdrRed = { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: 'C0392B' } }, alignment: { horizontal: 'center' } };
+  const subHdr = { font: { bold: true, color: { rgb: '2C5F4A' } }, fill: { fgColor: { rgb: 'E8F2EE' } } };
+  const subHdrDraw = { font: { bold: true, color: { rgb: 'C0392B' } }, fill: { fgColor: { rgb: 'FCE8E6' } } };
+  const totRow = { font: { bold: true }, fill: { fgColor: { rgb: 'D4EDE1' } } };
+  const totRowDraw = { font: { bold: true }, fill: { fgColor: { rgb: 'FAE8E6' } } };
+  const labelStyle = { font: { bold: true } };
+  const noteStyle  = { font: { italic: true, color: { rgb: '888888' } } };
+  const greenVal   = { font: { bold: true, color: { rgb: '0D9488' } } };
+  const goldVal    = { font: { bold: true, color: { rgb: 'B8860B' } } };
+  const redVal     = { font: { bold: true, color: { rgb: 'C0392B' } } };
+
+  // ════════════════════════════
+  // SHEET 1: SUMMARY
+  // ════════════════════════════
+  const summaryData = [];
+
+  summaryData.push([{ v: 'QUANTIFICATE — Retirement Plan Summary', t: 's', s: { font: { bold: true, sz: 14, color: { rgb: '2C5F4A' } } } }]);
+  summaryData.push([{ v: `Generated: ${new Date().toLocaleDateString('en-CA')}`, t: 's', s: noteStyle }]);
+  summaryData.push([]);
+
+  summaryData.push([{ v: 'KEY RESULTS', t: 's', s: { font: { bold: true, sz: 11, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '0F172A' } } } }, '', '']);
+  summaryData.push([{ v: 'Required Monthly Contribution', t: 's', s: labelStyle }, { v: alreadyFunded ? 0 : currency(reqMonthly), t: 'n', s: { ...greenVal, numFmt: '"$"#,##0' } }, { v: alreadyFunded ? 'Savings already cover goal' : `Starting today to retire at ${retireAge}`, t: 's', s: noteStyle }]);
+  summaryData.push([{ v: 'Nest Egg Needed at Retirement', t: 's', s: labelStyle }, { v: currency(nestEgg), t: 'n', s: { ...greenVal, numFmt: '"$"#,##0' } }, { v: `Pre-tax portfolio target at age ${retireAge}`, t: 's', s: noteStyle }]);
+  summaryData.push([{ v: 'Current Savings Grow To', t: 's', s: labelStyle }, { v: currency(fvCurrentSavings), t: 'n', s: { numFmt: '"$"#,##0' } }, { v: `${currency(currentSav).toLocaleString()} at ${cagrPct}% CAGR over ${ytr} yrs`, t: 's', s: noteStyle }]);
+  summaryData.push([{ v: 'After-Tax Annual Income Needed', t: 's', s: labelStyle }, { v: currency(afterTaxAnnual), t: 'n', s: { numFmt: '"$"#,##0' } }, { v: 'Inflation-adjusted future dollars/yr', t: 's', s: noteStyle }]);
+  summaryData.push([{ v: 'Pre-Tax Annual Withdrawal Needed', t: 's', s: labelStyle }, { v: currency(preTaxAnnual), t: 'n', s: { numFmt: '"$"#,##0' } }, { v: taxApplied ? taxLabel : 'No tax applied', t: 's', s: noteStyle }]);
+  if (taxApplied) {
+    summaryData.push([{ v: 'Annual Tax Drag at Retirement', t: 's', s: labelStyle }, { v: currency(taxDragAnnual), t: 'n', s: { ...redVal, numFmt: '"$"#,##0' } }, { v: 'Grows with inflation over retirement', t: 's', s: noteStyle }]);
+  }
+  summaryData.push([{ v: 'Amount Still Needing Contributions', t: 's', s: labelStyle }, { v: alreadyFunded ? 0 : currency(remainingNeeded), t: 'n', s: { numFmt: '"$"#,##0' } }, { v: 'Nest egg minus current savings FV', t: 's', s: noteStyle }]);
+  summaryData.push([]);
+
+  summaryData.push([{ v: 'INPUT PARAMETERS', t: 's', s: { font: { bold: true, sz: 11, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '0F172A' } } } }, '', '']);
+  summaryData.push([{ v: 'Currency', t: 's', s: labelStyle }, { v: (() => { const el = document.getElementById('currencySelect'); return el ? el.options[el.selectedIndex].text : getCurrencySymbol(); })(), t: 's' }]);
+  summaryData.push([{ v: 'Current Age', t: 's', s: labelStyle }, { v: currentAge, t: 'n' }]);
+  summaryData.push([{ v: 'Retirement Age', t: 's', s: labelStyle }, { v: retireAge, t: 'n' }]);
+  summaryData.push([{ v: 'Life Expectancy', t: 's', s: labelStyle }, { v: lifeExp, t: 'n' }]);
+  summaryData.push([{ v: 'Years to Retirement', t: 's', s: labelStyle }, { v: ytr, t: 'n' }]);
+  summaryData.push([{ v: 'Years in Retirement', t: 's', s: labelStyle }, { v: yir, t: 'n' }]);
+  summaryData.push([{ v: 'Current Savings', t: 's', s: labelStyle }, { v: currentSav, t: 'n', s: { numFmt: '"$"#,##0' } }]);
+  summaryData.push([{ v: 'Pre-Retirement CAGR', t: 's', s: labelStyle }, { v: cagrPct / 100, t: 'n', s: { numFmt: '0.0%' } }]);
+  summaryData.push([{ v: 'Post-Retirement CAGR', t: 's', s: labelStyle }, { v: retCagrPct / 100, t: 'n', s: { numFmt: '0.0%' } }]);
+  summaryData.push([{ v: 'Inflation Rate', t: 's', s: labelStyle }, { v: inflPct / 100, t: 'n', s: { numFmt: '0.0%' } }]);
+  summaryData.push([{ v: 'Account Type', t: 's', s: labelStyle }, { v: acctType === 'taxadv' ? 'Tax-Advantaged (RRSP/401k)' : 'Regular Investment', t: 's' }]);
+  if (acctType === 'taxadv') summaryData.push([{ v: 'Income Tax Rate (Retirement)', t: 's', s: labelStyle }, { v: incomeTaxPct / 100, t: 'n', s: { numFmt: '0.0%' } }]);
+  if (acctType === 'taxable') summaryData.push([{ v: 'Capital Gains Tax Rate', t: 's', s: labelStyle }, { v: capGainsPct / 100, t: 'n', s: { numFmt: '0.0%' } }]);
+  summaryData.push([]);
+
+  summaryData.push([{ v: 'PHASE TOTALS', t: 's', s: { font: { bold: true, sz: 11, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '0F172A' } } } }, '', '']);
+  summaryData.push([{ v: 'Total Contributions (Accumulation)', t: 's', s: labelStyle }, { v: currency(accumTotContrib), t: 'n', s: { ...greenVal, numFmt: '"$"#,##0' } }]);
+  summaryData.push([{ v: 'Total Returns (Accumulation)', t: 's', s: labelStyle }, { v: currency(accumTotRet), t: 'n', s: { numFmt: '"$"#,##0' } }]);
+  if (acctType === 'taxadv' && incomeTaxPct > 0) {
+    summaryData.push([{ v: 'Est. Tax Saved on Contributions', t: 's', s: labelStyle }, { v: currency(accumTotTaxSaved), t: 'n', s: { ...greenVal, numFmt: '"$"#,##0' } }]);
+  }
+  summaryData.push([{ v: 'Total Returns (Drawdown)', t: 's', s: labelStyle }, { v: currency(drawTotRet), t: 'n', s: { numFmt: '"$"#,##0' } }]);
+  summaryData.push([{ v: 'Total Gross Withdrawals', t: 's', s: labelStyle }, { v: currency(drawTotGross), t: 'n', s: { ...redVal, numFmt: '"$"#,##0' } }]);
+  summaryData.push([{ v: 'Total Tax on Withdrawals', t: 's', s: labelStyle }, { v: currency(drawTotTax), t: 'n', s: { ...redVal, numFmt: '"$"#,##0' } }]);
+  summaryData.push([{ v: 'Total Net Received (After Tax)', t: 's', s: labelStyle }, { v: currency(drawTotNet), t: 'n', s: { ...greenVal, numFmt: '"$"#,##0' } }]);
+  summaryData.push([]);
+  summaryData.push([{ v: 'For educational purposes only. Not financial advice. | quantificate.ca', t: 's', s: noteStyle }]);
+
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{ wch: 36 }, { wch: 18 }, { wch: 46 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  // ════════════════════════════
+  // SHEET 2: EXPENSE BREAKDOWN
+  // ════════════════════════════
+  const expRows = [];
+  expRows.push([
+    { v: 'Category', t: 's', s: hdr },
+    { v: 'Expense', t: 's', s: hdr },
+    { v: 'Today / yr', t: 's', s: hdr },
+    { v: 'At Retirement / yr', t: 's', s: hdrGold },
+    { v: 'Ret.', t: 's', s: hdr },
+    { v: 'Inf.', t: 's', s: hdr },
+  ]);
+
+  let lastCatEx = '';
+  let catTodaySum = 0, catRetSum = 0;
+
+  for (let i = 0; i < expenseTableData.length; i++) {
+    const r = expenseTableData[i];
+    const nextCat = expenseTableData[i + 1]?.category;
+
+    if (r.category !== lastCatEx && lastCatEx !== '') {
+      expRows.push([
+        { v: `${lastCatEx} Total`, t: 's', s: totRow },
+        { v: '', t: 's', s: totRow },
+        { v: catTodaySum, t: 'n', s: { ...totRow, numFmt: '"$"#,##0' } },
+        { v: catRetSum, t: 'n', s: { ...totRow, numFmt: '"$"#,##0' } },
+        { v: '', t: 's', s: totRow },
+        { v: '', t: 's', s: totRow },
+      ]);
+      catTodaySum = 0; catRetSum = 0;
+    }
+    lastCatEx = r.category;
+    catTodaySum += r.today || 0;
+    catRetSum += r.atRetirement || 0;
+
+    expRows.push([
+      { v: r.category, t: 's' },
+      { v: r.label, t: 's' },
+      { v: r.today || 0, t: 'n', s: { numFmt: '"$"#,##0' } },
+      { v: r.atRetirement || 0, t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: 'B8860B' } } } },
+      { v: r.retirement ? 'Y' : '-', t: 's', s: r.retirement ? { font: { color: { rgb: '0D9488' }, bold: true } } : {} },
+      { v: r.inflation  ? 'Y' : '-', t: 's', s: r.inflation  ? { font: { color: { rgb: 'B8860B' }, bold: true } } : {} },
+    ]);
+
+    // Last row or category change coming — print subtotal
+    if (!nextCat || nextCat !== r.category) {
+      expRows.push([
+        { v: `${r.category} Total`, t: 's', s: totRow },
+        { v: '', t: 's', s: totRow },
+        { v: catTodaySum, t: 'n', s: { ...totRow, numFmt: '"$"#,##0' } },
+        { v: catRetSum, t: 'n', s: { ...totRow, numFmt: '"$"#,##0' } },
+        { v: '', t: 's', s: totRow },
+        { v: '', t: 's', s: totRow },
+      ]);
+      catTodaySum = 0; catRetSum = 0;
+    }
+  }
+
+  // Grand total row
+  const grandTodaySum = expenseTableData.reduce((s, r) => s + (r.today || 0), 0);
+  const grandRetSum   = expenseTableData.reduce((s, r) => s + (r.atRetirement || 0), 0);
+  expRows.push([
+    { v: 'GRAND TOTAL', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '2C5F4A' } } } },
+    { v: '', t: 's', s: { fill: { fgColor: { rgb: '2C5F4A' } } } },
+    { v: grandTodaySum, t: 'n', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '2C5F4A' } }, numFmt: '"$"#,##0' } },
+    { v: grandRetSum,   t: 'n', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '2C5F4A' } }, numFmt: '"$"#,##0' } },
+    { v: '', t: 's', s: { fill: { fgColor: { rgb: '2C5F4A' } } } },
+    { v: '', t: 's', s: { fill: { fgColor: { rgb: '2C5F4A' } } } },
+  ]);
+
+  const wsExp = XLSX.utils.aoa_to_sheet(expRows);
+  wsExp['!cols'] = [{ wch: 18 }, { wch: 44 }, { wch: 16 }, { wch: 20 }, { wch: 6 }, { wch: 6 }];
+  XLSX.utils.book_append_sheet(wb, wsExp, 'Expense Breakdown');
+
+  // ════════════════════════════
+  // SHEET 3: MONTHLY SCHEDULE
+  // ════════════════════════════
+  const isTaxAdv  = acctType === 'taxadv';
+  const isTaxable = acctType === 'taxable';
+  const taxColLabel = isTaxAdv ? 'Income Tax' : (isTaxable && capGainsPct > 0 ? 'Cap Gains Tax' : 'Tax');
+
+  const schedRows = [];
+  schedRows.push([
+    { v: 'Phase',            t: 's', s: hdr },
+    { v: 'Age',              t: 's', s: hdr },
+    { v: 'Month #',          t: 's', s: hdr },
+    { v: 'Opening Balance',  t: 's', s: hdr },
+    { v: 'Contribution',     t: 's', s: { ...hdr, fill: { fgColor: { rgb: '0D9488' } } } },
+    { v: 'Investment Return',t: 's', s: { ...hdr, fill: { fgColor: { rgb: '2980B9' } } } },
+    { v: 'Gross Withdrawal', t: 's', s: hdrRed },
+    { v: taxColLabel,        t: 's', s: { ...hdr, fill: { fgColor: { rgb: 'E67E22' } } } },
+    { v: 'Net to You',       t: 's', s: { ...hdr, fill: { fgColor: { rgb: '0D9488' } } } },
+    { v: 'Closing Balance',  t: 's', s: hdr },
+  ]);
+
+  // Accum section header
+  schedRows.push([{ v: `ACCUMULATION PHASE — Ages ${currentAge}–${retireAge} (${nm} months)`, t: 's', s: { ...subHdr, font: { bold: true, color: { rgb: '2C5F4A' } } } }, ...Array(9).fill({ v: '', t: 's', s: subHdr })]);
+
+  for (const r of schedData) {
+    if (r.phase === 'accum') {
+      schedRows.push([
+        { v: 'Accumulation', t: 's' },
+        { v: parseFloat(r.age), t: 'n', s: { numFmt: '0.0' } },
+        { v: r.month, t: 'n' },
+        { v: currency(r.openBal), t: 'n', s: { numFmt: '"$"#,##0' } },
+        { v: currency(r.contrib), t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: '0D9488' } } } },
+        { v: currency(r.ret), t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: '2980B9' } } } },
+        { v: 0, t: 'n', s: { numFmt: '"$"#,##0' } },
+        { v: isTaxAdv ? currency(r.taxSaved) : 0, t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: '0D9488' } } } },
+        { v: 0, t: 'n', s: { numFmt: '"$"#,##0' } },
+        { v: currency(r.bal), t: 'n', s: { numFmt: '"$"#,##0', font: { bold: true } } },
+      ]);
+    }
+  }
+
+  // Accumulation totals
+  schedRows.push([
+    { v: 'ACCUMULATION TOTALS', t: 's', s: totRow },
+    { v: '', t: 's', s: totRow }, { v: nm, t: 'n', s: totRow },
+    { v: '', t: 's', s: totRow },
+    { v: currency(accumTotContrib), t: 'n', s: { ...totRow, numFmt: '"$"#,##0', font: { bold: true, color: { rgb: '0D9488' } } } },
+    { v: currency(accumTotRet),    t: 'n', s: { ...totRow, numFmt: '"$"#,##0', font: { bold: true, color: { rgb: '2980B9' } } } },
+    { v: '', t: 's', s: totRow }, { v: '', t: 's', s: totRow }, { v: '', t: 's', s: totRow },
+    { v: currency(nestEgg), t: 'n', s: { ...totRow, numFmt: '"$"#,##0', font: { bold: true } } },
+  ]);
+
+  // Retirement phase marker
+  schedRows.push([{ v: `RETIREMENT BEGINS AT AGE ${retireAge} — Portfolio: $${currency(nestEgg).toLocaleString()}`, t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '0F172A' } } } }, ...Array(9).fill({ v: '', t: 's', s: { fill: { fgColor: { rgb: '0F172A' } } } })]);
+
+  // Drawdown section header
+  schedRows.push([{ v: `DRAWDOWN PHASE — Ages ${retireAge}–${lifeExp} (${yir * 12} months)`, t: 's', s: { ...subHdrDraw, font: { bold: true, color: { rgb: '6D28D9' } } } }, ...Array(9).fill({ v: '', t: 's', s: subHdrDraw })]);
+
+  for (const r of schedData) {
+    if (r.phase === 'draw') {
+      schedRows.push([
+        { v: 'Drawdown', t: 's' },
+        { v: parseFloat(r.age), t: 'n', s: { numFmt: '0.0' } },
+        { v: r.month, t: 'n' },
+        { v: currency(r.openBal), t: 'n', s: { numFmt: '"$"#,##0' } },
+        { v: 0, t: 'n', s: { numFmt: '"$"#,##0' } },
+        { v: currency(r.ret), t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: '2980B9' } } } },
+        { v: currency(r.withdrawal), t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: '6D28D9' } } } },
+        { v: r.tax > 0 ? currency(r.tax) : 0, t: 'n', s: { numFmt: '"$"#,##0', font: { color: { rgb: 'E67E22' } } } },
+        { v: currency(r.netWithdrawal), t: 'n', s: { numFmt: '"$"#,##0', font: { bold: true, color: { rgb: '0D9488' } } } },
+        { v: currency(r.bal), t: 'n', s: { numFmt: '"$"#,##0', font: { bold: true } } },
+      ]);
+    }
+  }
+
+  // Drawdown totals
+  schedRows.push([
+    { v: 'DRAWDOWN TOTALS', t: 's', s: totRowDraw },
+    { v: '', t: 's', s: totRowDraw }, { v: yir * 12, t: 'n', s: totRowDraw },
+    { v: '', t: 's', s: totRowDraw }, { v: '', t: 's', s: totRowDraw },
+    { v: currency(drawTotRet),   t: 'n', s: { ...totRowDraw, numFmt: '"$"#,##0', font: { bold: true, color: { rgb: '2980B9' } } } },
+    { v: currency(drawTotGross), t: 'n', s: { ...totRowDraw, numFmt: '"$"#,##0', font: { bold: true, color: { rgb: '6D28D9' } } } },
+    { v: currency(drawTotTax),   t: 'n', s: { ...totRowDraw, numFmt: '"$"#,##0', font: { bold: true, color: { rgb: 'E67E22' } } } },
+    { v: currency(drawTotNet),   t: 'n', s: { ...totRowDraw, numFmt: '"$"#,##0', font: { bold: true, color: { rgb: '0D9488' } } } },
+    { v: '', t: 's', s: totRowDraw },
+  ]);
+
+  schedRows.push([]);
+  schedRows.push([{ v: 'For educational purposes only. Not financial advice. | quantificate.ca', t: 's', s: noteStyle }]);
+
+  const wsSched = XLSX.utils.aoa_to_sheet(schedRows);
+  wsSched['!cols'] = [{ wch: 16 }, { wch: 8 }, { wch: 10 }, { wch: 18 }, { wch: 16 }, { wch: 18 }, { wch: 18 }, { wch: 16 }, { wch: 16 }, { wch: 18 }];
+
+  // Freeze header row
+  wsSched['!freeze'] = { xSplit: 0, ySplit: 1 };
+
+  XLSX.utils.book_append_sheet(wb, wsSched, 'Monthly Schedule');
+
+  // ── Write and trigger download ──
+  const fileName = `Quantificate_Retirement_Plan_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  XLSX.writeFile(wb, fileName);
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.result-tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function downloadPDF() {
+  if (!lastCalc) { alert('Please calculate first.'); return; }
+  try {
+    if (!window.jspdf) throw new Error('jsPDF library not loaded. Please refresh and try again.');
+    const testDoc = new window.jspdf.jsPDF();
+    if (typeof testDoc.autoTable !== 'function') throw new Error('jsPDF autoTable plugin not loaded. Please refresh and try again.');
+    _generatePDF();
+  } catch(e) {
+    alert('PDF generation failed: ' + e.message);
+  }
+}
+
+function _generatePDF() {
+  const { jsPDF } = window.jspdf;
+  // ── Brand assets (base64 embedded) ──
+  const PDF_LOGO_B64   = 'data:image/png;base64,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';
+  const PDF_AVATAR_B64 = 'data:image/png;base64,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';
+
+  const noEmoji = s => String(s).replace(/[\u{1F000}-\u{1FFFF}|\u{2600}-\u{27FF}|\u{2300}-\u{23FF}|\u{1F300}-\u{1F9FF}]/gu, '').trim();
+
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const {
+    currentAge, retireAge, lifeExp, currentSav, cagrPct, retCagrPct, inflPct,
+    incomeTaxPct, capGainsPct, acctType, ytr, yir,
+    nestEgg, fvCurrentSavings, remainingNeeded, reqMonthly,
+    afterTaxAnnual, preTaxAnnual, taxDragAnnual, taxApplied, taxLabel,
+    annualToday, alreadyFunded, expenseTableData,
+    totalTaxSaved, monthlTaxSaved, showTaxRelief,
+    accumTotContrib, accumTotRet, accumTotTaxSaved,
+    drawTotRet, drawTotGross, drawTotTax, drawTotNet,
+    drawTotPrincipalReturned, drawTotGrowthTaxed, basisAtRetire
+  } = lastCalc;
+
+  const W = 210, M = 14;
+  const CONTENT_W = W - M * 2;
+
+  // ── Brand Kit v4 Colour Palette ──
+  const cInk     = [15, 23, 42];        // #0F172A
+  const cTeal    = [20, 184, 166];      // #14B8A6
+  const cTealDk  = [13, 148, 132];      // slightly darker teal
+  const cTealLt  = [232, 248, 246];
+  const cTealBdr = [180, 230, 225];
+  const cGold    = [245, 158, 11];      // #F59E0B
+  const cGoldLt  = [254, 249, 235];
+  const cGoldBdr = [253, 230, 138];
+  const cSky     = [2, 132, 199];       // #0284C7
+  const cGray    = [148, 163, 184];     // #94A3B8
+  const cInkLt   = [71, 85, 105];
+  const cInkXlt  = [148, 163, 184];
+  const cCream   = [248, 250, 252];
+  const cWhite   = [255, 255, 255];
+  const cBorder  = [226, 232, 240];
+  const cWarn    = [239, 68, 68];        // red — TAX items only
+  const cWarnLt  = [254, 242, 242];
+  const cWarnBdr = [252, 165, 165];
+  // Royal purple — DRAWDOWN theme (#6D28D9)
+  const cRoyal   = [109, 40, 217];
+  const cRoyalDk = [91, 33, 182];
+  const cRoyalLt = [245, 243, 255];      // very light lavender
+  const cRoyalBdr= [196, 181, 253];      // violet-300
+  const cGreen   = [15, 23, 42];        // use Ink for table headers (brand-consistent dark)
+  const cPanelBg = [255, 255, 255];
+
+  const HEADER_H = 22; // header bar height
+  const CONTENT_START = HEADER_H + 10; // generous gap between header and page content
+
+  const currSym = getCurrencySymbol();
+  const $ = n => currSym + Math.round(Math.abs(n)).toLocaleString();
+
+  // ── Helpers ──
+  function roundRect(x, y, w, h, r, fillRgb, strokeRgb) {
+    if (fillRgb)   { doc.setFillColor(...fillRgb);   }
+    if (strokeRgb) { doc.setDrawColor(...strokeRgb); } else { doc.setDrawColor(...cBorder); }
+    const mode = fillRgb && strokeRgb ? 'FD' : fillRgb ? 'F' : 'S';
+    doc.roundedRect(x, y, w, h, r, r, mode);
+  }
+
+  function label(txt, x, y, size, rgb, style='normal') {
+    doc.setFont('helvetica', style);
+    doc.setFontSize(size);
+    doc.setTextColor(...rgb);
+    doc.text(txt, x, y);
+  }
+
+  function pageHeader(title) {
+    // ── Dark Ink header bar ──
+    doc.setFillColor(...cInk);
+    doc.rect(0, 0, W, HEADER_H, 'F');
+
+    // Logo: fit height to header with padding, preserve aspect ratio
+    // Source: 512x292. Target height: HEADER_H - 6mm padding (3mm top+bottom)
+    const logoH = HEADER_H - 6;
+    const logoW = logoH * (512 / 292);   // preserve aspect ratio ~0.68 * width
+    const logoY = (HEADER_H - logoH) / 2;
+    try {
+      doc.addImage(PDF_LOGO_B64, 'PNG', M - 1, logoY, logoW, logoH);
+    } catch(e) {
+      label('QUANTIFICATE', M, HEADER_H / 2 + 1.5, 9, cTeal, 'bold');
+    }
+
+    // Teal vertical separator
+    doc.setDrawColor(...cTeal);
+    doc.setLineWidth(0.4);
+    doc.line(M + logoW + 3, 5, M + logoW + 3, HEADER_H - 5);
+    doc.setLineWidth(0.2);
+
+    // Page title (left of separator)
+    const titleX = M + logoW + 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(...cGray);
+    doc.text(title, titleX, HEADER_H / 2 + 1.5);
+
+    // Date right-aligned
+    doc.setFontSize(7.5);
+    doc.setTextColor(...cGray);
+    doc.text(`Generated ${new Date().toLocaleDateString('en-CA')}`, W - M, HEADER_H / 2 + 1.5, { align: 'right' });
+  }
+
+  function pageFooter() {
+    const n = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= n; i++) {
+      doc.setPage(i);
+      const ph = doc.internal.pageSize.getHeight();
+      // Footer bar: ink-dark strip with teal top border
+      doc.setFillColor(...cInk);
+      doc.rect(0, ph - 10, W, 10, 'F');
+      doc.setDrawColor(...cTeal);
+      doc.setLineWidth(0.5);
+      doc.line(0, ph - 10, W, ph - 10);
+      doc.setLineWidth(0.2);
+      // Avatar mark on left
+      try {
+        doc.addImage(PDF_AVATAR_B64, 'PNG', M, ph - 8.5, 6, 6);
+      } catch(e) {}
+      // Disclaimer — truly centred
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(6.5);
+      doc.setTextColor(...cGray);
+      doc.text('For educational purposes only. Not financial advice.  |  quantificate.ca', W / 2, ph - 4, { align: 'center' });
+      // Page number — right-aligned
+      doc.text(`Page ${i} of ${n}`, W - M, ph - 4, { align: 'right' });
+    }
+  }
+
+  // ── Draw a metric card (mirrors .result-card in HTML) ──
+  // type: 'primary'|'neutral'|'action'|'warn'|'tax'
+  function metricCard(x, y, w, h, rcLabel, rcValue, rcSub, type) {
+    let bg, border, valColor, labelColor;
+    switch (type) {
+      case 'primary': bg = cTealLt;   border = cTealBdr;  valColor = cTeal;   labelColor = cTealDk;  break;
+      case 'action':  bg = cGoldLt;   border = cGoldBdr;  valColor = cGold;   labelColor = cGold;    break;
+      case 'warn':    bg = cWarnLt;   border = cWarnBdr;  valColor = cWarn;   labelColor = cWarn;    break;  // tax/cost
+      case 'draw':    bg = cRoyalLt;  border = cRoyalBdr; valColor = cRoyal;  labelColor = cRoyalDk; break;  // drawdown
+      case 'tax':     bg = cTealLt;   border = cTealBdr;  valColor = cTeal;   labelColor = cTeal;    break;
+      default:        bg = cPanelBg;  border = cBorder;   valColor = cInk;    labelColor = cInkXlt;
+    }
+    roundRect(x, y, w, h, 2.5, bg, border);
+    label(rcLabel.toUpperCase(), x + 4, y + 5.5, 6, labelColor, 'bold');
+    label(rcValue, x + 4, y + 12, 12, valColor, 'bold');
+    if (rcSub) label(rcSub, x + 4, y + 16.5, 6.5, cInkXlt, 'normal');
+  }
+
+  // ── Draw the "How it's calculated" + parameters block ──
+  // Returns the y position after the block
+  function drawParamsBlock(startY) {
+    let y = startY;
+
+    // How it's calculated section header
+    roundRect(M, y, CONTENT_W, 6, 1.5, cTealLt, cTealBdr);
+    label("HOW IT'S CALCULATED", M + 3, y + 4.2, 6.5, cTeal, 'bold');
+    y += 8;
+
+    // Body text
+    const taxLine = taxApplied
+      ? (acctType === 'taxadv'
+          ? `Tax-advantaged account (e.g. RRSP/401k). Withdrawals taxed as income at ${incomeTaxPct}%. Gross withdrawal: ${$(preTaxAnnual)}/yr.`
+          : `Regular investment account. Growth portion taxed at ${capGainsPct}% cap gains rate. Gross withdrawal: ${$(preTaxAnnual)}/yr.`)
+      : 'No tax rate applied — after-tax income target used directly.';
+
+    const bodyLines = [
+      `Your retirement expenses of ${$(annualToday)}/yr today are inflation-adjusted (${inflPct}%/yr) to ${$(afterTaxAnnual)}/yr at age ${retireAge}.`,
+      taxLine,
+      `This pre-tax withdrawal stream, growing with inflation over ${yir} years, is discounted at ${retCagrPct}% post-retirement CAGR to produce a nest egg of ${$(nestEgg)}.`,
+      `Your current savings of ${$(currentSav)} compound monthly at ${cagrPct}% to reach ${$(fvCurrentSavings)}, leaving ${alreadyFunded ? getCurrencySymbol() + '0' : $(remainingNeeded)} to fund via contributions.`,
+    ];
+
+    doc.setFillColor(250, 252, 251);
+    doc.setDrawColor(...cBorder);
+    const lineH = 5.2;
+    // measure total text height
+    let totalTextH = 0;
+    bodyLines.forEach(line => {
+      const wrapped = doc.splitTextToSize(`• ${line}`, CONTENT_W - 8);
+      totalTextH += wrapped.length * lineH;
+    });
+    const blockH = totalTextH + 6;
+    roundRect(M, y, CONTENT_W, blockH, 1.5, [250, 252, 251], cBorder);
+
+    let ty = y + 4.5;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.2);
+    doc.setTextColor(...cInkLt);
+    bodyLines.forEach(line => {
+      const wrapped = doc.splitTextToSize(`• ${line}`, CONTENT_W - 8);
+      doc.text(wrapped, M + 4, ty);
+      ty += wrapped.length * lineH;
+    });
+    y += blockH + 5;
+
+    // Parameters table
+    roundRect(M, y, CONTENT_W, 6, 1.5, cTealLt, cTealBdr);
+    label('INPUT PARAMETERS', M + 3, y + 4.2, 6.5, cTeal, 'bold');
+    y += 8;
+
+    const params = [
+      ['Current Age', `${currentAge} yrs`],
+      ['Retirement Age', `${retireAge} yrs`],
+      ['Life Expectancy', `${lifeExp} yrs`],
+      ['Current Savings', $(currentSav)],
+      ['Pre-Retirement CAGR', `${cagrPct}%`],
+      ['Post-Retirement CAGR', `${retCagrPct}%`],
+      ['Inflation Rate', `${inflPct}%`],
+      ['Account Type', acctType === 'taxadv' ? 'Tax-Advantaged (RRSP/401k)' : 'Regular Investment'],
+      ...(acctType === 'taxadv' ? [['Income Tax Rate (Retirement)', `${incomeTaxPct}%`]] : [['Capital Gains Tax Rate', `${capGainsPct}%`]]),
+    ];
+
+    const paramColW = CONTENT_W / 2 - 2;
+    const paramH = 6.5;
+    // Two columns of params
+    params.forEach((p, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const px = M + col * (paramColW + 4);
+      const py = y + row * paramH;
+      const rowBg = row % 2 === 0 ? cCream : cPanelBg;
+      roundRect(px, py, paramColW, paramH, 0, rowBg, null);
+      doc.setDrawColor(...cBorder);
+      doc.rect(px, py, paramColW, paramH, 'S');
+      label(p[0], px + 3, py + 4.2, 6.8, cInkLt, 'normal');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(6.8);
+      doc.setTextColor(...cInk);
+      doc.text(p[1], px + paramColW - 3, py + 4.2, { align: 'right' });
+    });
+
+    const paramRows = Math.ceil(params.length / 2);
+    y += paramRows * paramH + 4;
+    return y;
+  }
+
+  // ════════════════════════════════════════
+  // PAGE 1 — SUMMARY
+  // ════════════════════════════════════════
+  pageHeader('Retirement Plan Summary');
+
+  let y = CONTENT_START;
+
+  // Page title + subtitle
+  label('Your Retirement Plan', M, y, 16, cInk, 'bold');
+  y += 6;
+  label(`Retire at ${retireAge}  ·  Live to ${lifeExp}  ·  ${ytr} yrs to save  ·  ${yir} yrs in retirement`, M, y, 8, cInkLt, 'normal');
+  y += 4;
+  doc.setDrawColor(...cBorder);
+  doc.line(M, y, W - M, y);
+  y += 5;
+
+  // ── HERO BAR (mirrors .hero-result) ──
+  const heroH = 24;
+  doc.setFillColor(...cTeal);
+  doc.roundedRect(M, y, CONTENT_W, heroH, 3, 3, 'F');
+
+  // Left: label (white, slightly smaller — pure white, no alpha)
+  label('REQUIRED MONTHLY CONTRIBUTION', M + 5, y + 6, 6.5, cWhite, 'bold');
+  // Big number
+  doc.setTextColor(...cWhite);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.text(alreadyFunded ? currSym + '0 / mo' : `${$(reqMonthly)} / mo`, M + 5, y + 16);
+  // Sub text
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...cWhite);
+  const heroSub = alreadyFunded
+    ? 'Your current savings already cover your retirement goal.'
+    : `Starting today — retire at ${retireAge}, funded to age ${lifeExp}`;
+  doc.text(heroSub, M + 5, y + 21);
+
+  // Right: note
+  const noteText = `${taxApplied ? taxLabel + ' gross-up applied.' : 'No tax adjustment.'}\nFunded to age ${lifeExp}.`;
+  doc.setFontSize(7);
+  doc.setTextColor(...cWhite);
+  doc.text(noteText, W - M - 3, y + 10, { align: 'right' });
+
+  y += heroH + 5;
+
+  // ── METRIC CARDS GRID (2 columns, mirrors .results-grid) ──
+  const cardH = 22;
+  const cardW = (CONTENT_W - 4) / 2;
+  const cardGap = 4;
+
+  // Build cards array matching HTML output
+  const cards = [
+    { label: `Nest Egg Needed at ${retireAge}`, value: fmt(nestEgg), sub: 'Pre-tax portfolio target (future $)', type: 'primary' },
+    { label: 'Your Savings Will Grow To', value: fmt(fvCurrentSavings), sub: `${$(currentSav)} compounded at ${cagrPct}% for ${ytr} yrs`, type: 'neutral' },
+    { label: 'After-Tax Income Needed', value: fmt(afterTaxAnnual) + '/yr', sub: 'Your lifestyle cost in future $', type: 'neutral' },
+    { label: 'Pre-Tax Withdrawal Needed', value: fmt(preTaxAnnual) + '/yr', sub: taxApplied ? `Grossed up · ${taxLabel}` : 'No tax applied', type: 'draw' },
+  ];
+
+  // Optional: tax relief card (full width)
+  const showTaxReliefCard = lastCalc.showTaxRelief;
+  const showTaxDragCard   = taxApplied;
+
+  // Render first 4 cards in 2x2 grid
+  cards.forEach((c, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const cx = M + col * (cardW + cardGap);
+    const cy = y + row * (cardH + 3);
+    metricCard(cx, cy, cardW, cardH, c.label, c.value, c.sub, c.type);
+  });
+
+  y += 2 * (cardH + 3) + 1;
+
+  // Tax relief full-width card
+  if (showTaxReliefCard) {
+    const tsVal = lastCalc.totalTaxSaved;
+    const msVal = lastCalc.monthlTaxSaved;
+    metricCard(M, y, CONTENT_W, cardH, 'Tax Relief on Contributions',
+      fmt(tsVal),
+      `Est. tax saved over ${ytr} yrs · ${$(msVal)}/mo back at ${incomeTaxPct}% marginal rate`, 'tax');
+    y += cardH + 3;
+  }
+
+  // Tax drag + Still needs funding — side by side if both present, else full width
+  if (showTaxDragCard && !alreadyFunded) {
+    metricCard(M, y, cardW, cardH, 'Annual Tax Drag at Retirement',
+      fmt(taxDragAnnual) + '/yr',
+      `Extra withdrawal for taxes · grows over ${yir}-yr retirement`, 'warn');
+    metricCard(M + cardW + cardGap, y, cardW, cardH, 'Still Needs Funding via Contributions',
+      $(remainingNeeded), 'Nest egg minus current savings FV', 'action');
+  } else if (showTaxDragCard) {
+    metricCard(M, y, cardW, cardH, 'Annual Tax Drag at Retirement',
+      fmt(taxDragAnnual) + '/yr',
+      `Extra withdrawal for taxes · grows over ${yir}-yr retirement`, 'warn');
+    metricCard(M + cardW + cardGap, y, cardW, cardH, 'Still Needs Funding via Contributions',
+      getCurrencySymbol() + '0', 'Already funded by current savings', 'action');
+  } else {
+    metricCard(M, y, CONTENT_W, cardH, 'Still Needs Funding via Contributions',
+      alreadyFunded ? getCurrencySymbol() + '0' : $(remainingNeeded),
+      alreadyFunded ? 'Already funded by current savings' : 'Nest egg minus current savings FV', 'action');
+  }
+  y += cardH + 6;
+
+  // ── CHART (capture from canvas) ──
+  const chartCanvas = document.getElementById('growthCanvas');
+  const chartH = 58;
+  const chartW = CONTENT_W;
+  if (chartCanvas) {
+    try {
+      const imgData = chartCanvas.toDataURL('image/png');
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(...cBorder);
+      doc.roundedRect(M, y, chartW, chartH, 2, 2, 'FD');
+      doc.addImage(imgData, 'PNG', M + 1, y + 1, chartW - 2, chartH - 2);
+    } catch(e) {
+      roundRect(M, y, chartW, chartH, 2, cCream, cBorder);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(...cInkXlt);
+      doc.text('Portfolio Growth Chart (see on-screen view)', W / 2, y + chartH / 2, { align: 'center' });
+    }
+  } else {
+    roundRect(M, y, chartW, chartH, 2, cCream, cBorder);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(...cInkXlt);
+    doc.text('Portfolio Growth Chart (see on-screen view)', W / 2, y + chartH / 2, { align: 'center' });
+  }
+  y += chartH + 6;
+
+  // ── Try to fit params + how-to on page 1 ──
+  const pageUsable = 277;
+  const spaceLeft  = pageUsable - y;
+  const paramsNeed = 105;
+
+  if (spaceLeft >= paramsNeed) {
+    drawParamsBlock(y);
+  } else {
+    doc.addPage();
+    pageHeader('Parameters & Methodology');
+    drawParamsBlock(CONTENT_START);
+  }
+
+  // ════════════════════════════════════════
+  // EXPENSE BREAKDOWN PAGE
+  // ════════════════════════════════════════
+  doc.addPage();
+  pageHeader('Expense Breakdown');
+
+  y = CONTENT_START;
+  label('Expense Breakdown', M, y, 15, cInk, 'bold');
+  y += 6;
+
+  // Summary line
+  const summaryLineItems = [`Today's expenses: ${$(annualToday)}/yr`, `At retirement: ${$(afterTaxAnnual)}/yr`, `Inflation: ${inflPct}%/yr`];
+  summaryLineItems.forEach((item, i) => {
+    const pill_x = M + i * 60;
+    roundRect(pill_x, y - 1, 56, 7, 2, cTealLt, cTealBdr);
+    label(item, pill_x + 4, y + 4, 7, cTeal, 'bold');
+  });
+  y += 12;
+
+  // Legend row
+  const legItems = [
+    { color: cTeal, text: 'Ret. = Continues in retirement' },
+    { color: cGold, text: 'Inf. = Grows with inflation' },
+    { color: cInkXlt, text: '@ Retire = Inflation-projected value' },
+  ];
+  legItems.forEach((l, i) => {
+    const lx = M + i * 62;
+    doc.setFillColor(...l.color);
+    doc.circle(lx + 2, y + 1.5, 1.5, 'F');
+    label(l.text, lx + 5, y + 3, 6.5, cInkLt, 'normal');
+  });
+  y += 8;
+
+  // Build expense table body — category rows + item rows + subtotals
+  const expBody = [];
+
+  // Group items by category and compute subtotals
+  const cats = {};
+  expenseTableData.forEach(r => {
+    if (!cats[r.category]) cats[r.category] = [];
+    cats[r.category].push(r);
+  });
+
+  let grandToday = 0, grandRet = 0;
+
+  Object.entries(cats).forEach(([cat, items]) => {
+    // Category header row
+    expBody.push([{
+      content: noEmoji(cat).toUpperCase(),
+      colSpan: 5,
+      styles: {
+        fillColor: cTealLt,
+        textColor: cTealDk,
+        fontStyle: 'bold',
+        fontSize: 7.5,
+        cellPadding: { top: 3, bottom: 3, left: 4, right: 4 },
+      }
+    }]);
+
+    let catToday = 0, catRet = 0;
+    items.forEach(r => {
+      catToday += r.today || 0;
+      if (r.atRetirement) catRet += r.atRetirement;
+      grandToday += r.today || 0;
+      if (r.atRetirement) grandRet += r.atRetirement;
+
+      expBody.push([
+        { content: noEmoji(r.label), styles: { textColor: cInk, fontSize: 7.5 } },
+        { content: $(r.today) + '/yr', styles: { halign: 'right', textColor: cInkLt, fontSize: 7.5 } },
+        { content: r.atRetirement ? $(r.atRetirement) + '/yr' : '—', styles: { halign: 'right', textColor: r.atRetirement ? cGold : cInkXlt, fontStyle: r.atRetirement ? 'bold' : 'normal', fontSize: 7.5 } },
+        { content: r.retirement ? 'Y' : '—', styles: { halign: 'center', textColor: r.retirement ? cTeal : cInkXlt, fontStyle: r.retirement ? 'bold' : 'normal', fontSize: 7.5 } },
+        { content: r.inflation  ? 'Y' : '—', styles: { halign: 'center', textColor: r.inflation  ? cGold : cInkXlt, fontStyle: r.inflation  ? 'bold' : 'normal', fontSize: 7.5 } },
+      ]);
+    });
+
+    // Category subtotal row
+    expBody.push([
+      { content: `${noEmoji(cat)} Subtotal`, styles: { fontStyle: 'bold', fontSize: 7, textColor: cInkLt, fillColor: [245, 247, 250], cellPadding: { top: 2.5, bottom: 2.5, left: 4, right: 4 } } },
+      { content: $(catToday) + '/yr', styles: { halign: 'right', fontStyle: 'bold', fontSize: 7, textColor: cTeal, fillColor: [245, 247, 250] } },
+      { content: catRet ? $(catRet) + '/yr' : '—', styles: { halign: 'right', fontStyle: 'bold', fontSize: 7, textColor: cGold, fillColor: [245, 247, 250] } },
+      { content: '', styles: { fillColor: [245, 247, 250] } },
+      { content: '', styles: { fillColor: [245, 247, 250] } },
+    ]);
+  });
+
+  // Grand total row
+  expBody.push([
+    { content: 'GRAND TOTAL', styles: { fontStyle: 'bold', fontSize: 8, textColor: cWhite, fillColor: cTeal, cellPadding: { top: 4, bottom: 4, left: 4, right: 4 } } },
+    { content: $(grandToday) + '/yr', styles: { halign: 'right', fontStyle: 'bold', fontSize: 8, textColor: cWhite, fillColor: cTeal } },
+    { content: grandRet ? $(grandRet) + '/yr' : '—', styles: { halign: 'right', fontStyle: 'bold', fontSize: 8, textColor: cWhite, fillColor: cTeal } },
+    { content: '', styles: { fillColor: cTeal } },
+    { content: '', styles: { fillColor: cTeal } },
+  ]);
+
+  doc.autoTable({
+    startY: y,
+    head: [[
+      { content: 'Expense', styles: { fillColor: cWhite, textColor: cInk, fontStyle: 'bold', fontSize: 8 } },
+      { content: 'Today / yr', styles: { fillColor: cWhite, textColor: cTealDk, fontStyle: 'bold', fontSize: 8, halign: 'right' } },
+      { content: '@ Retirement / yr', styles: { fillColor: cWhite, textColor: [180, 130, 0], fontStyle: 'bold', fontSize: 8, halign: 'right' } },
+      { content: 'Ret.', styles: { fillColor: cWhite, textColor: cTealDk, fontStyle: 'bold', fontSize: 8, halign: 'center' } },
+      { content: 'Inf.', styles: { fillColor: cWhite, textColor: [180, 130, 0], fontStyle: 'bold', fontSize: 8, halign: 'center' } },
+    ]],
+    body: expBody,
+    theme: 'grid',
+    headStyles: { minCellHeight: 8 },
+    bodyStyles: { fontSize: 7.5, textColor: cInk, cellPadding: { top: 2.5, bottom: 2.5, left: 4, right: 4 } },
+    alternateRowStyles: { fillColor: [252, 253, 254] },
+    columnStyles: {
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 36, halign: 'right' },
+      2: { cellWidth: 40, halign: 'right' },
+      3: { cellWidth: 14, halign: 'center' },
+      4: { cellWidth: 14, halign: 'center' },
+    },
+    margin: { left: M, right: M },
+    didParseCell: data => {
+      // Prevent alternateRowStyles from overriding explicit fillColor on cat/subtotal/total rows
+      if (data.cell.raw && typeof data.cell.raw === 'object' && data.cell.raw.styles && data.cell.raw.styles.fillColor) {
+        data.cell.styles.fillColor = data.cell.raw.styles.fillColor;
+      }
+    }
+  });
+
+  // Footer note after expense table
+  const finalY = doc.lastAutoTable.finalY + 4;
+  roundRect(M, finalY, CONTENT_W, 10, 2, [253, 249, 235], cGoldBdr);
+  label('Ret.', M + 4, finalY + 4, 7, cTeal, 'bold');
+  label('= expense continues in retirement and is included in your income target.   ', M + 10, finalY + 4, 7, cInkLt, 'normal');
+  label('Inf.', M + 4, finalY + 8.5, 7, cGold, 'bold');
+  label('= expense grows with inflation between now and retirement.', M + 10, finalY + 8.5, 7, cInkLt, 'normal');
+
+  // ════════════════════════════════════════
+  // PAGE 4 — SCHEDULE SUMMARY + TAX BREAKDOWN
+  // ════════════════════════════════════════
+  doc.addPage();
+  pageHeader('Schedule Summary & Tax Breakdown');
+
+  let sy = CONTENT_START;
+
+  // Page title
+  label('Phase Summary & Tax Breakdown', M, sy, 15, cInk, 'bold');
+  sy += 6;
+  label(`${ytr}-year accumulation  ·  ${yir}-year drawdown  ·  All values in future $`, M, sy, 8, cInkLt, 'normal');
+  sy += 7;
+
+  // ── ACCUMULATION PHASE TOTALS ──
+  roundRect(M, sy, CONTENT_W, 6.5, 1.5, cTealLt, cTealBdr);
+  label('ACCUMULATION PHASE TOTALS', M + 3, sy + 4.5, 7, cTealDk, 'bold');
+  sy += 8;
+
+  const isTaxAdv = acctType === 'taxadv';
+
+  const accumRows = [
+    ['Total Contributions Made', $(accumTotContrib), cInk, cTeal],
+    ['Total Investment Returns', $(accumTotRet), cInk, [41, 128, 185]],
+    isTaxAdv
+      ? ['Estimated Tax Saved on Contributions', $(accumTotTaxSaved), cInkLt, cTeal]
+      : ['Tax Benefit on Contributions', '—', cInkLt, cInkXlt],
+    ['Portfolio at Retirement (Closing Balance)', $(nestEgg), cInk, cTeal],
+  ];
+
+  const accumColW = (CONTENT_W - 4) / 2;
+  const rowH2 = 14;
+  accumRows.forEach((row, i) => {
+    const col = i % 2;
+    const r   = Math.floor(i / 2);
+    const rx  = M + col * (accumColW + 4);
+    const ry  = sy + r * (rowH2 + 3);
+    roundRect(rx, ry, accumColW, rowH2, 2, i % 2 === 0 ? cCream : [248, 253, 252], cBorder);
+    label(row[0], rx + 4, ry + 5, 6.5, row[2], 'normal');
+    label(row[1], rx + 4, ry + 11, 11, row[3], 'bold');
+  });
+  sy += Math.ceil(accumRows.length / 2) * (rowH2 + 3) + 6;
+
+  // ── DRAWDOWN PHASE TOTALS ──
+  roundRect(M, sy, CONTENT_W, 6.5, 1.5, cRoyalLt, cRoyalBdr);
+  label('DRAWDOWN PHASE TOTALS', M + 3, sy + 4.5, 7, cRoyal, 'bold');
+  sy += 8;
+
+  const cBlue = [41, 128, 185];
+  const drawRows = [
+    ['Total Investment Returns (in retirement)', $(drawTotRet), cInk, cBlue],
+    ['Total Gross Withdrawals', $(drawTotGross), cInk, cRoyal],
+    ['Total Tax Paid on Withdrawals', drawTotTax > 0 ? $(drawTotTax) : '—', cInkLt, drawTotTax > 0 ? cWarn : cInkXlt],
+    ['Total Net Received (After Tax)', $(drawTotNet), cInk, cTeal],
+  ];
+
+  drawRows.forEach((row, i) => {
+    const col = i % 2;
+    const r   = Math.floor(i / 2);
+    const rx  = M + col * (accumColW + 4);
+    const ry  = sy + r * (rowH2 + 3);
+    roundRect(rx, ry, accumColW, rowH2, 2, i % 2 === 0 ? cCream : cRoyalLt, cBorder);
+    label(row[0], rx + 4, ry + 5, 6.5, row[2], 'normal');
+    label(row[1], rx + 4, ry + 11, 11, row[3], 'bold');
+  });
+  sy += Math.ceil(drawRows.length / 2) * (rowH2 + 3) + 8;
+
+  // ── Monthly rate note ──
+  roundRect(M, sy, CONTENT_W, 8, 1.5, cCream, cBorder);
+  label(`Returns calculated monthly at ${(cagrPct/12).toFixed(3)}%/mo (pre-retirement) and ${(retCagrPct/12).toFixed(3)}%/mo (post-retirement).  Gross withdrawals grow with inflation (${inflPct}%/yr) annually during drawdown.`, M + 4, sy + 5, 6.5, cInkLt, 'normal');
+  sy += 13;
+
+  // ── TAX BREAKDOWN ──
+  if (!taxApplied) {
+    roundRect(M, sy, CONTENT_W, 14, 2, cCream, cBorder);
+    label('No tax rate applied — income target used directly. Enable income tax or capital gains to see a tax breakdown.', M + 4, sy + 8, 7.5, cInkXlt, 'normal');
+  } else {
+    const effectiveTaxRateDraw = drawTotGross > 0 ? (drawTotTax / drawTotGross * 100).toFixed(1) : '0.0';
+
+    if (isTaxAdv) {
+      // ── TAX-ADVANTAGED header ──
+      roundRect(M, sy, CONTENT_W, 6.5, 1.5, cTealLt, cTealBdr);
+      label(`TAX BREAKDOWN — TAX-ADVANTAGED ACCOUNT (${incomeTaxPct}% MARGINAL RATE)`, M + 3, sy + 4.5, 7, cTealDk, 'bold');
+      sy += 9;
+
+      const halfW = (CONTENT_W - 4) / 2;
+
+      // Left panel: Accumulation / tax relief
+      roundRect(M, sy, halfW, 58, 2, cWhite, cTealBdr);
+      label('Accumulation Phase · Tax Relief on Contributions', M + 4, sy + 6, 7, cTealDk, 'bold');
+
+      const accumTaxRows = [
+        ['Total contributions made', $(accumTotContrib)],
+        ['Marginal income tax rate', `${incomeTaxPct}%`],
+        ['Est. tax saved (contributions × rate)', $(accumTotTaxSaved)],
+      ];
+      let aty = sy + 12;
+      accumTaxRows.forEach((r, i) => {
+        const highlight = i === 2;
+        if (highlight) {
+          doc.setFillColor(...cTealLt);
+          doc.rect(M + 2, aty - 3, halfW - 4, 7, 'F');
+        }
+        label(r[0], M + 4, aty, 6.8, cInkLt, 'normal');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(6.8);
+        doc.setTextColor(...(highlight ? cTeal : cInk));
+        doc.text(r[1], M + halfW - 4, aty, { align: 'right' });
+        aty += 9;
+      });
+      // note
+      const noteStr = `Each month your contribution reduces taxable income. At ${incomeTaxPct}% you save ${$(reqMonthly * (incomeTaxPct/100))}/mo.`;
+      const noteWrapped = doc.splitTextToSize(noteStr, halfW - 8);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(6.2);
+      doc.setTextColor(...cInkXlt);
+      doc.text(noteWrapped, M + 4, aty + 2);
+
+      // Right panel: Drawdown / income tax
+      const rx2 = M + halfW + 4;
+      roundRect(rx2, sy, halfW, 58, 2, cWhite, cRoyalBdr);
+      label('Drawdown Phase · Income Tax on Withdrawals', rx2 + 4, sy + 6, 7, cRoyal, 'bold');
+
+      const drawTaxRows = [
+        ['Total gross withdrawals', $(drawTotGross), false],
+        ['Income tax rate at retirement', `${incomeTaxPct}%`, false],
+        ['Total income tax paid', $(drawTotTax), true],
+        ['Total net received (after tax)', $(drawTotNet), false],
+        ['Effective tax rate on withdrawals', `${effectiveTaxRateDraw}%`, false],
+      ];
+      let dty = sy + 12;
+      drawTaxRows.forEach(r => {
+        const hl = r[2];
+        if (hl) {
+          doc.setFillColor(254, 230, 230);
+          doc.rect(rx2 + 2, dty - 3, halfW - 4, 7, 'F');
+        }
+        label(r[0], rx2 + 4, dty, 6.8, cInkLt, 'normal');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(6.8);
+        doc.setTextColor(...(hl ? cWarn : r[0].includes('net') ? cTeal : r[0].includes('Income tax rate') ? cInkLt : cRoyal));
+        doc.text(r[1], rx2 + halfW - 4, dty, { align: 'right' });
+        dty += 8.5;
+      });
+
+      sy += 62;
+
+      // Net summary bar
+      const netPos = accumTotTaxSaved >= drawTotTax;
+      const netAmt = netPos
+        ? `Net tax saving: ${$(accumTotTaxSaved - drawTotTax)} over full horizon`
+        : `Net tax cost: ${$(drawTotTax - accumTotTaxSaved)} over full horizon`;
+      roundRect(M, sy, CONTENT_W, 9, 2, netPos ? cTealLt : cWarnLt, netPos ? cTealBdr : cWarnBdr);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(...(netPos ? cTealDk : cWarn));
+      doc.text(netAmt, W / 2, sy + 5.8, { align: 'center' });
+
+    } else {
+      // ── TAXABLE / CAP GAINS header ──
+      roundRect(M, sy, CONTENT_W, 6.5, 1.5, cGoldLt, cGoldBdr);
+      label(`TAX BREAKDOWN — REGULAR INVESTMENT ACCOUNT (${capGainsPct}% CAP GAINS RATE)`, M + 3, sy + 4.5, 7, [130, 80, 0], 'bold');
+      sy += 9;
+
+      const halfW = (CONTENT_W - 4) / 2;
+      const initBasisRatioPct = nestEgg > 0 ? (basisAtRetire / nestEgg * 100).toFixed(1) : '0.0';
+      const growthSharePct    = (100 - parseFloat(initBasisRatioPct)).toFixed(1);
+      const avgBasisRatio     = drawTotGross > 0 ? (drawTotPrincipalReturned / drawTotGross * 100).toFixed(1) : '0.0';
+      const avgGrowthShare    = (100 - parseFloat(avgBasisRatio)).toFixed(1);
+
+      // Left panel: Accumulation / no upfront tax
+      roundRect(M, sy, halfW, 52, 2, cWhite, cBorder);
+      label('Accumulation Phase · No Upfront Tax Benefit', M + 4, sy + 6, 7, cInkLt, 'bold');
+
+      const accumCGRows = [
+        ['Total contributions (cost basis)', $(accumTotContrib), false],
+        ['Portfolio at retirement', $(nestEgg), false],
+        ['Unrealised gains at retirement', $(nestEgg - basisAtRetire), false],
+        [`Cost basis ratio at retirement`, `${initBasisRatioPct}% principal / ${growthSharePct}% growth`, true],
+      ];
+      let aty = sy + 13;
+      accumCGRows.forEach(r => {
+        if (r[2]) {
+          doc.setFillColor(240, 242, 248);
+          doc.rect(M + 2, aty - 3, halfW - 4, 7, 'F');
+        }
+        label(r[0], M + 4, aty, 6.5, cInkLt, 'normal');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(6.5);
+        doc.setTextColor(...cInk);
+        doc.text(r[1], M + halfW - 4, aty, { align: 'right' });
+        aty += 9;
+      });
+
+      // Right panel: Drawdown / cap gains
+      const rx2 = M + halfW + 4;
+      roundRect(rx2, sy, halfW, 52, 2, cWhite, cRoyalBdr);
+      label('Drawdown Phase · Cap Gains on Growth Portion', rx2 + 4, sy + 6, 7, cRoyal, 'bold');
+
+      const drawCGRows = [
+        ['Total gross withdrawals', $(drawTotGross), false],
+        ['Principal returned tax-free', $(drawTotPrincipalReturned), false],
+        ['Growth portion subject to cap gains', $(drawTotGrowthTaxed), false],
+        [`Avg split (principal / growth)`, `${avgBasisRatio}% / ${avgGrowthShare}%`, false],
+        ['Cap gains tax rate', `${capGainsPct}%`, false],
+        ['Total cap gains tax paid', $(drawTotTax), true],
+        ['Total net received (after tax)', $(drawTotNet), false],
+        [`Effective tax rate on withdrawals`, `${effectiveTaxRateDraw}%`, false],
+      ];
+      let dty = sy + 13;
+      drawCGRows.forEach(r => {
+        if (r[2]) {
+          doc.setFillColor(254, 230, 230);
+          doc.rect(rx2 + 2, dty - 3, halfW - 4, 7, 'F');
+        }
+        label(r[0], rx2 + 4, dty, 6.5, cInkLt, 'normal');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(6.5);
+        doc.setTextColor(...(r[2] ? cWarn : r[0].includes('net received') ? cTeal : r[0].includes('Cap gains tax rate') || r[0].includes('Effective') ? cInkLt : cRoyal));
+        doc.text(r[1], rx2 + halfW - 4, dty, { align: 'right' });
+        dty += 7.5;
+      });
+    }
+  }
+
+  pageFooter();
+  const pdfBlob = doc.output('blob');
+  window.open(URL.createObjectURL(pdfBlob), '_blank');
+}
+
+initState();
+Object.keys(CATEGORIES).forEach(k => buildExpenseRows(k));
+recalcTotals();
+updateCurrencyPrefixes();
+</script>
+
+<script>
+// ── Collapsible inputs panel ──
+function toggleInputs() {
+  const body = document.getElementById('inputsBody');
+  const isOpen = body.classList.contains('open');
+  if (isOpen) { collapseInputs(); } else { expandInputs(); }
+}
+
+function collapseInputs() {
+  const body = document.getElementById('inputsBody');
+  const chevron = document.getElementById('inputsChevron');
+  body.classList.remove('open');
+  chevron.classList.remove('open');
+  updateSummaryChips();
+}
+
+function expandInputs() {
+  const body = document.getElementById('inputsBody');
+  const chevron = document.getElementById('inputsChevron');
+  body.classList.add('open');
+  chevron.classList.add('open');
+}
+
+function updateSummaryChips() {
+  const chips = document.getElementById('inputSummaryChips');
+  if (!chips) return;
+  const isOpen = document.getElementById('inputsBody').classList.contains('open');
+  if (isOpen) { chips.innerHTML = ''; return; }
+
+  const age    = document.getElementById('currentAge')?.value || '—';
+  const ret    = document.getElementById('retirementAge')?.value || '—';
+  const life   = document.getElementById('lifeExpectancy')?.value || '—';
+  const sav    = parseFloat(document.getElementById('currentSavings')?.value) || 0;
+  const savFmt = sav >= 1000 ? getCurrencySymbol() + (sav/1000).toFixed(0) + 'K' : getCurrencySymbol() + sav;
+
+  chips.innerHTML = `
+    <span class="summary-chip">Age ${age} → ${ret}</span>
+    <span class="summary-chip">Life ${life}</span>
+    <span class="summary-chip">Savings ${savFmt}</span>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateSummaryChips();
+});
+</script>
+
+</body>
+</html>

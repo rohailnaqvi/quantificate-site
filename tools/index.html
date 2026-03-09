@@ -17,7 +17,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   
-  // Default: deny all tracking until user consents
   gtag('consent', 'default', {
     'analytics_storage': 'denied',
     'ad_storage': 'denied',
@@ -112,6 +111,112 @@
   @media (prefers-color-scheme: dark) {
     .card-video {
       border-color: #1f2937;
+    }
+  }
+
+  /* ====================================
+     SHARED SLIDER STYLES
+     ==================================== */
+
+  .slider-wrapper {
+    position: relative;
+  }
+
+  .slider-track-outer {
+    overflow: hidden;
+  }
+
+  .slider-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .slider-track .card {
+    flex: 0 0 calc((100% - 40px) / 3);
+    min-width: 0;
+  }
+
+  .slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .slider-btn {
+    background: none;
+    border: 2px solid #14b8a6;
+    color: #14b8a6;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .slider-btn:hover {
+    background: #14b8a6;
+    color: #fff;
+  }
+
+  .slider-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .slider-btn:disabled:hover {
+    background: none;
+    color: #14b8a6;
+  }
+
+  .slider-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .slider-dot.active {
+    background: #14b8a6;
+    transform: scale(1.25);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .slider-dot {
+      background: #374151;
+    }
+    .slider-dot.active {
+      background: #14b8a6;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .slider-track .card {
+      flex: 0 0 100%;
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 900px) {
+    .slider-track .card {
+      flex: 0 0 calc((100% - 20px) / 2);
     }
   }
 
@@ -216,40 +321,56 @@
     <h2 class="section-heading">Personal Finance &amp; Investments</h2>
     <p class="section-subtitle">Interactive dashboards, planners, and models to support your financial decisions.</p>
 
-    <div class="grid cols-3">
-
-      <!-- Personal Investment Planner -->
-      <div class="card">
-        <h3>Personal Investment Planner</h3>
-        <p class="note">Indices, metals, crypto — historical lookback and projections.</p>
-        <div class="card-video">
-          <iframe
-            src="https://www.youtube.com/embed/OcqDihgt0UM"
-            title="Personal Investment Planner"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div class="card-buttons">
-          <a class="btn primary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Open Dashboard</a>
-          <a class="btn secondary disabled" href="#">Spreadsheet (coming soon)</a>
-          <a class="btn secondary" href="/articles/investment-basics.html">Read: Starting Your Investment Journey</a>
-        </div>
-      </div>
-
-      <!-- Placeholder -->
-      <div class="card">
-        <h3>Coming Soon</h3>
-        <p class="note">More personal finance tools and models on the way.</p>
-      </div>
-
-      <!-- Placeholder -->
-      <div class="card">
-        <h3>Coming Soon</h3>
-        <p class="note">Have a suggestion? Head to the contact page and let us know.</p>
-      </div>
-
+    <!-- Slider nav controls -->
+    <div class="slider-nav">
+      <div class="slider-dots" id="pfDots"></div>
+      <button class="slider-btn" id="pfPrev" aria-label="Previous">&#8592;</button>
+      <button class="slider-btn" id="pfNext" aria-label="Next">&#8594;</button>
     </div>
+
+    <!-- Slider -->
+    <div class="slider-wrapper">
+      <div class="slider-track-outer">
+        <div class="slider-track" id="pfTrack">
+
+          <!-- Personal Investment Planner -->
+          <div class="card">
+            <h3>Personal Investment Planner</h3>
+            <p class="note">Indices, metals, crypto — historical lookback and projections.</p>
+            <div class="card-video">
+              <iframe
+                src="https://www.youtube.com/embed/OcqDihgt0UM"
+                title="Personal Investment Planner"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="card-buttons">
+              <a class="btn primary" href="https://quantificate-planner.streamlit.app" target="_blank" rel="noopener">Open Dashboard</a>
+              <a class="btn secondary disabled" href="#">Spreadsheet (coming soon)</a>
+              <a class="btn secondary" href="/articles/investment-basics.html">Read: Starting Your Investment Journey</a>
+            </div>
+          </div>
+
+          <!-- Retirement Calculator -->
+          <div class="card">
+            <h3>Retirement Calculator</h3>
+            <p class="note">Enter your current expenses and see exactly how much you need to save each month to fund your retirement — with tax handling, inflation adjustments, and a full monthly schedule.</p>
+            <div class="card-buttons">
+              <a class="btn primary" href="/tools/retirement-calculator/index.html">Try Retirement Calculator</a>
+            </div>
+          </div>
+
+          <!-- Placeholder -->
+          <div class="card">
+            <h3>Coming Soon</h3>
+            <p class="note">More personal finance tools and models on the way.</p>
+          </div>
+
+        </div><!-- /slider-track -->
+      </div><!-- /slider-track-outer -->
+    </div><!-- /slider-wrapper -->
+
   </div>
 
   <!-- =============================================
@@ -291,27 +412,114 @@
      ==================================== -->
 
 <script>
-  // Hamburger menu toggle
   document.getElementById('menuToggle').addEventListener('click', function() {
     document.getElementById('mainNav').classList.toggle('active');
   });
 
-  // Close menu when clicking outside
   document.addEventListener('click', function(event) {
     const nav = document.getElementById('mainNav');
     const toggle = document.getElementById('menuToggle');
-    
     if (!nav.contains(event.target) && !toggle.contains(event.target)) {
       nav.classList.remove('active');
     }
   });
 
-  // Close menu when a link is clicked
   document.querySelectorAll('#mainNav a').forEach(link => {
     link.addEventListener('click', function() {
       document.getElementById('mainNav').classList.remove('active');
     });
   });
+</script>
+
+<!-- ====================================
+     SLIDER JAVASCRIPT
+     ==================================== -->
+
+<script>
+  function initSlider(trackId, prevId, nextId, dotsId) {
+    const track = document.getElementById(trackId);
+    const prevBtn = document.getElementById(prevId);
+    const nextBtn = document.getElementById(nextId);
+    const dotsContainer = document.getElementById(dotsId);
+
+    const cards = Array.from(track.children);
+    let currentIndex = 0;
+
+    function getVisibleCount() {
+      const w = window.innerWidth;
+      if (w <= 640) return 1;
+      if (w <= 900) return 2;
+      return 3;
+    }
+
+    function getTotalSteps() {
+      return Math.ceil(cards.length / getVisibleCount());
+    }
+
+    function buildDots() {
+      dotsContainer.innerHTML = '';
+      const steps = getTotalSteps();
+      const needsSlider = steps > 1;
+      prevBtn.style.display = needsSlider ? '' : 'none';
+      nextBtn.style.display = needsSlider ? '' : 'none';
+      if (!needsSlider) return;
+      for (let i = 0; i < steps; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'slider-dot' + (i === currentIndex ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateDots() {
+      const dots = dotsContainer.querySelectorAll('.slider-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+
+    function goTo(index) {
+      const visibleCount = getVisibleCount();
+      const totalSteps = getTotalSteps();
+      currentIndex = Math.max(0, Math.min(index, totalSteps - 1));
+
+      const cardEl = cards[0];
+      const gap = 20;
+      const cardWidth = cardEl.getBoundingClientRect().width;
+      const offset = currentIndex * (cardWidth + gap) * visibleCount;
+
+      track.style.transform = `translateX(-${offset}px)`;
+
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex >= totalSteps - 1;
+      updateDots();
+    }
+
+    prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+    buildDots();
+    goTo(0);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        buildDots();
+        goTo(0);
+      }, 150);
+    });
+
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const delta = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(delta) > 50) {
+        delta > 0 ? goTo(currentIndex + 1) : goTo(currentIndex - 1);
+      }
+    }, { passive: true });
+  }
+
+  initSlider('pfTrack', 'pfPrev', 'pfNext', 'pfDots');
 </script>
 
 <!-- Cookie Consent Banner -->
@@ -374,7 +582,6 @@
   </div>
 </div>
 
-<!-- Load Cookie Consent Script -->
 <script src="/assets/js/cookie-consent.js"></script>
 
 </body>
