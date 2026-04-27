@@ -186,6 +186,22 @@
     .section-divider:first-child { margin-top: 0; }
     .sd-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); white-space: nowrap; }
     .sd-line { flex: 1; height: 1px; background: var(--teal-light); }
+    .sd-required { color: #dc2626; font-weight: 700; margin-left: 2px; font-size: 0.9em; }
+    .required-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 3px solid #dc2626;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 0 0 16px 0;
+      font-size: 0.82rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .required-note strong { color: #dc2626; }
+    @media (prefers-color-scheme: dark) {
+      .required-note { background: rgba(220,38,38,0.08); border-color: rgba(220,38,38,0.35); border-left-color: #dc2626; }
+    }
 
     /* Simple field row */
     .field-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
@@ -316,6 +332,161 @@
       background: var(--teal-light); border: 1px solid var(--teal-border);
       border-radius: 8px; padding: 12px 16px; margin-top: 14px;
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+
+    /* =========================================
+       MOBILE OPTIMISATION FOR EXPENSE ROWS
+       Below 720px the 6-column grid overflows;
+       restructure each row into a clean 2-line card.
+       Layout (children order: label, amt, M/A, ret-chk, inf-chk, @retire-wrap):
+         Row 1: label (full-width)
+         Row 2: amount (1fr) | M/A (60px) | ret (30px) | inf (30px)
+         Row 3: @ Retire wrap (full-width)
+       ========================================= */
+    @media (max-width: 720px) {
+
+      /* Hide the column header bar — replaced with inline mini-labels */
+      .expense-col-headers { display: none; }
+
+      /* Each expense row becomes a small card with a 4-col mobile grid */
+      .expense-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 56px 32px 32px;
+        column-gap: 8px;
+        row-gap: 8px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        background: var(--cream);
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        align-items: center;
+      }
+
+      /* Row 1: expense label spans all 4 columns */
+      .exp-label {
+        grid-column: 1 / -1;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1.3;
+        padding-bottom: 4px;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      /* Row 2: amount input + M/A toggle + 2 checkboxes */
+      .exp-input-wrap {
+        grid-column: 1;
+      }
+      .exp-input-wrap input[type="number"] {
+        width: 100%;
+        height: 38px;
+        padding: 6px 8px 6px 28px;
+        background: var(--white);
+        font-size: 0.92rem;
+      }
+      .exp-input-wrap .prefix { left: 10px; font-size: 0.85rem; }
+
+      .ma-toggle {
+        grid-column: 2;
+        height: 38px;
+      }
+      .ma-toggle button { font-size: 0.78rem; }
+
+      /* Checkbox cells — show mini Ret/Inf label above the box */
+      .chk-cell {
+        flex-direction: column;
+        gap: 1px;
+        height: 38px;
+      }
+      .chk-cell::before {
+        font-size: 0.55rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ink-xlight);
+        line-height: 1;
+      }
+      .expense-row > .chk-cell:nth-child(4) { grid-column: 3; }
+      .expense-row > .chk-cell:nth-child(4)::before { content: "Ret"; color: var(--accent); }
+      .expense-row > .chk-cell:nth-child(5) { grid-column: 4; }
+      .expense-row > .chk-cell:nth-child(5)::before { content: "Inf"; color: var(--gold); }
+      .chk-cell input[type="checkbox"] { width: 18px; height: 18px; }
+
+      /* Row 3: @ Retire wrapper, spanning all columns
+         (this is the last <div> child of expense-row, holding proj-wrap + proj-period) */
+      .expense-row > div:last-child {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 8px;
+        align-items: center;
+        padding-top: 8px;
+        border-top: 1px dashed var(--border-light);
+      }
+      .expense-row > div:last-child::before {
+        content: "@ Retire";
+        grid-column: 1 / -1;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 2px;
+      }
+      .proj-wrap { grid-column: 1; }
+      .proj-wrap input[type="number"] {
+        width: 100%;
+        height: 38px;
+        padding: 6px 8px 6px 28px;
+        font-size: 0.9rem;
+      }
+      .proj-wrap .prefix { left: 10px; font-size: 0.85rem; }
+      .proj-period {
+        grid-column: 2;
+        margin-top: 0;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        text-align: right;
+      }
+
+      /* Category subtotal: clean two-line layout */
+      .cat-subtotal {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 4px;
+      }
+      .cst-label, .cst-amt, .cst-ret { grid-column: auto; }
+      .cst-label { font-size: 0.72rem; }
+      .cst-amt { text-align: left; }
+      .cst-amt::before {
+        content: "Today: ";
+        font-weight: 400;
+        color: var(--ink-xlight);
+        font-size: 0.7rem;
+      }
+      .cst-ret::before {
+        content: "@ Retire: ";
+        font-weight: 400;
+        color: var(--ink-xlight);
+        font-size: 0.7rem;
+      }
+      /* Hide the empty placeholder spans inside cat-subtotal on mobile */
+      .cat-subtotal > span:empty { display: none; }
+
+      /* Tighten panel padding on mobile */
+      .panel-body { padding: 12px; }
+
+      /* Inputs grid: ensure good vertical spacing */
+      .inputs-grid { gap: 16px; }
+
+      /* Required note: a touch tighter */
+      .required-note {
+        padding: 10px 12px;
+        font-size: 0.78rem;
+      }
     }
     .etb-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 2px; }
     .etb-sub { font-size: 0.75rem; color: var(--ink-light); }
@@ -633,7 +804,7 @@
 
 <section class="section">
   <h1>Retirement Calculator 🏦</h1>
-  <p style="color:var(--ink-light);max-width:620px;margin-bottom:16px">Enter your current lifestyle expenses below and we'll calculate how much you may need to save each month — starting today — to fully fund your retirement.</p>
+  <p style="color:var(--ink-light);max-width:620px;margin-bottom:16px">Enter your current lifestyle expenses below and we'll calculate exactly what you need to save each month — starting today — to fully fund your retirement.</p>
   <div class="tool-disclaimer"><strong>For educational purposes only.</strong> This calculator provides estimates based on the assumptions you enter. It does not constitute financial advice. Please review our <a href="/disclaimer/index.html" style="color:var(--gold);font-weight:600">General Disclaimer</a> and consult a qualified financial advisor before making investment decisions.</div>
 
 <div class="calc-layout">
@@ -651,11 +822,15 @@
     <div class="collapsible-body open" id="inputsBody">
       <div class="panel-body">
 
+        <div class="required-note">
+          <strong>Before you calculate:</strong> Sections marked with a red asterisk <span style="color:#dc2626;font-weight:700">*</span> — <strong>Profile</strong>, <strong>Growth &amp; Rates</strong>, and <strong>Tax &amp; Account Type</strong> — are required. Default values are pre-filled, but please review and adjust them to match your personal situation before calculating.
+        </div>
+
         <div class="inputs-grid">
 
           <!-- Column 1: Profile + Savings -->
           <div>
-            <div class="section-divider"><span class="sd-label">👤 Profile</span><div class="sd-line"></div></div>
+            <div class="section-divider"><span class="sd-label">👤 Profile<span class="sd-required">*</span></span><div class="sd-line"></div></div>
             <div class="field-row">
               <label>Currency</label>
               <div class="num-input-wrap" style="padding:0">
@@ -824,7 +999,7 @@
 
           <!-- Column 2: Rates + Tax -->
           <div>
-            <div class="section-divider"><span class="sd-label">📈 Growth &amp; Rates</span><div class="sd-line"></div></div>
+            <div class="section-divider"><span class="sd-label">📈 Growth &amp; Rates<span class="sd-required">*</span></span><div class="sd-line"></div></div>
             <div class="slider-field">
               <div class="slider-top"><label>Portfolio CAGR (pre-retirement)</label><span class="sv" id="lbl-cagr">7.0%</span></div>
               <input type="range" id="cagr" min="1" max="15" step="0.5" value="7"
@@ -841,7 +1016,7 @@
                 oninput="document.getElementById('lbl-inflation').textContent=parseFloat(this.value).toFixed(1)+'%'; updateAllProjections();" />
             </div>
 
-            <div class="section-divider"><span class="sd-label">🧾 Tax &amp; Account Type</span><div class="sd-line"></div></div>
+            <div class="section-divider"><span class="sd-label">🧾 Tax &amp; Account Type<span class="sd-required">*</span></span><div class="sd-line"></div></div>
             <div style="margin-bottom:14px">
               <div style="font-size:0.82rem;color:var(--ink);margin-bottom:8px;font-weight:500">Account type</div>
               <div class="acct-toggle">
@@ -1319,7 +1494,8 @@ function recalcTotals() {
       const av = annualVal(item.id);
       catAmt += av;
 
-      if (s.retirement && av > 0) {
+      // Retirement amount: count if flagged AND (base value > 0 OR user has entered a manual override)
+      if (s.retirement && (av > 0 || s.projOverride !== null)) {
         let projAnnual;
         if (s.projOverride !== null) {
           projAnnual = s.mode === 'M' ? s.projOverride * 12 : s.projOverride;
@@ -1391,7 +1567,8 @@ function calculate() {
       const s = state[item.id];
       if (!s.retirement) continue;
       const av = annualVal(item.id);
-      if (av === 0) continue;
+      // Include item if it has a base amount OR a manual @ Retire override
+      if (av === 0 && s.projOverride === null) continue;
       retTotal += av;
 
       if (s.projOverride !== null) {
@@ -1409,7 +1586,7 @@ function calculate() {
       for (const item of items) {
         const s = state[item.id];
         const av = annualVal(item.id);
-        if (av === 0) continue;
+        if (av === 0 && s.projOverride === null) continue;
         futureAnnual += s.projOverride !== null
           ? (s.mode === 'M' ? s.projOverride * 12 : s.projOverride)
           : (s.inflation ? av * Math.pow(1 + infl, ytr) : av);
@@ -1515,12 +1692,15 @@ function calculate() {
   let retirementGrandTotal = 0;
   for (const [catKey, items] of Object.entries(CATEGORIES)) {
     const ct = catTotal(catKey);
-    if (ct === 0) continue;
+    // Keep the category if it has any $$ OR any override-only retirement items
+    const hasOverride = items.some(it => state[it.id].projOverride !== null && state[it.id].retirement);
+    if (ct === 0 && !hasOverride) continue;
     tableRows += `<tr class="cat-row"><td colspan="5">${catNamesDisplay[catKey]}</td></tr>`;
     for (const item of items) {
       const av = annualVal(item.id);
-      if (av === 0) continue;
       const s = state[item.id];
+      // Skip a row only if it has no base amount AND no override
+      if (av === 0 && s.projOverride === null) continue;
       const retMark = s.retirement ? `<span style="color:var(--accent);font-weight:600">✓</span>` : `<span style="color:var(--ink-xlight)">—</span>`;
       const infMark = s.inflation  ? `<span style="color:var(--gold);font-weight:600">✓</span>`  : `<span style="color:var(--ink-xlight)">—</span>`;
       let retAnnual = null;
@@ -1532,7 +1712,10 @@ function calculate() {
       const retCostCell = retAnnual !== null
         ? `<td class="num" style="color:var(--gold);font-weight:500">${fmtShort(retAnnual)}/yr</td>`
         : `<td class="num" style="color:var(--ink-xlight)">—</td>`;
-      tableRows += `<tr><td>${item.label}</td><td class="num">${fmtShort(av)}/yr</td>${retCostCell}<td class="ctr">${retMark}</td><td class="ctr">${infMark}</td></tr>`;
+      const baseCostCell = av > 0
+        ? `<td class="num">${fmtShort(av)}/yr</td>`
+        : `<td class="num" style="color:var(--ink-xlight)">—</td>`;
+      tableRows += `<tr><td>${item.label}</td>${baseCostCell}${retCostCell}<td class="ctr">${retMark}</td><td class="ctr">${infMark}</td></tr>`;
     }
   }
   tableRows += `<tr class="total-row"><td>Total (all expenses)</td><td class="num">${fmtShort(grandTotal())}/yr</td><td class="num" style="color:var(--gold);font-weight:700">${fmtShort(retirementGrandTotal)}/yr</td><td></td><td></td></tr>
@@ -1842,8 +2025,8 @@ function calculate() {
   for (const [catKey, items] of Object.entries(CATEGORIES)) {
     for (const item of items) {
       const av = annualVal(item.id);
-      if (av === 0) continue;
       const s = state[item.id];
+      if (av === 0 && s.projOverride === null) continue;
       let retAnnualPdf = null;
       if (s.retirement) {
         if (s.projOverride !== null) { retAnnualPdf = s.mode === 'M' ? s.projOverride * 12 : s.projOverride; }
